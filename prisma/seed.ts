@@ -9,7 +9,7 @@ async function main() {
         },
     });
 
-    const roleAdmin = await prisma.userRole.upsert({
+    const userRoleAdmin = await prisma.userRole.upsert({
         where: { name: "admin" },
         update: {},
         create: {
@@ -17,19 +17,46 @@ async function main() {
         },
     });
 
-    const adminUser = await prisma.user.upsert({
-        where: { username: "demo" },
+    const userRoleBasic = await prisma.userRole.upsert({
+        where: { name: "basic" },
         update: {},
         create: {
-            username: "demo",
+            name: "basic",
+            grants: [ "quites" ],
+        },
+    });
+
+    const adminUser = await prisma.user.upsert({
+        where: { username: "admin" },
+        update: {},
+        create: {
+            username: "admin",
             password: "demo",
-            userRoleId: roleAdmin.id,
+            userRoleId: userRoleAdmin.id,
             tenantId: demoTenant.id,
             extraData: { language: "it" },
         },
     });
 
-    console.log({ demoTenant, roleAdmin, adminUser });
+    const basicUser = await prisma.user.upsert({
+        where: { username: "demo" },
+        update: {},
+        create: {
+            username: "demo",
+            password: "demo",
+            userRoleId: userRoleBasic.id,
+            tenantId: demoTenant.id,
+            extraData: { language: "it" },
+        },
+    });
+
+    console.log({
+        demoTenant,
+        userRoleAdmin,
+        userRoleBasic,
+        adminUser,
+        basicUser,
+    });
 }
 main()
     .then(async () => {

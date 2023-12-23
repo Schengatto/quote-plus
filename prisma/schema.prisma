@@ -16,9 +16,10 @@ model Tenant {
 }
 
 model UserRole {
-    id   String @id @default(uuid())
-    name String @unique
-    user User[]
+    id     String   @id @default(uuid())
+    name   String   @unique
+    grants String[] @default(["quotes", "categories", "brands", "products"])
+    user   User[]
 }
 
 model User {
