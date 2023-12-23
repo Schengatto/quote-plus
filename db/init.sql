@@ -1,0 +1,1 @@
+CREATE DATABASE quote_plus;

@@ -1,27 +1,44 @@
 {
   "name": "quote-plus",
-  "version": "0.1.0",
+  "version": "0.8.0",
   "private": true,
+  "author": {
+    "name": "Enrico Schintu",
+    "email": "schintu.enrico@gmail.com",
+    "url": "https://enricoschintu.dev"
+  },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "prisma generate && next dev",
+    "build": "npx puppeteer browsers install chrome && prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:sync": "prisma db push && prisma generate",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.0.4"
+    "@prisma/client": "5.7.0",
+    "@tinymce/tinymce-react": "4.3.2",
+    "html-to-react": "1.7.0",
+    "next": "14.0.4",
+    "puppeteer": "21.6.1",
+    "react": "18",
+    "react-dom": "18",
+    "react-i18next": "13.5.0",
+    "react-icons": "4.12.0",
+    "store": "2.0.12",
+    "zustand": "4.4.7"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.0.1",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.4"
+    "@sparticuz/chromium": "^119.0.2",
+    "@types/node": "20",
+    "@types/react": "18",
+    "@types/react-dom": "18",
+    "autoprefixer": "10.0.1",
+    "eslint": "8",
+    "eslint-config-next": "14.0.4",
+    "postcss": "8.4.32",
+    "prisma": "5.7.0",
+    "tailwindcss": "3.3.0",
+    "typescript": "5"
   }
 }

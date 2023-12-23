@@ -1,0 +1,93 @@
+// schema.prisma
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("PRISMA_DB_CONNECTION_STRING")
+}
+
+model Brand {
+    id          Int       @id @default(autoincrement())
+    name        String    @unique
+    createdAt   DateTime  @default(now()) @map(name: "created_at")
+    updatedAt   DateTime  @updatedAt @map(name: "updated_at")
+    createdById Int
+    products    Product[]
+}
+
+model Category {
+    id          Int        @id @default(autoincrement())
+    name        String     @unique
+    parentId    Int?
+    parent      Category?  @relation("parents", fields: [parentId], references: [id])
+    parents     Category[] @relation("parents")
+    createdAt   DateTime   @default(now()) @map(name: "created_at")
+    updatedAt   DateTime   @updatedAt @map(name: "updated_at")
+    createdById Int
+    products    Product[]
+}
+
+model Currency {
+    id          Int       @id @default(autoincrement())
+    name        String    @unique
+    symbol      String
+    isEnabled   Boolean   @default(false)
+    createdAt   DateTime  @default(now()) @map(name: "created_at")
+    updatedAt   DateTime  @updatedAt @map(name: "updated_at")
+    createdById Int
+    products    Product[]
+}
+
+model Template {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    content     String
+    user        User     @relation(fields: [createdById], references: [id])
+    createdAt   DateTime @default(now()) @map(name: "created_at")
+    updatedAt   DateTime @updatedAt @map(name: "updated_at")
+    createdById Int
+}
+
+model User {
+    id               Int        @id @default(autoincrement())
+    username         String     @unique
+    password         String
+    activeTemplateId Int?       @map("activeSignId")
+    templates        Template[]
+    createdAt        DateTime   @default(now()) @map(name: "created_at")
+    updatedAt        DateTime   @updatedAt @map(name: "updated_at")
+}
+
+model Product {
+    id          Int      @id @default(autoincrement())
+    code        String   @unique
+    name        String   @unique
+    categoryId  Int
+    category    Category @relation(fields: [categoryId], references: [id])
+    photo       String?
+    description String
+    price       Float
+    currencyId  Int
+    currency    Currency @relation(fields: [currencyId], references: [id])
+    tags        String
+    brandId     Int
+    brand       Brand    @relation(fields: [brandId], references: [id])
+    createdAt   DateTime @default(now()) @map(name: "created_at")
+    updatedAt   DateTime @updatedAt @map(name: "updated_at")
+    createdById Int
+}
+
+model Quote {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    content     String
+    createdAt   DateTime @default(now()) @map(name: "created_at")
+    createdById Int
+    createdBy   String
+    updatedAt   DateTime @updatedAt @map(name: "updated_at")
+    updatedById Int
+    updatedBy   String
+}

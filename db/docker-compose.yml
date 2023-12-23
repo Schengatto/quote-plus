@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  database:
+    image: 'postgres:latest'
+    ports:
+      - 15432:5432
+    networks:
+      - postgres-network
+    volumes:
+      - quote-plus-pg-data:/var/lib/postgresql/data/
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+    - ${POSTGRES_USER:-postgres}
+    - ${POSTGRES_PASSWORD:-changeMe}
+    - ${POSTGRES_DB:-postgres}
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 15433:80
+    depends_on:
+      - database
+    networks:
+      - postgres-network
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin/
+    environment:
+      - ${PGADMIN_DEFAULT_EMAIL:-schengatto@gmail.com}
+      - ${PGADMIN_DEFAULT_PASSWORD:-changeMe}
+
+networks:
+  postgres-network:
+    driver: bridge
+
+volumes:
+  quote-plus-pg-data:
+  pgadmin-data:
