@@ -1,7 +1,6 @@
 import doWithPrisma from "@/lib/prisma";
 import { Product } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { useRouter } from "next/router";
 
 type ResponseData = {
     message: string;

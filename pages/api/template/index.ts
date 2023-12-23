@@ -10,7 +10,7 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<ResponseData | Template[] | Partial<Template>>
 ) {
-    if (!req.method || ![ "POST", "GET" ].includes(req.method)) {
+    if (!req.method || !["POST", "GET"].includes(req.method)) {
         res.status(405).json({ message: "Method not allowed" });
         return;
     }
@@ -21,7 +21,13 @@ export default async function handler(
             const { id } = await doWithPrisma((prisma) => prisma.template.create({ data }));
             res.status(201).json({ id });
         } else if (req.method === "GET") {
-            const templates = await doWithPrisma((prisma) => prisma.template.findMany({}));
+            const filters = req.query;
+            if (!filters.userId) {
+                throw new Error("Invalid user");
+            }
+            const templates = await doWithPrisma((prisma) =>
+                prisma.template.findMany({ where: { createdById: Number(filters.userId) } })
+            );
             res.status(200).json(templates);
         }
     } catch (error: any) {
