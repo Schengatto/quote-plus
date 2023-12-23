@@ -1,5 +1,6 @@
 import TextEditor from "@/components/TextEditor";
 import AppLayout from "@/layouts/Layout";
+import { useAuthStore } from "@/store/auth";
 import { useI18nStore } from "@/store/i18n";
 import { CategoryApiModel } from "@/types/api/category";
 import { Brand, Currency, Product } from "@prisma/client";
@@ -11,13 +12,14 @@ const ProductEdit = () => {
 
     const router = useRouter();
     const params = useParams();
-    const { t } = useI18nStore();
 
-    const [ product, setProduct ] = useState<Partial<Product>>({});
-    const [ brands, setBrands ] = useState<Brand[]>([]);
-    const [ categories, setCategories ] = useState<CategoryApiModel[]>([]);
-    const [ currencies, setCurrencies ] = useState<Currency[]>([]);
-    const [ photo, setPhoto ] = useState<File | null>(null);
+    const { t } = useI18nStore();
+    const { user } = useAuthStore();
+
+    const [product, setProduct] = useState<Partial<Product>>({});
+    const [brands, setBrands] = useState<Brand[]>([]);
+    const [categories, setCategories] = useState<CategoryApiModel[]>([]);
+    const [currencies, setCurrencies] = useState<Currency[]>([]);
 
     const handleCodeChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setProduct((prev) => ({ ...prev, code: e.target.value }));
@@ -104,19 +106,24 @@ const ProductEdit = () => {
         setCurrencies(_currencies);
     };
 
-    const fetchProduct = async () => {
-        const _product = await fetch(`/api/product/${params.id}`, { method: "GET" }).then((res) => res.json());
-        setProduct(_product);
-    };
-
     useEffect(() => {
-        if (!params?.id) return;
+        if (!user || !params?.id) return;
+
+        if (!user?.userRole.grants?.includes("products")) {
+            router.push("/");
+            return;
+        }
+
+        const fetchProduct = async () => {
+            const _product = await fetch(`/api/product/${params.id}`, { method: "GET" }).then((res) => res.json());
+            setProduct(_product);
+        };
 
         fetchBrands();
         fetchCategories();
         fetchCurrency();
         fetchProduct();
-    }, [ params ]);
+    }, [params, user, router]);
 
     return (
         <AppLayout>

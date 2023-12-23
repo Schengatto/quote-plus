@@ -38,3 +38,4 @@ next-env.d.ts
 # Database
 db/db-data
 db/pgadmin-data
+prisma/seed.local.ts

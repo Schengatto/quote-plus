@@ -2,26 +2,17 @@ import AppLayout from "@/layouts/Layout";
 import { useAuthStore } from "@/store/auth";
 import { useI18nStore } from "@/store/i18n";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
 
 const UserProfile = () => {
 
     const router = useRouter();
     const { t, setCurrentLanguage, currentLanguage } = useI18nStore();
-    const { user, logout, login } = useAuthStore();
 
     const handleSelectedLanguageChanged = (e: ChangeEvent<HTMLSelectElement>) => {
         const language: string = e.currentTarget.value;
         setCurrentLanguage(language);
     };
-
-    const handleSave = async () => {
-        router.push("/home");
-    };
-
-    useEffect(() => {
-
-    }, []);
 
     return (
         <AppLayout>

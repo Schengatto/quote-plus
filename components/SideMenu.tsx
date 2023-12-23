@@ -6,7 +6,7 @@ import { useAuthStore } from "@/store/auth";
 
 const SideMenu: FunctionComponent = () => {
     const { t } = useI18nStore();
-    const { logout } = useAuthStore();
+    const { logout, user } = useAuthStore();
 
     const router = useRouter();
 
@@ -30,35 +30,44 @@ const SideMenu: FunctionComponent = () => {
                         <div className="ml-2">{t("sideMenu.item.home")}</div>
                     </div>
                 </div>
-                <div className="w-full">
-                    <div className="side-menu__category">{t("sideMenu.item.quotes")}</div>
-                    <div className="side-menu__item" onClick={() => navigateTo("/quote/create")}>
-                        <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
-                        <div className="ml-2">{t("sideMenu.item.newQuote")}</div>
+                {user?.userRole.grants?.includes("quotes") &&
+                    <div className="w-full" >
+                        <div className="side-menu__category">{t("sideMenu.item.quotes")}</div>
+                        <div className="side-menu__item" onClick={() => navigateTo("/quote/create")}>
+                            <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
+                            <div className="ml-2">{t("sideMenu.item.newQuote")}</div>
+                        </div>
+                        <div className="side-menu__item" onClick={() => navigateTo("/quote")}>
+                            <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineFolderOpen /></div>
+                            <div className="ml-2">{t("sideMenu.item.quotesArchive")}</div>
+                        </div>
                     </div>
-                    <div className="side-menu__item" onClick={() => navigateTo("/quote")}>
-                        <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineFolderOpen /></div>
-                        <div className="ml-2">{t("sideMenu.item.quotesArchive")}</div>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <div className="side-menu__category">{t("sideMenu.item.catalog")}</div>
-                    <div className="side-menu__item"
-                        onClick={() => navigateTo("/category")}>
-                        <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
-                        <div className="ml-2">{t("sideMenu.item.categories")}</div>
-                    </div>
-                    <div className="side-menu__item"
-                        onClick={() => navigateTo("/product")}>
-                        <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
-                        <div className="ml-2 ">{t("sideMenu.item.products")}</div>
-                    </div>
-                    <div className="side-menu__item"
-                        onClick={() => navigateTo("/brand")}>
-                        <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
-                        <div className="ml-2 ">{t("sideMenu.item.brands")}</div>
-                    </div>
-                </div>
+                }
+                {user?.userRole.grants?.some(g => ["categories", "brands", "products"].includes(g)) &&
+                    <div className="w-full">
+                        <div className="side-menu__category">{t("sideMenu.item.catalog")}</div>
+                        {user?.userRole.grants?.includes("categories") &&
+                            <div className="side-menu__item"
+                                onClick={() => navigateTo("/category")}>
+                                <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
+                                <div className="ml-2">{t("sideMenu.item.categories")}</div>
+                            </div>
+                        }
+                        {user?.userRole.grants?.includes("products") &&
+                            <div className="side-menu__item"
+                                onClick={() => navigateTo("/product")}>
+                                <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
+                                <div className="ml-2 ">{t("sideMenu.item.products")}</div>
+                            </div>
+                        }
+                        {user?.userRole.grants?.includes("brands") &&
+                            <div className="side-menu__item"
+                                onClick={() => navigateTo("/brand")}>
+                                <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
+                                <div className="ml-2 ">{t("sideMenu.item.brands")}</div>
+                            </div>
+                        }
+                    </div>}
                 <div className="w-full">
                     <div className="side-menu__category">{t("sideMenu.item.user")}</div>
                     <div className="side-menu__item"

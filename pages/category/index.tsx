@@ -6,15 +6,20 @@ import { CategoryApiModel } from "@/types/api/category";
 import { useI18nStore } from "@/store/i18n";
 import { useAppStore } from "@/store/app";
 import { doActionWithLoader } from "@/utils/actions";
+import { useAuthStore } from "@/store/auth";
+import { useRouter } from "next/router";
 
 const Categories = () => {
+    const router = useRouter();
+
     const { t } = useI18nStore();
+    const { user } = useAuthStore();
     const { setIsLoading } = useAppStore();
 
-    const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
-    const [ selectedCategory, setSelectedCategory ] = useState<Partial<CategoryApiModel> | null>(null);
-    const [ categories, setCategories ] = useState<CategoryApiModel[]>([]);
-    const [ availableParentCategories, setAvailableParentCategories ] = useState<Category[]>([]);
+    const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
+    const [selectedCategory, setSelectedCategory] = useState<Partial<CategoryApiModel> | null>(null);
+    const [categories, setCategories] = useState<CategoryApiModel[]>([]);
+    const [availableParentCategories, setAvailableParentCategories] = useState<Category[]>([]);
 
     const handleEdit = (event: any, _selectedCategory: Partial<Category>) => {
         event.stopPropagation();
@@ -83,11 +88,10 @@ const Categories = () => {
     };
 
     const fetchCategories = async () => {
-        doActionWithLoader(setIsLoading, async() => {
+        doActionWithLoader(setIsLoading, async () => {
             const _categories = await fetch("/api/category", { method: "GET" }).then((res) => res.json());
             setCategories(_categories);
         });
-
     };
 
     const categoryLabel = (category: CategoryApiModel): string => {
@@ -97,15 +101,21 @@ const Categories = () => {
     };
 
     useEffect(() => {
+        if (!user) return;
+        if (!user?.userRole.grants?.includes("categories")) {
+            router.push("/");
+            return;
+        }
+
         fetchCategories();
-    }, []);
+    }, [router, user]);
 
     useEffect(() => {
         const notTheSelectedOne = ((c: Category) => c.id !== selectedCategory?.id);
         const isNotChildCategory = ((c: Category) => !c.parentId);
         const _availableCategories = categories.filter(c => notTheSelectedOne(c) && isNotChildCategory(c));
         setAvailableParentCategories(_availableCategories);
-    }, [ selectedCategory, categories ]);
+    }, [selectedCategory, categories]);
 
     return (
         <AppLayout>

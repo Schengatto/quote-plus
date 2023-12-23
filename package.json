@@ -12,6 +12,7 @@
     "build": "npx puppeteer browsers install chrome && prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "db:sync": "prisma db push && prisma generate",
     "db:seed": "ts-node prisma/seed.ts",
     "db:studio": "prisma studio"

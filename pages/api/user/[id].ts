@@ -13,16 +13,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         if (req.method === "GET") {
             const user = await doWithPrisma((prisma) =>
-                prisma.user.findUnique({
-                    select: {
-                        id: true,
-                        username: true,
-                        password: false,
-                        activeTemplateId: true,
-                        createdAt: true,
-                        updatedAt: true,
-                    },
+                prisma.user.findFirstOrThrow({
                     where: { id: Number(id) },
+                    include: { tenant: { select: { id: true } }, userRole: { select: { id: true, grants: true } } },
                 })
             );
             res.status(200).json(user);

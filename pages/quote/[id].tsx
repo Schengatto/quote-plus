@@ -11,6 +11,7 @@ const QuoteEdit = () => {
 
     const router = useRouter();
     const params = useParams();
+
     const { t } = useI18nStore();
     const { user } = useAuthStore();
     const targetRef = useRef<HTMLDivElement>(null);
@@ -42,8 +43,11 @@ const QuoteEdit = () => {
     };
 
     useEffect(() => {
-        if (!params?.id) return;
-        if (!user) return;
+        if (!user || !params?.id) return;
+        if (!user?.userRole.grants?.includes("quotes")) {
+            router.push("/");
+            return;
+        }
         fetchSelectedQuote();
     }, [ params ]);
 

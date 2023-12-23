@@ -12,6 +12,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 const QuoteCreate = () => {
 
     const router = useRouter();
+
     const { t } = useI18nStore();
     const { user } = useAuthStore();
     const { selectedQuote, setSelectedQuote } = useQuotesStore();
@@ -21,8 +22,8 @@ const QuoteCreate = () => {
     const [ products, setProducts ] = useState<Product[]>([]);
     const [ templates, setTemplates ] = useState<Template[]>([]);
     const [ categories, setCategories ] = useState<CategoryApiModel[]>([]);
-    const [ selectedCategory, setSelectedCategory ] = useState<number | null>(null);
-    const [ selectedProduct, setSelectedProduct ] = useState<Product | null>(null);
+    const [ selectedCategory, setSelectedCategory ] = useState<number | undefined>(undefined);
+    const [ selectedProduct, setSelectedProduct ] = useState<Product | undefined>(undefined);
     const [ selectedProductDiscount, setSelectedProductDiscount ] = useState<number>(0);
     const [ quoteOverview, setQuoteOverview ] = useState<string>("");
 
@@ -43,7 +44,7 @@ const QuoteCreate = () => {
 
     const handleProductChanged = (e: ChangeEvent<HTMLSelectElement>) => {
         const productId: number = !!e.currentTarget.value ? Number(e.currentTarget.value) : 0;
-        const _product: Product | null = products.find(p => p.id === productId) || null;
+        const _product: Product | undefined = products.find(p => p.id === productId) || undefined;
         setSelectedProduct(_product);
     };
 
@@ -120,6 +121,12 @@ const QuoteCreate = () => {
 
     useEffect(() => {
         if (!user) return;
+
+        if (!user?.userRole.grants?.includes("quotes")) {
+            router.push("/");
+            return;
+        }
+
         fetchCategories();
         fetchUserTemplates();
 

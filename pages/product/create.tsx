@@ -13,15 +13,16 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 const ProductCreate = () => {
 
     const router = useRouter();
+
     const { t } = useI18nStore();
     const { user } = useAuthStore();
     const { setIsLoading } = useAppStore();
     const { setSelectedProduct, selectedProduct } = useProductsStore();
 
-    const [ product, setProduct ] = useState<Partial<Product>>({});
-    const [ brands, setBrands ] = useState<Brand[]>([]);
-    const [ categories, setCategories ] = useState<CategoryApiModel[]>([]);
-    const [ currencies, setCurrencies ] = useState<Currency[]>([]);
+    const [product, setProduct] = useState<Partial<Product>>({});
+    const [brands, setBrands] = useState<Brand[]>([]);
+    const [categories, setCategories] = useState<CategoryApiModel[]>([]);
+    const [currencies, setCurrencies] = useState<Currency[]>([]);
 
     const handleCodeChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setProduct((prev) => ({ ...prev, code: e.target.value }));
@@ -114,12 +115,20 @@ const ProductCreate = () => {
         doActionWithLoader(
             setIsLoading,
             async () => {
-                await Promise.all([ fetchBrands(), fetchCategories(), fetchCurrency() ]);
+                await Promise.all([fetchBrands(), fetchCategories(), fetchCurrency()]);
                 if (selectedProduct) setProduct({ ...selectedProduct, id: undefined });
             }
         );
         return () => setSelectedProduct(null);
-    }, [ selectedProduct ]);
+    }, [selectedProduct]);
+
+    useEffect(() => {
+        if (!user) return;
+        if (!user?.userRole.grants?.includes("products")) {
+            router.push("/");
+            return;
+        }
+    }, [router, user]);
 
     return (
         <AppLayout>

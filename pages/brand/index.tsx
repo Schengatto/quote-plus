@@ -1,14 +1,17 @@
-import { Brand } from "@prisma/client";
 import AppLayout from "@/layouts/Layout";
-import { MdEdit, MdDelete, MdAddCircleOutline } from "react-icons/md";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useI18nStore } from "@/store/i18n";
-import { useAuthStore } from "@/store/auth";
 import { useAppStore } from "@/store/app";
-import { doActionWithLoader } from "@/utils/actions";
+import { useAuthStore } from "@/store/auth";
+import { useI18nStore } from "@/store/i18n";
 import { BrandApiModel } from "@/types/api/brand";
+import { doActionWithLoader } from "@/utils/actions";
+import { Brand } from "@prisma/client";
+import { useRouter } from "next/router";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
 
 const Brands = () => {
+
+    const router = useRouter();
 
     const { t } = useI18nStore();
     const { user } = useAuthStore();
@@ -82,6 +85,12 @@ const Brands = () => {
     };
 
     useEffect(() => {
+        if (!user) return;
+        if (!user?.userRole.grants?.includes("brands")) {
+            router.push("/");
+            return;
+        }
+
         fetchBrands();
     }, []);
 
@@ -147,9 +156,9 @@ const Brands = () => {
                             </div>
 
                             {!!selectedBrand?.products?.length &&
-                <div className="uppercase py-4 text-center border-4 bg-yellow-200 border-yellow-500 my-4">
-                    <strong>{t("brands.warning.deleteDisabled")}</strong>
-                </div>
+                                <div className="uppercase py-4 text-center border-4 bg-yellow-200 border-yellow-500 my-4">
+                                    <strong>{t("brands.warning.deleteDisabled")}</strong>
+                                </div>
                             }
 
                             <div className="flex justify-center items-center gap-2 flex-wrap">
@@ -162,13 +171,13 @@ const Brands = () => {
                                 </button>
 
                                 {selectedBrand?.id
-                  && <button
-                      type="button"
-                      className="btn-danger"
-                      disabled={!!selectedBrand.products?.length}
-                      onClick={(e) => handleDelete(e, selectedBrand.id!)}>
-                      <div className="uppercase font-bold text-lg">{t("common.delete")}</div>
-                  </button>
+                                    && <button
+                                        type="button"
+                                        className="btn-danger"
+                                        disabled={!!selectedBrand.products?.length}
+                                        onClick={(e) => handleDelete(e, selectedBrand.id!)}>
+                                        <div className="uppercase font-bold text-lg">{t("common.delete")}</div>
+                                    </button>
                                 }
 
                                 <button

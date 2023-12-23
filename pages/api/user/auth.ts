@@ -15,13 +15,16 @@ export default async function handler(
     try {
         if (req.method === "POST") {
             const { username, password }: Partial<User> = JSON.parse(req.body);
-            const user = await doWithPrisma((prisma) =>
-                prisma.user.findFirstOrThrow({ where: { username, password } })
+            const userData = await doWithPrisma((prisma) =>
+                prisma.user.findFirstOrThrow({
+                    where: { username, password },
+                    include: { tenant: { select: { id: true } }, userRole: { select: { id: true, grants: true } } },
+                })
             );
-            if (!user) {
+            if (!userData) {
                 throw new Error("User not found");
             }
-            res.status(200).json({ id: user.id, username: user.username, activeTemplateId: user.activeTemplateId });
+            res.status(200).json({ ...userData, password: undefined });
         }
     } catch (error: any) {
         res.status(403).json({ message: error.message });

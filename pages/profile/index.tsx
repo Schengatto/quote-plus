@@ -99,7 +99,7 @@ const UserProfile = () => {
                             <div className='font-extrabold text-lg uppercase'>{t("userProfile.form.activeTemplate")}</div>
                             <select className='text-input'
                                 required
-                                value={selectedTemplate}
+                                value={selectedTemplate || ""}
                                 onChange={handleSelectedTemplateChanged} >
                                 <option value={undefined}></option>
                                 {templates.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}

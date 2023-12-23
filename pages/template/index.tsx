@@ -14,9 +14,9 @@ const Templates = () => {
     const { user } = useAuthStore();
     const { setIsLoading } = useAppStore();
 
-    const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
-    const [selectedTemplate, setSelectedTemplate] = useState<Partial<Template> | null>(null);
-    const [templates, setTemplates] = useState<Template[]>([]);
+    const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
+    const [ selectedTemplate, setSelectedTemplate ] = useState<Partial<Template> | null>(null);
+    const [ templates, setTemplates ] = useState<Template[]>([]);
 
     const handleEdit = (event: any, _selectedTemplate: Partial<Template>) => {
         event.stopPropagation();

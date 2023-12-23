@@ -1,5 +1,6 @@
 import AppLayout from "@/layouts/Layout";
 import { useAppStore } from "@/store/app";
+import { useAuthStore } from "@/store/auth";
 import { useI18nStore } from "@/store/i18n";
 import { useProductsStore } from "@/store/products";
 import { doActionWithLoader } from "@/utils/actions";
@@ -10,11 +11,13 @@ import { MdAddCircleOutline, MdCopyAll, MdDelete, MdEdit } from "react-icons/md"
 
 const ProductList = () => {
     const router = useRouter();
+
+    const { user } = useAuthStore();
     const { t } = useI18nStore();
     const { setIsLoading } = useAppStore();
     const { setSelectedProduct } = useProductsStore();
 
-    const [ products, setProducts ] = useState<ProductList[]>([]);
+    const [products, setProducts] = useState<ProductList[]>([]);
 
     const handleEdit = (event: any, _selectedProduct: Partial<ProductList>) => {
         event.stopPropagation();
@@ -53,9 +56,14 @@ const ProductList = () => {
     };
 
     useEffect(() => {
+        if (!user) return;
+        if (!user?.userRole.grants?.includes("products")) {
+            router.push("/");
+        }
+
         doActionWithLoader(setIsLoading, fetchProducts);
         setSelectedProduct(null);
-    }, []);
+    }, [user, router]);
 
     return (
         <AppLayout>

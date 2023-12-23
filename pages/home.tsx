@@ -1,14 +1,15 @@
 import AppLayout from "@/layouts/Layout";
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdLogout, MdOutlineFolderOpen } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
 import { useI18nStore } from "@/store/i18n";
+import React from "react";
 
 const Home = () => {
     const router = useRouter();
 
     const { t } = useI18nStore();
-    const { logout } = useAuthStore();
+    const { user, logout } = useAuthStore();
 
     const handleLogout = () => {
         window.localStorage.removeItem("user");
@@ -17,13 +18,13 @@ const Home = () => {
     };
 
     const menuItems = [
-        { label: "sideMenu.item.newQuote", icon: "pencil", onClick: () => router.push("/quote/create", { scroll: false }) },
-        { label: "sideMenu.item.quotes", icon: "folder", onClick: () => router.push("/quote", { scroll: false }) },
-        { label: "sideMenu.item.categories", icon: "pencil", onClick: () => router.push("/category", { scroll: false }) },
-        { label: "sideMenu.item.products", icon: "pencil", onClick: () => router.push("/product", { scroll: false }) },
-        { label: "sideMenu.item.brands", icon: "pencil", onClick: () => router.push("brand", { scroll: false }) },
-        { label: "sideMenu.item.logout", icon: "exit", onClick: handleLogout },
-    ];
+        { label: "sideMenu.item.newQuote", icon: MdEdit, grant: "quotes", onClick: () => router.push("/quote/create", { scroll: false }) },
+        { label: "sideMenu.item.quotesArchive", icon: MdOutlineFolderOpen, grant: "quotes", onClick: () => router.push("/quote", { scroll: false }) },
+        { label: "sideMenu.item.categories", icon: MdEdit, grant: "categories", onClick: () => router.push("/category", { scroll: false }) },
+        { label: "sideMenu.item.products", icon: MdEdit, grant: "products", onClick: () => router.push("/product", { scroll: false }) },
+        { label: "sideMenu.item.brands", icon: MdEdit, grant: "brands", onClick: () => router.push("brand", { scroll: false }) },
+        { label: "sideMenu.item.logout", icon: MdLogout, onClick: handleLogout },
+    ].filter(item => !item.grant || user?.userRole.grants?.find(g => g === item.grant));
 
     return (
         <AppLayout>
@@ -34,7 +35,7 @@ const Home = () => {
                         type="button"
                         onClick={() => item.onClick()}>
                         <div>
-                            <MdEdit />
+                            {React.createElement(item.icon)}
                         </div>
                         <div className="uppercase font-bold">{t(item.label)}</div>
                     </button>)}

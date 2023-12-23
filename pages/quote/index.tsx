@@ -1,5 +1,6 @@
 import AppLayout from "@/layouts/Layout";
 import { useAppStore } from "@/store/app";
+import { useAuthStore } from "@/store/auth";
 import { useI18nStore } from "@/store/i18n";
 import { useQuotesStore } from "@/store/quotes";
 import { doActionWithLoader } from "@/utils/actions";
@@ -10,12 +11,13 @@ import { MdAddCircleOutline, MdCopyAll, MdDelete, MdEdit, MdOutlinePictureAsPdf,
 
 const QuoteList = () => {
 
+    const router = useRouter();
+
+    const { user } = useAuthStore();
     const { t } = useI18nStore();
-    const [ quotes, setProducts ] = useState<Quote[]>([]);
+    const [quotes, setProducts] = useState<Quote[]>([]);
     const { setIsLoading } = useAppStore();
     const { setSelectedQuote } = useQuotesStore();
-
-    const router = useRouter();
 
     const handleEdit = (event: any, _selectedQuote: Partial<QuoteList>) => {
         event.stopPropagation();
@@ -54,9 +56,14 @@ const QuoteList = () => {
     };
 
     useEffect(() => {
+        if (!user) return;
+        if (!user?.userRole.grants?.includes("quotes")) {
+            router.push("/");
+        }
+
         setSelectedQuote(null);
         doActionWithLoader(setIsLoading, fetchQuotes);
-    }, []);
+    }, [user]);
 
     return (
         <AppLayout>
