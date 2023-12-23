@@ -13,6 +13,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:sync": "prisma db push && prisma generate",
+    "db:seed": "ts-node prisma/seed.ts",
     "db:studio": "prisma studio"
   },
   "dependencies": {
@@ -26,6 +27,7 @@
     "react-i18next": "13.5.0",
     "react-icons": "4.12.0",
     "store": "2.0.12",
+    "ts-node": "10.9.2",
     "zustand": "4.4.7"
   },
   "devDependencies": {

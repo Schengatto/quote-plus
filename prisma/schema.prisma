@@ -9,12 +9,39 @@ datasource db {
     url      = env("PRISMA_DB_CONNECTION_STRING")
 }
 
+model Tenant {
+    id   String @id @default(uuid())
+    name String @unique
+    user User[]
+}
+
+model UserRole {
+    id   String @id @default(uuid())
+    name String @unique
+    user User[]
+}
+
+model User {
+    id               Int        @id @default(autoincrement())
+    username         String     @unique
+    password         String
+    userRoleId       String     @map("user_role_id")
+    userRole         UserRole   @relation(fields: [userRoleId], references: [id])
+    activeTemplateId Int?       @map("active_template_id")
+    extraData        Json?      @default("{}") @map("extra_data")
+    tenantId         String     @map("tenant_id")
+    tenant           Tenant     @relation(fields: [tenantId], references: [id])
+    templates        Template[]
+    createdAt        DateTime   @default(now()) @map(name: "created_at")
+    updatedAt        DateTime   @updatedAt @map(name: "updated_at")
+}
+
 model Brand {
     id          Int       @id @default(autoincrement())
     name        String    @unique
     createdAt   DateTime  @default(now()) @map(name: "created_at")
     updatedAt   DateTime  @updatedAt @map(name: "updated_at")
-    createdById Int
+    createdById Int       @map(name: "created_by_id")
     products    Product[]
 }
 
@@ -26,7 +53,7 @@ model Category {
     parents     Category[] @relation("parents")
     createdAt   DateTime   @default(now()) @map(name: "created_at")
     updatedAt   DateTime   @updatedAt @map(name: "updated_at")
-    createdById Int
+    createdById Int        @map(name: "created_by_id")
     products    Product[]
 }
 
@@ -37,7 +64,7 @@ model Currency {
     isEnabled   Boolean   @default(false)
     createdAt   DateTime  @default(now()) @map(name: "created_at")
     updatedAt   DateTime  @updatedAt @map(name: "updated_at")
-    createdById Int
+    createdById Int       @map(name: "created_by_id")
     products    Product[]
 }
 
@@ -48,36 +75,26 @@ model Template {
     user        User     @relation(fields: [createdById], references: [id])
     createdAt   DateTime @default(now()) @map(name: "created_at")
     updatedAt   DateTime @updatedAt @map(name: "updated_at")
-    createdById Int
-}
-
-model User {
-    id               Int        @id @default(autoincrement())
-    username         String     @unique
-    password         String
-    activeTemplateId Int?       @map("activeSignId")
-    templates        Template[]
-    createdAt        DateTime   @default(now()) @map(name: "created_at")
-    updatedAt        DateTime   @updatedAt @map(name: "updated_at")
+    createdById Int      @map(name: "created_by_id")
 }
 
 model Product {
     id          Int      @id @default(autoincrement())
     code        String   @unique
     name        String   @unique
-    categoryId  Int
+    categoryId  Int      @map(name: "category_id")
     category    Category @relation(fields: [categoryId], references: [id])
     photo       String?
     description String
     price       Float
-    currencyId  Int
+    currencyId  Int      @map(name: "currency_id")
     currency    Currency @relation(fields: [currencyId], references: [id])
     tags        String
-    brandId     Int
+    brandId     Int      @map(name: "brand_id")
     brand       Brand    @relation(fields: [brandId], references: [id])
     createdAt   DateTime @default(now()) @map(name: "created_at")
     updatedAt   DateTime @updatedAt @map(name: "updated_at")
-    createdById Int
+    createdById Int      @map(name: "created_by_id")
 }
 
 model Quote {
@@ -86,8 +103,8 @@ model Quote {
     content     String
     createdAt   DateTime @default(now()) @map(name: "created_at")
     createdById Int
-    createdBy   String
+    createdBy   String   @map(name: "created_by_id")
     updatedAt   DateTime @updatedAt @map(name: "updated_at")
-    updatedById Int
-    updatedBy   String
+    updatedById Int      @map(name: "updated_by_id")
+    updatedBy   String   @map(name: "updated_by")
 }
