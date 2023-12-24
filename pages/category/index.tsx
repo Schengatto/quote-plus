@@ -8,13 +8,14 @@ import { useAppStore } from "@/store/app";
 import { doActionWithLoader } from "@/utils/actions";
 import { useRouter } from "next/router";
 import { useAuth } from "@/hooks/useAuth";
+import { genericDeleteItemsDialog } from "@/utils/dialog";
 
 const Categories = () => {
     const router = useRouter();
     const user = useAuth();
 
     const { t } = useI18nStore();
-    const { setIsLoading } = useAppStore();
+    const { setIsLoading, setDialog } = useAppStore();
 
     const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
     const [selectedCategory, setSelectedCategory] = useState<Partial<CategoryApiModel> | null>(null);
@@ -50,6 +51,12 @@ const Categories = () => {
 
     const handleDelete = async (event: any, categoryId: number) => {
         event.stopPropagation();
+        await genericDeleteItemsDialog(() => deleteCategory(categoryId), t)
+            .then(content => setDialog(content));
+    };
+
+    const deleteCategory = async (categoryId: number) => {
+        setDialog(null);
         await doActionWithLoader(setIsLoading, () => fetch(`/api/category/${categoryId}`, { method: "DELETE" }), (error) => alert(error));
         await fetchCategories();
         if (selectedCategory?.id === categoryId) {

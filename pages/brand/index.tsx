@@ -4,6 +4,7 @@ import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import { BrandApiModel } from "@/types/api/brand";
 import { doActionWithLoader } from "@/utils/actions";
+import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Brand } from "@prisma/client";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
@@ -15,11 +16,11 @@ const Brands = () => {
     const user = useAuth();
 
     const { t } = useI18nStore();
-    const { setIsLoading } = useAppStore();
+    const { setIsLoading, setDialog } = useAppStore();
 
-    const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
-    const [ selectedBrand, setSelectedBrand ] = useState<Partial<BrandApiModel> | null>(null);
-    const [ brands, setBrands ] = useState<BrandApiModel[]>([]);
+    const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
+    const [selectedBrand, setSelectedBrand] = useState<Partial<BrandApiModel> | null>(null);
+    const [brands, setBrands] = useState<BrandApiModel[]>([]);
 
     const handleEdit = (event: any, _selectedBrand: Partial<Brand>) => {
         event.stopPropagation();
@@ -44,12 +45,19 @@ const Brands = () => {
 
     const handleDelete = async (event: any, brandId: number) => {
         event.stopPropagation();
+        await genericDeleteItemsDialog(() => deleteBrand(brandId), t)
+            .then(content => setDialog(content));
+    };
+
+    const deleteBrand = async (brandId: number) => {
+        setDialog(null);
         await doActionWithLoader(setIsLoading, () => fetch(`/api/brand/${brandId}`, { method: "DELETE" }));
-        await fetchBrands();
+
         if (selectedBrand?.id === brandId) {
             setIsInputFormActive(false);
             setSelectedBrand(null);
         }
+        await fetchBrands();
     };
 
     const handleSave = async (e: FormEvent<HTMLFormElement>) => {
@@ -92,7 +100,7 @@ const Brands = () => {
         }
 
         fetchBrands();
-    }, []);
+    }, [user]);
 
     return (
         <AppLayout>

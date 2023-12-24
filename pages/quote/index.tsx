@@ -4,6 +4,7 @@ import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import { useQuotesStore } from "@/store/quotes";
 import { doActionWithLoader } from "@/utils/actions";
+import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Quote, Product as QuoteList } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -16,7 +17,7 @@ const QuoteList = () => {
 
     const { t } = useI18nStore();
     const [quotes, setProducts] = useState<Quote[]>([]);
-    const { setIsLoading } = useAppStore();
+    const { setIsLoading, setDialog } = useAppStore();
     const { setSelectedQuote } = useQuotesStore();
 
     const handleEdit = (event: any, _selectedQuote: Partial<QuoteList>) => {
@@ -41,14 +42,26 @@ const QuoteList = () => {
 
     const handleDelete = async (event: any, quote: Partial<QuoteList>) => {
         event.stopPropagation();
+        await genericDeleteItemsDialog(() => deleteQuote(quote), t)
+            .then(content => setDialog(content));
+    };
+
+    const deleteQuote = async (quote: Partial<QuoteList>) => {
+        setDialog(null);
         await fetch(`/api/quote/${quote.id}`, { method: "DELETE" });
         await fetchQuotes();
     };
 
     const fetchQuotes = async () => {
-        const _quotes = await fetch("/api/quote", { method: "GET" })
-            .then((res) => res.json());
-        setProducts(_quotes);
+        doActionWithLoader(
+            setIsLoading,
+            async () => {
+                const _quotes = await fetch("/api/quote", { method: "GET" })
+                    .then((res) => res.json());
+                setProducts(_quotes);
+            },
+            (error: any) => alert(error.message)
+        );
     };
 
     const formatDate = (date: string | Date) => {
@@ -62,7 +75,7 @@ const QuoteList = () => {
         }
 
         setSelectedQuote(null);
-        doActionWithLoader(setIsLoading, fetchQuotes);
+        fetchQuotes();
     }, [user]);
 
     return (

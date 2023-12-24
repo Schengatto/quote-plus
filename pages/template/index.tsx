@@ -4,15 +4,17 @@ import AppLayout from "@/layouts/Layout";
 import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import { doActionWithLoader } from "@/utils/actions";
+import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Template } from "@prisma/client";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
 
 const Templates = () => {
 
-    const { t } = useI18nStore();
     const auth = useAuth();
-    const { setIsLoading } = useAppStore();
+
+    const { t } = useI18nStore();
+    const { setIsLoading, setDialog } = useAppStore();
 
     const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
     const [selectedTemplate, setSelectedTemplate] = useState<Partial<Template> | null>(null);
@@ -66,6 +68,12 @@ const Templates = () => {
 
     const handleDelete = async (event: any, template: Template) => {
         event.stopPropagation();
+        await genericDeleteItemsDialog(() => deleteTemplate(template), t)
+            .then(content => setDialog(content));
+    };
+
+    const deleteTemplate = async (template: Template) => {
+        setDialog(null);
         await fetch(`/api/template/${template.id}`, { method: "DELETE" });
         await fetchTemplates();
     };
