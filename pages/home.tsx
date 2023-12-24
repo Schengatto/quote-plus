@@ -5,11 +5,13 @@ import { useI18nStore } from "@/store/i18n";
 import React from "react";
 import { useAuth } from "@/hooks/useAuth";
 import Cookies from "universal-cookie";
+import { useAppStore } from "@/store/app";
 
 const Home = () => {
     const router = useRouter();
     const user = useAuth();
 
+    const { setDialog } = useAppStore();
     const { t } = useI18nStore();
 
     const handleLogout = () => {
@@ -30,16 +32,18 @@ const Home = () => {
     return (
         <AppLayout>
             <div className="flex flex-col gap-2 items-center justify-center h-full">
-                {menuItems.map((item, index) =>
-                    <button key={index}
-                        className="btn-secondary !w-[350px]"
-                        type="button"
-                        onClick={() => item.onClick()}>
-                        <div>
-                            {React.createElement(item.icon)}
-                        </div>
-                        <div className="uppercase font-bold">{t(item.label)}</div>
-                    </button>)}
+                {
+                    menuItems.map((item, index) =>
+                        <button key={index}
+                            className="btn-secondary !w-[350px]"
+                            type="button"
+                            onClick={() => item.onClick()}>
+                            <div>
+                                {React.createElement(item.icon)}
+                            </div>
+                            <div className="uppercase font-bold">{t(item.label)}</div>
+                        </button>)
+                }
             </div>
         </AppLayout>
     );
