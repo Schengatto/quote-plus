@@ -1,7 +1,7 @@
 import TextEditor from "@/components/TextEditor";
+import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
 import { useAppStore } from "@/store/app";
-import { useAuthStore } from "@/store/auth";
 import { useI18nStore } from "@/store/i18n";
 import { useProductsStore } from "@/store/products";
 import { CategoryApiModel } from "@/types/api/category";
@@ -13,9 +13,9 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 const ProductCreate = () => {
 
     const router = useRouter();
+    const user = useAuth();
 
     const { t } = useI18nStore();
-    const { user } = useAuthStore();
     const { setIsLoading } = useAppStore();
     const { setSelectedProduct, selectedProduct } = useProductsStore();
 

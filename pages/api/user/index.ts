@@ -1,4 +1,4 @@
-import doWithPrisma from "@/lib/prisma";
+import doWithPrisma from "@/libs/prisma";
 import { ResponseData } from "@/types/api";
 import { User } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";

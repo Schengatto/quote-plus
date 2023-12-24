@@ -1,7 +1,7 @@
 import TextEditor from "@/components/TextEditor";
+import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
 import { useAppStore } from "@/store/app";
-import { useAuthStore } from "@/store/auth";
 import { useI18nStore } from "@/store/i18n";
 import { useQuotesStore } from "@/store/quotes";
 import { CategoryApiModel } from "@/types/api/category";
@@ -16,8 +16,9 @@ const QuoteEdit = () => {
 
     const router = useRouter();
     const params = useParams();
+    const user = useAuth();
+
     const { t } = useI18nStore();
-    const { user } = useAuthStore();
     const { setIsLoading } = useAppStore();
     const { selectedQuote, setSelectedQuote } = useQuotesStore();
 

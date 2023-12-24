@@ -1,21 +1,20 @@
+import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
-import { useAuthStore } from "@/store/auth";
 import { useI18nStore } from "@/store/i18n";
 import { Template } from "@prisma/client";
-import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { MdDeleteOutline, MdOutlineSave } from "react-icons/md";
 
 const UserProfile = () => {
 
-    const router = useRouter();
-    const { t } = useI18nStore();
-    const { user, logout, login } = useAuthStore();
+    const user = useAuth();
 
-    const [ username, setUsername ] = useState<string>(user?.username || "");
-    const [ password, setPassword ] = useState<string>(user?.password || "");
-    const [ selectedTemplate, setSelectedTemplate ] = useState<number>(user?.activeTemplateId || 0);
-    const [ templates, setTemplates ] = useState<Template[]>([]);
+    const { t } = useI18nStore();
+
+    const [username, setUsername] = useState<string>(user?.username || "");
+    const [password, setPassword] = useState<string>(user?.password || "");
+    const [selectedTemplate, setSelectedTemplate] = useState<number>(user?.activeTemplateId || 0);
+    const [templates, setTemplates] = useState<Template[]>([]);
 
     const handleUsernameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -41,14 +40,10 @@ const UserProfile = () => {
                 activeTemplateId: selectedTemplate || null
             })
         });
-
-        const _user = await fetch(`/api/user/${user?.id}`, { method: "GET" }).then(res => res.json());
-        login(_user);
     };
 
     const handleDelete = async () => {
         await fetch(`/api/user/${user?.id}`, { method: "DELETE" });
-        logout();
     };
 
     const fetchUserTemplates = async () => {

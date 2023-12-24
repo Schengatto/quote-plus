@@ -1,13 +1,15 @@
-import doWithPrisma from "@/lib/prisma";
+import { getJwtSecretKey } from "@/libs/auth";
+import doWithPrisma from "@/libs/prisma";
 import { ResponseData } from "@/types/api";
 import { User } from "@prisma/client";
+import { SignJWT } from "jose";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<ResponseData | User[] | Partial<User>>
 ) {
-    if (!req.method || ![ "POST" ].includes(req.method)) {
+    if (!req.method || !["POST"].includes(req.method)) {
         res.status(405).json({ message: "Method not allowed" });
         return;
     }
@@ -24,7 +26,14 @@ export default async function handler(
             if (!userData) {
                 throw new Error("User not found");
             }
-            res.status(200).json({ ...userData, password: undefined });
+            const token = await new SignJWT({ ...userData })
+                .setProtectedHeader({ alg: "HS256" })
+                .setIssuedAt()
+                .setExpirationTime("12h")
+                .sign(getJwtSecretKey());
+            res.status(200);
+            res.setHeader("Set-Cookie", `token=${token}; Path=/`);
+            res.json({ ...userData, password: undefined });
         }
     } catch (error: any) {
         res.status(403).json({ message: error.message });

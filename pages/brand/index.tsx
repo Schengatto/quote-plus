@@ -1,6 +1,6 @@
+import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
 import { useAppStore } from "@/store/app";
-import { useAuthStore } from "@/store/auth";
 import { useI18nStore } from "@/store/i18n";
 import { BrandApiModel } from "@/types/api/brand";
 import { doActionWithLoader } from "@/utils/actions";
@@ -12,9 +12,9 @@ import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
 const Brands = () => {
 
     const router = useRouter();
+    const user = useAuth();
 
     const { t } = useI18nStore();
-    const { user } = useAuthStore();
     const { setIsLoading } = useAppStore();
 
     const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
