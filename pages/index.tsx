@@ -5,16 +5,18 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 interface UserCredentials {
-  username: string;
-  password: string;
+    username: string;
+    password: string;
 }
 
 const LoginPage = () => {
 
     const router = useRouter();
+    const user = useAuth();
+
     const { t } = useI18nStore();
 
-    const [ credentials, setCredentials ] = useState<UserCredentials>({ username: "", password: "" });
+    const [credentials, setCredentials] = useState<UserCredentials>({ username: "", password: "" });
 
     const handleUsernameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setCredentials((prev) => ({ ...prev, username: e.target.value }));
@@ -40,6 +42,12 @@ const LoginPage = () => {
             alert(error.message);
         }
     };
+
+    useEffect(() => {
+        if (user) {
+            router.push("/home");
+        }
+    }, [user]);
 
     return (
         <>
