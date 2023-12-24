@@ -1,5 +1,5 @@
+import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
-import { useAuthStore } from "@/store/auth";
 import { useI18nStore } from "@/store/i18n";
 import { Quote } from "@prisma/client";
 import { Parser } from "html-to-react";
@@ -11,9 +11,9 @@ const QuoteEdit = () => {
 
     const router = useRouter();
     const params = useParams();
+    const user = useAuth();
 
     const { t } = useI18nStore();
-    const { user } = useAuthStore();
     const targetRef = useRef<HTMLDivElement>(null);
 
     const [ selectedQuote, setSelectedQuote ] = useState<Quote | null>(null);

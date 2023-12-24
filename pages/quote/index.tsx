@@ -1,6 +1,6 @@
+import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
 import { useAppStore } from "@/store/app";
-import { useAuthStore } from "@/store/auth";
 import { useI18nStore } from "@/store/i18n";
 import { useQuotesStore } from "@/store/quotes";
 import { doActionWithLoader } from "@/utils/actions";
@@ -12,8 +12,8 @@ import { MdAddCircleOutline, MdCopyAll, MdDelete, MdEdit, MdOutlinePictureAsPdf,
 const QuoteList = () => {
 
     const router = useRouter();
+    const user = useAuth();
 
-    const { user } = useAuthStore();
     const { t } = useI18nStore();
     const [quotes, setProducts] = useState<Quote[]>([]);
     const { setIsLoading } = useAppStore();

@@ -1,19 +1,18 @@
 import AppLayout from "@/layouts/Layout";
 import { MdEdit, MdLogout, MdOutlineFolderOpen } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/store/auth";
 import { useI18nStore } from "@/store/i18n";
 import React from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 const Home = () => {
     const router = useRouter();
+    const user = useAuth();
 
     const { t } = useI18nStore();
-    const { user, logout } = useAuthStore();
 
     const handleLogout = () => {
         window.localStorage.removeItem("user");
-        logout();
         router.push("/");
     };
 

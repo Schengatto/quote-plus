@@ -1,6 +1,6 @@
 import TextEditor from "@/components/TextEditor";
+import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
-import { useAuthStore } from "@/store/auth";
 import { useI18nStore } from "@/store/i18n";
 import { CategoryApiModel } from "@/types/api/category";
 import { Brand, Currency, Product } from "@prisma/client";
@@ -12,9 +12,9 @@ const ProductEdit = () => {
 
     const router = useRouter();
     const params = useParams();
+    const user = useAuth();
 
     const { t } = useI18nStore();
-    const { user } = useAuthStore();
 
     const [product, setProduct] = useState<Partial<Product>>({});
     const [brands, setBrands] = useState<Brand[]>([]);

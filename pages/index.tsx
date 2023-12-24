@@ -1,21 +1,22 @@
-import { useAuthStore } from "@/store/auth";
+import { useAuth } from "@/hooks/useAuth";
 import { useI18nStore } from "@/store/i18n";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 interface UserCredentials {
-  username: string;
-  password: string;
+    username: string;
+    password: string;
 }
 
 const LoginPage = () => {
 
     const router = useRouter();
-    const { t } = useI18nStore();
-    const { login } = useAuthStore();
+    const user = useAuth();
 
-    const [ credentials, setCredentials ] = useState<UserCredentials>({ username: "", password: "" });
+    const { t } = useI18nStore();
+
+    const [credentials, setCredentials] = useState<UserCredentials>({ username: "", password: "" });
 
     const handleUsernameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setCredentials((prev) => ({ ...prev, username: e.target.value }));
@@ -24,15 +25,6 @@ const LoginPage = () => {
     const handlePasswordChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setCredentials((prev) => ({ ...prev, password: e.target.value }));
     };
-
-    useEffect(() => {
-        if (!window) return;
-        if (window.localStorage.getItem("user")) {
-            const _user = JSON.parse(window.localStorage.getItem("user")!);
-            login(_user);
-            router.push("/home");
-        }
-    }, []);
 
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -45,13 +37,17 @@ const LoginPage = () => {
             if (!response.id) {
                 throw Error("Utente non trovato");
             }
-            login(response);
-            localStorage.setItem("user", JSON.stringify(response));
             router.push("/home");
         } catch (error: any) {
             alert(error.message);
         }
     };
+
+    useEffect(() => {
+        if (user) {
+            router.push("/home");
+        }
+    }, [user]);
 
     return (
         <>

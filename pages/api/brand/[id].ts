@@ -1,4 +1,4 @@
-import doWithPrisma from "@/lib/prisma";
+import doWithPrisma from "@/libs/prisma";
 import { Brand } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 

@@ -1,12 +1,10 @@
 import AppLayout from "@/layouts/Layout";
-import { useAuthStore } from "@/store/auth";
 import { useI18nStore } from "@/store/i18n";
 import { useRouter } from "next/router";
 import { ChangeEvent } from "react";
 
 const UserProfile = () => {
 
-    const router = useRouter();
     const { t, setCurrentLanguage, currentLanguage } = useI18nStore();
 
     const handleSelectedLanguageChanged = (e: ChangeEvent<HTMLSelectElement>) => {

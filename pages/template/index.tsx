@@ -1,22 +1,22 @@
-import { Template } from "@prisma/client";
-import AppLayout from "@/layouts/Layout";
-import { MdEdit, MdDelete, MdAddCircleOutline } from "react-icons/md";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useI18nStore } from "@/store/i18n";
-import { useAuthStore } from "@/store/auth";
 import TextEditor from "@/components/TextEditor";
-import { doActionWithLoader } from "@/utils/actions";
+import { useAuth } from "@/hooks/useAuth";
+import AppLayout from "@/layouts/Layout";
 import { useAppStore } from "@/store/app";
+import { useI18nStore } from "@/store/i18n";
+import { doActionWithLoader } from "@/utils/actions";
+import { Template } from "@prisma/client";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
 
 const Templates = () => {
 
     const { t } = useI18nStore();
-    const { user } = useAuthStore();
+    const auth = useAuth();
     const { setIsLoading } = useAppStore();
 
-    const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
-    const [ selectedTemplate, setSelectedTemplate ] = useState<Partial<Template> | null>(null);
-    const [ templates, setTemplates ] = useState<Template[]>([]);
+    const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
+    const [selectedTemplate, setSelectedTemplate] = useState<Partial<Template> | null>(null);
+    const [templates, setTemplates] = useState<Template[]>([]);
 
     const handleEdit = (event: any, _selectedTemplate: Partial<Template>) => {
         event.stopPropagation();
@@ -25,7 +25,8 @@ const Templates = () => {
     };
 
     const handleCreateNew = () => {
-        setSelectedTemplate({ name: "", content: "", createdById: user?.id });
+        if (!auth) return;
+        setSelectedTemplate({ name: "", content: "", createdById: auth.id });
         setIsInputFormActive(true);
     };
 
@@ -71,15 +72,16 @@ const Templates = () => {
 
     const fetchTemplates = async () => {
         doActionWithLoader(setIsLoading, async () => {
-            const _templates = await fetch(`/api/template?userId=${user?.id}`, { method: "GET" })
+            const _templates = await fetch(`/api/template?userId=${auth?.id}`, { method: "GET" })
                 .then((res) => res.json());
             setTemplates(_templates);
         });
     };
 
     useEffect(() => {
+        if (!auth) return;
         fetchTemplates();
-    }, []);
+    }, [auth]);
 
     return (
         <AppLayout>

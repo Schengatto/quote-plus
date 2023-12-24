@@ -6,14 +6,14 @@ import { CategoryApiModel } from "@/types/api/category";
 import { useI18nStore } from "@/store/i18n";
 import { useAppStore } from "@/store/app";
 import { doActionWithLoader } from "@/utils/actions";
-import { useAuthStore } from "@/store/auth";
 import { useRouter } from "next/router";
+import { useAuth } from "@/hooks/useAuth";
 
 const Categories = () => {
     const router = useRouter();
+    const user = useAuth();
 
     const { t } = useI18nStore();
-    const { user } = useAuthStore();
     const { setIsLoading } = useAppStore();
 
     const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);

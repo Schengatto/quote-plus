@@ -1,9 +1,8 @@
 import SideMenu from "@/components/SideMenu";
-import { useAuthStore } from "@/store/auth";
+import { useAuth } from "@/hooks/useAuth";
 import { useI18nStore } from "@/store/i18n";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import { MdMenu, MdMenuOpen } from "react-icons/md";
 
 interface LayoutProps {
@@ -12,26 +11,14 @@ interface LayoutProps {
 
 const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
 
-    const router = useRouter();
+    const auth = useAuth();
 
     const { t } = useI18nStore();
-    const { getUsername, isLoggedIn, user, login } = useAuthStore();
-
     const [isMenuVisible, setisMenuVisible] = useState<boolean>(true);
 
     const toggleMenu = () => {
         setisMenuVisible((prev: boolean) => !prev);
     }
-
-    useEffect(() => {
-        if (!window) return;
-        if (window.localStorage.getItem("user")) {
-            const _user = JSON.parse(window.localStorage.getItem("user")!);
-            login(_user)
-        } else {
-            router.push("/");
-        }
-    }, []);
 
     return (
         <>
@@ -44,7 +31,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            {isLoggedIn() &&
+            {auth &&
                 <main className="bg-gray-900 h-screen">
                     <div className="h-[7vh] z-10 fixed w-full bg-gray-900 text-white uppercase flex justify-between p-4">
                         <div>
@@ -56,7 +43,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                         </div>
                         <div>
                             <div className="text-lg font-bold">
-                                {t("navbar.welcome")} {getUsername()}
+                                {t("navbar.welcome")} {auth.username}
                             </div>
                             <div className="text-right">
                                 <small>v. {process.env.appVersion}</small>
