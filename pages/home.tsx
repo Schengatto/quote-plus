@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useI18nStore } from "@/store/i18n";
 import React from "react";
 import { useAuth } from "@/hooks/useAuth";
+import Cookies from "universal-cookie";
 
 const Home = () => {
     const router = useRouter();
@@ -12,7 +13,8 @@ const Home = () => {
     const { t } = useI18nStore();
 
     const handleLogout = () => {
-        window.localStorage.removeItem("user");
+        const cookies = new Cookies();
+        cookies.remove("token");
         router.push("/");
     };
 
