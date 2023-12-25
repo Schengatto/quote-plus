@@ -1,11 +1,11 @@
 import doWithPrisma from "@/libs/prisma";
-import { ResponseData } from "@/types/api";
+import { ErrorResponseData } from "@/types/api";
 import { User } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<ResponseData | User[] | Partial<User>>
+    res: NextApiResponse<ErrorResponseData | User[] | Partial<User>>
 ) {
     if (!req.method || ![ "GET", "POST" ].includes(req.method)) {
         res.status(405).json({ message: "Method not allowed" });

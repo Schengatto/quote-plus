@@ -2,7 +2,7 @@ import SideMenu from "@/components/SideMenu";
 import { useAuth } from "@/hooks/useAuth";
 import { useI18nStore } from "@/store/i18n";
 import Head from "next/head";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { MdMenu, MdMenuOpen } from "react-icons/md";
 
 interface LayoutProps {
@@ -13,12 +13,18 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
 
     const auth = useAuth();
 
-    const { t } = useI18nStore();
-    const [isMenuVisible, setisMenuVisible] = useState<boolean>(true);
+    const { t, setCurrentLanguage } = useI18nStore();
+    const [isMenuVisible, setIsMenuVisible] = useState<boolean>(true);
 
     const toggleMenu = () => {
-        setisMenuVisible((prev: boolean) => !prev);
-    }
+        setIsMenuVisible((prev: boolean) => !prev);
+    };
+
+    useEffect(() => {
+        if (!auth) return;
+        const userLanguage = (auth?.extraData as any).language || "en";
+        setCurrentLanguage(userLanguage );
+    }, [auth])
 
     return (
         <>

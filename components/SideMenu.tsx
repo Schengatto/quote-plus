@@ -85,12 +85,6 @@ const SideMenu: FunctionComponent = () => {
                     </div>
                 </div>
                 <div className="w-full">
-                    <div className="side-menu__category">{t("sideMenu.item.appOptions")}</div>
-                    <div className="side-menu__item "
-                        onClick={() => navigateTo("/options")}>
-                        <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
-                        <div className="ml-2 ">{t("sideMenu.item.editAppOptions")}</div>
-                    </div>
                     <div className="side-menu__item"
                         onClick={handleLogout}>
                         <div className="ml-5 flex flex-col items-center justify-center"><MdExitToApp /></div>

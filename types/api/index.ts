@@ -1,3 +1,3 @@
-export type ResponseData = {
+export type ErrorResponseData = {
     message: string;
 };

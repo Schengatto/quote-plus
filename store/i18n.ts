@@ -9,7 +9,7 @@ type I18nStore = {
 };
 
 export const useI18nStore = create<I18nStore>((set, get) => ({
-    currentLanguage: "it",
+    currentLanguage: "en",
     setCurrentLanguage: (language: string) => set({ currentLanguage: language }),
     translations: {},
     setTranslations: (translations: Record<string, string>) => set({ translations }),

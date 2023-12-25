@@ -1,20 +1,29 @@
 import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
+import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
-import { Template } from "@prisma/client";
+import { ErrorResponseData } from "@/types/api";
+import { doActionWithLoader } from "@/utils/actions";
+import { genericDeleteItemsDialog } from "@/utils/dialog";
+import { Template, User } from "@prisma/client";
+import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { MdDeleteOutline, MdOutlineSave } from "react-icons/md";
+import Cookies from "universal-cookie";
 
 const UserProfile = () => {
 
+    const router = useRouter();
     const user = useAuth();
 
-    const { t } = useI18nStore();
+    const { t, setCurrentLanguage, currentLanguage } = useI18nStore();
+    const { setIsLoading, setDialog } = useAppStore();
 
+    const [templates, setTemplates] = useState<Template[]>([]);
     const [username, setUsername] = useState<string>(user?.username || "");
     const [password, setPassword] = useState<string>(user?.password || "");
     const [selectedTemplate, setSelectedTemplate] = useState<number>(user?.activeTemplateId || 0);
-    const [templates, setTemplates] = useState<Template[]>([]);
+    const [selectedLanguage, setSelectedLanguage] = useState<string>(currentLanguage);
 
     const handleUsernameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -31,19 +40,71 @@ const UserProfile = () => {
         setSelectedTemplate(templateId);
     };
 
-    const handleSave = async () => {
-        await fetch(`/api/user/${user?.id}`, {
-            method: "PATCH", body: JSON.stringify({
-                ...user,
-                username: username || user?.username,
-                password: password || user?.password,
-                activeTemplateId: selectedTemplate || null
-            })
-        });
+    const handleSelectedLanguageChanged = (e: ChangeEvent<HTMLSelectElement>) => {
+        const language: string = e.currentTarget.value;
+        setSelectedLanguage(language);
+    };
+
+    const handleLogout = () => {
+        const cookies = new Cookies();
+        cookies.remove("token");
+        router.push("/");
+    };
+
+    const handleSaveUserOptions = async () => {
+        if (!user) return;
+        doActionWithLoader(
+            setIsLoading,
+            async () => {
+                const result: any | Partial<User> | ErrorResponseData = await fetch(`/api/user/${user?.id}`, {
+                    method: "PATCH",
+                    body: JSON.stringify({
+                        activeTemplateId: selectedTemplate || null,
+                        extraData: { ...(user.extraData as any), language: selectedLanguage }
+                    })
+                }).then(data => data.json());
+
+                if (result.message) {
+                    throw new Error(result.message);
+                }
+
+                setCurrentLanguage(selectedLanguage);
+            },
+            (error) => alert(error.message)
+        );
+    };
+
+    const handleSaveAccountOptions = async () => {
+        if (!user) return;
+        await doActionWithLoader(
+            setIsLoading,
+            async () => {
+                const result: any | Partial<User> | ErrorResponseData = await fetch(`/api/user/${user?.id}`, {
+                    method: "PATCH",
+                    body: JSON.stringify({
+                        username: username ? username : undefined,
+                        password: password ? password : undefined,
+                    })
+                }).then(data => data.json());
+
+                if (result.message) {
+                    throw new Error(result.message);
+                }
+            },
+            (error) => alert(error.message)
+        );
+        handleLogout();
     };
 
     const handleDelete = async () => {
-        await fetch(`/api/user/${user?.id}`, { method: "DELETE" });
+        const deleteAccount = async () => {
+            setDialog(null);
+            await fetch(`/api/user/${user?.id}`, { method: "DELETE" });
+            handleLogout();
+        };
+
+        await genericDeleteItemsDialog(() => deleteAccount(), t)
+            .then(content => setDialog(content));
     };
 
     const fetchUserTemplates = async () => {
@@ -69,7 +130,51 @@ const UserProfile = () => {
     return (
         <AppLayout>
             <div className="m-8">
-                <div className="card-header">{t("userProfile.form.title")}</div>
+                <div className="card-header">{t("userProfile.userOptions.title")}</div>
+                <div className="card-body">
+                    <form className="w-[90%]">
+                        <div className='w-full my-4'>
+                            <div className='font-extrabold text-lg uppercase'>{t("userProfile.form.activeTemplate")}</div>
+                            <select className='text-input'
+                                required
+                                value={selectedTemplate || ""}
+                                onChange={handleSelectedTemplateChanged} >
+                                <option value={undefined}></option>
+                                {templates.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
+                            </select>
+                        </div>
+
+                        <div className='w-full my-4'>
+                            <div className='font-extrabold text-lg uppercase'>{t("options.form.language")}</div>
+                            <select className='text-input'
+                                required
+                                value={selectedLanguage}
+                                onChange={handleSelectedLanguageChanged} >
+                                <option value="en">English</option>
+                                <option value="it">Italiano</option>
+                                <option value="fr">Français</option>
+                                <option value="de">Deutsche</option>
+                                <option value="es">Español</option>
+                            </select>
+                        </div>
+
+                        <div className="flex justify-center items-center gap-4">
+                            <button
+                                type="button"
+                                className="btn-primary"
+                                onClick={handleSaveUserOptions}>
+                                <div>
+                                    <MdOutlineSave />
+                                </div>
+                                <div className="uppercase font-bold text-lg">{t("userProfile.button.saveAccount")}</div>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div className="m-8">
+                <div className="card-header">{t("userProfile.accountOptions.title")}</div>
                 <div className="card-body">
                     <form className="w-[90%]">
                         <div className="w-full my-4">
@@ -90,16 +195,7 @@ const UserProfile = () => {
                                 onChange={handlePasswordChanged}
                             />
                         </div>
-                        <div className='w-full my-4'>
-                            <div className='font-extrabold text-lg uppercase'>{t("userProfile.form.activeTemplate")}</div>
-                            <select className='text-input'
-                                required
-                                value={selectedTemplate || ""}
-                                onChange={handleSelectedTemplateChanged} >
-                                <option value={undefined}></option>
-                                {templates.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
-                            </select>
-                        </div>
+
                         <div className="flex justify-center items-center gap-4">
                             <button
                                 type="button"
@@ -114,7 +210,7 @@ const UserProfile = () => {
                             <button
                                 type="button"
                                 className="btn-primary"
-                                onClick={handleSave}>
+                                onClick={handleSaveAccountOptions}>
                                 <div>
                                     <MdOutlineSave />
                                 </div>

@@ -1,11 +1,11 @@
 import doWithPrisma from "@/libs/prisma";
-import { ResponseData } from "@/types/api";
+import { ErrorResponseData } from "@/types/api";
 import { Currency } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<ResponseData | Currency[] | Partial<Currency>>
+    res: NextApiResponse<ErrorResponseData | Currency[] | Partial<Currency>>
 ) {
     if (!req.method || ![ "GET" ].includes(req.method)) {
         res.status(405).json({ message: "Method not allowed" });

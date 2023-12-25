@@ -49,7 +49,7 @@ const QuoteEdit = () => {
             return;
         }
         fetchSelectedQuote();
-    }, [ params ]);
+    }, [ user ]);
 
     return (
         <AppLayout>

@@ -22,7 +22,7 @@ async function main() {
         update: {},
         create: {
             name: "basic",
-            grants: [ "quotes" ],
+            grants: ["quotes"],
         },
     });
 
@@ -50,12 +50,24 @@ async function main() {
         },
     });
 
+    const euroCurrency = await prisma.currency.upsert({
+        where: { name: "euro" },
+        update: {},
+        create: {
+            name: "euro",
+            symbol: "€",
+            isEnabled: true,
+            createdById: 0,
+        },
+    });
+
     console.log({
         demoTenant,
         userRoleAdmin,
         userRoleBasic,
         adminUser,
         basicUser,
+        euroCurrency
     });
 }
 main()

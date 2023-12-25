@@ -22,7 +22,7 @@ const Dialog: FunctionComponent = () => {
             {dialog &&
                 <>
                     <div className="w-full min-h-[100vh] items-center justify-center h-full bg-[#1e6bd769] fixed z-20">
-                        <div className="bg-gray-900 text-white w-[600px] m-auto mt-[30vh] p-4 border-4 border-red-500">
+                        <div className="bg-gray-900 text-white w-[50%] m-auto mt-[30vh] p-4 border-4 border-red-500">
                             <div className="flex">
                                 <div className="text-yellow-400 text-4xl mr-4">
                                     <MdWarning />
