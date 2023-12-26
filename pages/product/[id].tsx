@@ -16,10 +16,10 @@ const ProductEdit = () => {
 
     const { t } = useI18nStore();
 
-    const [product, setProduct] = useState<Partial<Product>>({});
-    const [brands, setBrands] = useState<Brand[]>([]);
-    const [categories, setCategories] = useState<CategoryApiModel[]>([]);
-    const [currencies, setCurrencies] = useState<Currency[]>([]);
+    const [ product, setProduct ] = useState<Partial<Product>>({});
+    const [ brands, setBrands ] = useState<Brand[]>([]);
+    const [ categories, setCategories ] = useState<CategoryApiModel[]>([]);
+    const [ currencies, setCurrencies ] = useState<Currency[]>([]);
 
     const handleCodeChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setProduct((prev) => ({ ...prev, code: e.target.value }));
@@ -123,7 +123,7 @@ const ProductEdit = () => {
         fetchCategories();
         fetchCurrency();
         fetchProduct();
-    }, [params, user, router]);
+    }, [ params, user, router ]);
 
     return (
         <AppLayout>

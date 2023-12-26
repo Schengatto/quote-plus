@@ -17,10 +17,10 @@ const Categories = () => {
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
-    const [selectedCategory, setSelectedCategory] = useState<Partial<CategoryApiModel> | null>(null);
-    const [categories, setCategories] = useState<CategoryApiModel[]>([]);
-    const [availableParentCategories, setAvailableParentCategories] = useState<Category[]>([]);
+    const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
+    const [ selectedCategory, setSelectedCategory ] = useState<Partial<CategoryApiModel> | null>(null);
+    const [ categories, setCategories ] = useState<CategoryApiModel[]>([]);
+    const [ availableParentCategories, setAvailableParentCategories ] = useState<Category[]>([]);
 
     const handleEdit = (event: any, _selectedCategory: Partial<Category>) => {
         event.stopPropagation();
@@ -115,14 +115,14 @@ const Categories = () => {
         }
 
         fetchCategories();
-    }, [router, user]);
+    }, [ router, user ]);
 
     useEffect(() => {
         const notTheSelectedOne = ((c: Category) => c.id !== selectedCategory?.id);
         const isNotChildCategory = ((c: Category) => !c.parentId);
         const _availableCategories = categories.filter(c => notTheSelectedOne(c) && isNotChildCategory(c));
         setAvailableParentCategories(_availableCategories);
-    }, [selectedCategory, categories]);
+    }, [ selectedCategory, categories ]);
 
     return (
         <AppLayout>

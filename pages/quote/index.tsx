@@ -16,7 +16,7 @@ const QuoteList = () => {
     const user = useAuth();
 
     const { t } = useI18nStore();
-    const [quotes, setProducts] = useState<Quote[]>([]);
+    const [ quotes, setProducts ] = useState<Quote[]>([]);
     const { setIsLoading, setDialog } = useAppStore();
     const { setSelectedQuote } = useQuotesStore();
 
@@ -76,7 +76,7 @@ const QuoteList = () => {
 
         setSelectedQuote(null);
         fetchQuotes();
-    }, [user]);
+    }, [ user ]);
 
     return (
         <AppLayout>

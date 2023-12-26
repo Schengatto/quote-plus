@@ -15,7 +15,6 @@ const doWithPrisma = async (
             await onError(error);
         }
     } finally {
-        console.log("CIAO");
         prisma.$disconnect();
         return result;
     }

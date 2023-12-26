@@ -10,7 +10,6 @@ export const doActionWithLoader = async (
         if (!onError) {
             throw new Error(error);
         } else {
-            console.log("ciao", error)
             await onError(error);
         }
     } finally {

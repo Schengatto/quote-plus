@@ -19,11 +19,11 @@ const UserProfile = () => {
     const { t, setCurrentLanguage, currentLanguage } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [templates, setTemplates] = useState<Template[]>([]);
-    const [username, setUsername] = useState<string>(user?.username || "");
-    const [password, setPassword] = useState<string>(user?.password || "");
-    const [selectedTemplate, setSelectedTemplate] = useState<number>(user?.activeTemplateId || 0);
-    const [selectedLanguage, setSelectedLanguage] = useState<string>(currentLanguage);
+    const [ templates, setTemplates ] = useState<Template[]>([]);
+    const [ username, setUsername ] = useState<string>(user?.username || "");
+    const [ password, setPassword ] = useState<string>(user?.password || "");
+    const [ selectedTemplate, setSelectedTemplate ] = useState<number>(user?.activeTemplateId || 0);
+    const [ selectedLanguage, setSelectedLanguage ] = useState<string>(currentLanguage);
 
     const handleUsernameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -197,15 +197,17 @@ const UserProfile = () => {
                         </div>
 
                         <div className="flex justify-center items-center gap-4">
-                            <button
-                                type="button"
-                                className="btn-danger"
-                                onClick={handleDelete}>
-                                <div>
-                                    <MdDeleteOutline />
-                                </div>
-                                <div className="uppercase font-bold text-lg">{t("userProfile.button.deleteAccount")}</div>
-                            </button>
+                            {user?.userRole.grants?.includes("delete-account") &&
+                                <button
+                                    type="button"
+                                    className="btn-danger"
+                                    onClick={handleDelete}>
+                                    <div>
+                                        <MdDeleteOutline />
+                                    </div>
+                                    <div className="uppercase font-bold text-lg">{t("userProfile.button.deleteAccount")}</div>
+                                </button>
+                            }
 
                             <button
                                 type="button"

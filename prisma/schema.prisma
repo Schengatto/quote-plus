@@ -18,7 +18,7 @@ model Tenant {
 model UserRole {
     id     String   @id @default(uuid())
     name   String   @unique
-    grants String[] @default(["quotes", "categories", "brands", "products"])
+    grants String[] @default(["quotes", "categories", "brands", "products", "delete-account", "manage-users"])
     user   User[]
 }
 

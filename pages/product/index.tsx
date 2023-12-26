@@ -18,7 +18,7 @@ const ProductList = () => {
     const { setIsLoading, setDialog } = useAppStore();
     const { setSelectedProduct } = useProductsStore();
 
-    const [products, setProducts] = useState<ProductList[]>([]);
+    const [ products, setProducts ] = useState<ProductList[]>([]);
 
     const handleEdit = (event: any, _selectedProduct: Partial<ProductList>) => {
         event.stopPropagation();
@@ -70,7 +70,7 @@ const ProductList = () => {
 
         doActionWithLoader(setIsLoading, fetchProducts);
         setSelectedProduct(null);
-    }, [user, router]);
+    }, [ user, router ]);
 
     return (
         <AppLayout>

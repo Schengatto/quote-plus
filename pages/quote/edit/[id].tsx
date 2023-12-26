@@ -22,14 +22,14 @@ const QuoteEdit = () => {
     const { setIsLoading } = useAppStore();
     const { selectedQuote, setSelectedQuote } = useQuotesStore();
 
-    const [quoteContent, setQuoteContent] = useState<string>("");
-    const [products, setProducts] = useState<Product[]>([]);
-    const [templates, setTemplates] = useState<Template[]>([]);
-    const [categories, setCategories] = useState<CategoryApiModel[]>([]);
-    const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-    const [selectedProductDiscount, setSelectedProductDiscount] = useState<number>(0);
-    const [quoteOverview, setQuoteOverview] = useState<string>("");
+    const [ quoteContent, setQuoteContent ] = useState<string>("");
+    const [ products, setProducts ] = useState<Product[]>([]);
+    const [ templates, setTemplates ] = useState<Template[]>([]);
+    const [ categories, setCategories ] = useState<CategoryApiModel[]>([]);
+    const [ selectedCategory, setSelectedCategory ] = useState<number | null>(null);
+    const [ selectedProduct, setSelectedProduct ] = useState<Product | null>(null);
+    const [ selectedProductDiscount, setSelectedProductDiscount ] = useState<number>(0);
+    const [ quoteOverview, setQuoteOverview ] = useState<string>("");
 
     const handleNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -134,18 +134,18 @@ const QuoteEdit = () => {
             return;
         }
 
-        doActionWithLoader(setIsLoading, async () => await Promise.all([fetchCategories(), fetchUserTemplates(), fetchSelectedQuote()]));
-    }, [params, user]);
+        doActionWithLoader(setIsLoading, async () => await Promise.all([ fetchCategories(), fetchUserTemplates(), fetchSelectedQuote() ]));
+    }, [ params, user ]);
 
     useEffect(() => {
         if (selectedCategory) {
             fetchProducts();
         }
-    }, [selectedCategory]);
+    }, [ selectedCategory ]);
 
     useEffect(() => {
         setQuoteOverview(() => quoteContent.replaceAll("{{prodotti}}", ""));
-    }, [quoteContent]);
+    }, [ quoteContent ]);
 
     return (
         <AppLayout>

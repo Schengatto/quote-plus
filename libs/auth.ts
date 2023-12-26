@@ -1,3 +1,4 @@
+import { AuthenticatedUser } from "@/types/api/user";
 import { JWTPayload, jwtVerify } from "jose";
 
 export const getJwtSecretKey = (): Uint8Array => {
@@ -8,7 +9,7 @@ export const getJwtSecretKey = (): Uint8Array => {
     return new TextEncoder().encode(secret);
 };
 
-export const verifyJwtToken = async (token: string): Promise<JWTPayload | null> => {
+export const verifyJwtToken = async (token: string): Promise<JWTPayload | AuthenticatedUser |null> => {
     try {
         const { payload } = await jwtVerify(token, getJwtSecretKey());
         return payload;

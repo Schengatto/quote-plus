@@ -16,7 +16,7 @@ const LoginPage = () => {
 
     const { t } = useI18nStore();
 
-    const [credentials, setCredentials] = useState<UserCredentials>({ username: "", password: "" });
+    const [ credentials, setCredentials ] = useState<UserCredentials>({ username: "", password: "" });
 
     const handleUsernameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setCredentials((prev) => ({ ...prev, username: e.target.value }));
@@ -47,7 +47,7 @@ const LoginPage = () => {
         if (user) {
             router.push("/home");
         }
-    }, [user]);
+    }, [ user ]);
 
     return (
         <>
