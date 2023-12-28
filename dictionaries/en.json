@@ -28,6 +28,8 @@
   "sideMenu.item.appOptions": "program options",
   "sideMenu.item.editAppOptions": "edit options",
   "sideMenu.item.manageTemplates": "manage signatures",
+  "sideMenu.item.admin": "administration",
+  "sideMenu.item.usersManagement": "users management",
   "sideMenu.item.logout": "logout",
   "brands.table.title": "brands list",
   "brands.button.addBrand": "add brand",
@@ -90,5 +92,14 @@
   "templates.form.content": "signature content",
   "templates.button.save": "save template",
   "options.form.title": "options",
-  "options.form.language": "language"
+  "options.form.language": "language",
+  "usersManagement.table.title": "users management",
+  "usersManagement.table.head.username": "username",
+  "usersManagement.table.head.roleName": "role",
+  "usersManagement.button.addUser": "add a new user",
+  "usersManagement.form.title": "fill in the fields",
+  "usersManagement.form.username": "username",
+  "usersManagement.form.role": "role",
+  "usersManagement.form.password": "password",
+  "usersManagement.button.save": "save"
 }

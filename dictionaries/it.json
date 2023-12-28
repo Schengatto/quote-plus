@@ -28,6 +28,8 @@
   "sideMenu.item.appOptions": "opzioni programma",
   "sideMenu.item.editAppOptions": "modifica opzioni",
   "sideMenu.item.manageTemplates": "gestione firme",
+  "sideMenu.item.admin": "amministrazione",
+  "sideMenu.item.usersManagement": "gestione utenti",
   "sideMenu.item.logout": "esci dal programma",
   "brands.table.title": "elenco marchi",
   "brands.button.addBrand": "aggiungi marchio",
@@ -77,7 +79,7 @@
   "quotes.button.editQuote": "modifica",
   "quotes.button.exportPdf": "esporta PDF",
   "userProfile.userOptions.title": "opzioni utente",
-  "userProfile.accountOptions.title" : "opzioni account",
+  "userProfile.accountOptions.title": "opzioni account",
   "userProfile.form.username": "username",
   "userProfile.form.password": "password",
   "userProfile.form.activeTemplate": "firma predefinita",
@@ -90,5 +92,14 @@
   "templates.form.content": "contenuto firma",
   "templates.button.save": "salva template",
   "options.form.title": "opzioni",
-  "options.form.language": "lingua"
+  "options.form.language": "lingua",
+  "usersManagement.table.title": "gestione utenti",
+  "usersManagement.table.head.username": "username",
+  "usersManagement.table.head.roleName": "ruolo",
+  "usersManagement.button.addUser": "aggiungi utente",
+  "usersManagement.form.title": "compila i campi",
+  "usersManagement.form.username": "username",
+  "usersManagement.form.role": "ruolo",
+  "usersManagement.form.password": "password",
+  "usersManagement.button.save": "salva"
 }

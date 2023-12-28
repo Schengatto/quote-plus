@@ -1,9 +1,9 @@
-import { FunctionComponent } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { useI18nStore } from "@/store/i18n";
 import { useRouter } from "next/navigation";
-import { MdOutlineEdit, MdOutlineHouse, MdOutlineFolderOpen, MdExitToApp } from "react-icons/md";
+import { FunctionComponent } from "react";
+import { MdEditDocument, MdExitToApp, MdManageAccounts, MdOutlineEdit, MdOutlineFolderOpen, MdOutlineHouse, MdSignLanguage, MdStorage } from "react-icons/md";
 import Cookies from "universal-cookie";
-import { useAuth } from "@/hooks/useAuth";
 
 const SideMenu: FunctionComponent = () => {
     const auth = useAuth();
@@ -33,7 +33,7 @@ const SideMenu: FunctionComponent = () => {
                         <div className="ml-2">{t("sideMenu.item.home")}</div>
                     </div>
                 </div>
-                {hasGrants([ "quotes" ]) &&
+                {hasGrants(["quotes"]) &&
                     <div className="w-full" >
                         <div className="side-menu__category">{t("sideMenu.item.quotes")}</div>
                         <div className="side-menu__item" onClick={() => navigateTo("/quotes/create")}>
@@ -46,31 +46,44 @@ const SideMenu: FunctionComponent = () => {
                         </div>
                     </div>
                 }
-                {hasGrants([ "categories", "brands", "products" ]) &&
+                {hasGrants(["categories", "brands", "products"]) &&
                     <div className="w-full">
                         <div className="side-menu__category">{t("sideMenu.item.catalog")}</div>
-                        {hasGrants([ "categories" ]) &&
+                        {hasGrants(["categories"]) &&
                             <div className="side-menu__item"
                                 onClick={() => navigateTo("/categories")}>
-                                <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
+                                <div className="ml-5 flex flex-col items-center justify-center"><MdStorage /></div>
                                 <div className="ml-2">{t("sideMenu.item.categories")}</div>
                             </div>
                         }
-                        {hasGrants([ "products" ]) &&
+                        {hasGrants(["products"]) &&
                             <div className="side-menu__item"
                                 onClick={() => navigateTo("/products")}>
-                                <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
+                                <div className="ml-5 flex flex-col items-center justify-center"><MdStorage /></div>
                                 <div className="ml-2 ">{t("sideMenu.item.products")}</div>
                             </div>
                         }
-                        {hasGrants([ "brands" ]) &&
+                        {hasGrants(["brands"]) &&
                             <div className="side-menu__item"
                                 onClick={() => navigateTo("/brands")}>
-                                <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
+                                <div className="ml-5 flex flex-col items-center justify-center"><MdStorage /></div>
                                 <div className="ml-2 ">{t("sideMenu.item.brands")}</div>
                             </div>
                         }
-                    </div>}
+                    </div>
+                }
+                {hasGrants(["users-management"]) &&
+                    <div className="w-full">
+                        <div className="side-menu__category">{t("sideMenu.item.admin")}</div>
+                        {hasGrants(["users-management"]) &&
+                            <div className="side-menu__item"
+                                onClick={() => navigateTo("/users-management")}>
+                                <div className="ml-5 flex flex-col items-center justify-center"><MdManageAccounts /></div>
+                                <div className="ml-2">{t("sideMenu.item.usersManagement")}</div>
+                            </div>
+                        }
+                    </div>
+                }
                 <div className="w-full">
                     <div className="side-menu__category">{t("sideMenu.item.user")}</div>
                     <div className="side-menu__item"
@@ -80,7 +93,7 @@ const SideMenu: FunctionComponent = () => {
                     </div>
                     <div className="side-menu__item"
                         onClick={() => navigateTo("/templates")}>
-                        <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
+                        <div className="ml-5 flex flex-col items-center justify-center"><MdEditDocument /></div>
                         <div className="ml-2 ">{t("sideMenu.item.manageTemplates")}</div>
                     </div>
                 </div>

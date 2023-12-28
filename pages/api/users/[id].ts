@@ -1,4 +1,4 @@
-import { verifyJwtToken } from "@/libs/auth";
+import { getAuthUserFromRequest, verifyJwtToken } from "@/libs/auth";
 import doWithPrisma from "@/libs/prisma";
 import { AuthenticatedUser } from "@/types/api/users";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -6,7 +6,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const id: number | undefined = req.query?.id ? Number(req.query.id) : Number(undefined);
 
-    if (isNaN(id) || !req.method || ![ "DELETE", "PATCH", "GET" ].includes(req.method)) {
+    if (isNaN(id) || !req.method || !["DELETE", "PATCH", "GET"].includes(req.method)) {
         res.status(405).json({ message: "Method not allowed" });
         return;
     }
@@ -21,11 +21,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             );
             res.status(200).json(user);
         } else if (req.method === "DELETE") {
-            const { cookies } = req;
-            const token = cookies["token"];
-            const verifiedToken = token && (await verifyJwtToken(token));
+            const authUser = await getAuthUserFromRequest(req);
 
-            if ((verifiedToken as AuthenticatedUser).userRole.grants?.includes("delete-account")) {
+            if (!authUser || !authUser.userRole.grants?.includes("delete-account")) {
                 res.status(401).json({ message: "authentication failed" });
             }
             await doWithPrisma((prisma) => prisma.user.delete({ where: { id: Number(id) } }));

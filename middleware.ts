@@ -23,19 +23,26 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    if (url.includes("/api/brandss") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("brands")) {
+    if (url.includes("/brands") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("brands")) {
         return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
     }
 
-    if (url.includes("/api/categories") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("categories")) {
+    if (url.includes("/categories") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("categories")) {
         return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
     }
 
-    if (url.includes("/api/productss") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("products")) {
+    if (url.includes("/products") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("products")) {
         return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
     }
 
-    if (url.includes("/api/quotess") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("quotes")) {
+    if (url.includes("/quotes") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("quotes")) {
+        return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
+    }
+
+    if (
+        url.includes("/users-management") &&
+        !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("users-management")
+    ) {
         return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
     }
 
@@ -52,5 +59,6 @@ export const config = {
         "/brands/:path*",
         "/profile/:path*",
         "/templates/:path*",
+        "/users-management/:path*",
     ],
 };

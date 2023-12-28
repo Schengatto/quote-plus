@@ -1,4 +1,4 @@
-import { verifyJwtToken } from "@/libs/auth";
+import { getAuthUserFromRequest, verifyJwtToken } from "@/libs/auth";
 import doWithPrisma from "@/libs/prisma";
 import { AuthenticatedUser } from "@/types/api/users";
 import { Template } from "@prisma/client";
@@ -14,12 +14,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         if (req.method === "DELETE") {
-            const { cookies } = req;
-            const token = cookies["token"];
-            const verifiedToken = token && (await verifyJwtToken(token));
-            const userId = (verifiedToken as AuthenticatedUser).id;
+            const user = await getAuthUserFromRequest(req);
 
-            await doWithPrisma((prisma) => prisma.template.delete({ where: { id: Number(id), createdById: userId } }));
+            await doWithPrisma((prisma) => prisma.template.delete({ where: { id: Number(id), createdById: user?.id } }));
             res.status(204).json({});
         } else if (req.method === "PATCH") {
             const template: Partial<Template> = JSON.parse(req.body);
