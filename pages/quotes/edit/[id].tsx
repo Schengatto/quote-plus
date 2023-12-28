@@ -4,7 +4,7 @@ import AppLayout from "@/layouts/Layout";
 import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import { useQuotesStore } from "@/store/quotes";
-import { CategoryApiModel } from "@/types/api/category";
+import { CategoryApiModel } from "@/types/api/categories";
 import { doActionWithLoader } from "@/utils/actions";
 import { Product, Quote, Template } from "@prisma/client";
 import { Parser } from "html-to-react";
@@ -78,14 +78,14 @@ const QuoteEdit = () => {
 
     const handleBack = () => {
         setSelectedQuote(null);
-        router.push(`/quote/${params.id}`);
+        router.push(`/quotes/${params.id}`);
     };
 
     const handleSave = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
-            const endpoint = `/api/quote/${params.id}`;
+            const endpoint = `/api/quotes/${params.id}`;
             const body: Partial<Quote> = {
                 ...selectedQuote,
                 content: quoteContent,
@@ -99,30 +99,30 @@ const QuoteEdit = () => {
             if (!response.id) {
                 throw Error("Preventivo non creato!");
             }
-            router.push("/quote");
+            router.push("/quotes");
         } catch (error: any) {
-            alert(`Qualcosa è andato storto durante il salvataggio, ${error.message}`);
+            alert(`${t("common.error.onSave")}, ${error.message}`);
         }
     };
 
     const fetchCategories = async () => {
-        const _categories = await fetch("/api/category", { method: "GET" }).then((res) => res.json());
+        const _categories = await fetch("/api/categories", { method: "GET" }).then((res) => res.json());
         setCategories(_categories);
     };
 
     const fetchProducts = async () => {
-        const _products = await fetch(`/api/product?categoryId=${selectedCategory}`, { method: "GET" }).then((res) => res.json());
+        const _products = await fetch(`/api/products?categoryId=${selectedCategory}`, { method: "GET" }).then((res) => res.json());
         setProducts(_products);
     };
 
     const fetchUserTemplates = async () => {
-        const _templates = await fetch(`/api/template?userId=${user!.id}`, { method: "GET" })
+        const _templates = await fetch(`/api/templates?userId=${user!.id}`, { method: "GET" })
             .then((res) => res.json());
         setTemplates(_templates);
     };
 
     const fetchSelectedQuote = async () => {
-        const _quote = await fetch(`/api/quote/${params.id}`, { method: "GET" }).then((res) => res.json());
+        const _quote = await fetch(`/api/quotes/${params.id}`, { method: "GET" }).then((res) => res.json());
         setSelectedQuote(_quote);
         setQuoteContent(_quote.content);
     };

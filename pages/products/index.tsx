@@ -22,17 +22,17 @@ const ProductList = () => {
 
     const handleEdit = (event: any, _selectedProduct: Partial<ProductList>) => {
         event.stopPropagation();
-        router.push(`/product/${_selectedProduct.id}`);
+        router.push(`/products/${_selectedProduct.id}`);
     };
 
     const handleClone = (event: any, _selectedProduct: Partial<Product>) => {
         event.stopPropagation();
         setSelectedProduct(_selectedProduct);
-        router.push("/product/create");
+        router.push("/products/create");
     };
 
     const handleCreateNew = () => {
-        router.push("/product/create");
+        router.push("/products/create");
     };
 
     const handleDelete = async (event: any, product: Partial<ProductList>) => {
@@ -44,14 +44,14 @@ const ProductList = () => {
     const deleteProduct = async (product: Partial<ProductList>) => {
         setDialog(null);
         await doActionWithLoader(setIsLoading,
-            () => fetch(`/api/product/${product.id}`, { method: "DELETE" }),
+            () => fetch(`/api/products/${product.id}`, { method: "DELETE" }),
             (error) => alert(error.message)
         );
         await fetchProducts();
     };
 
     const fetchProducts = async () => {
-        const _products = await fetch("/api/product", { method: "GET" })
+        const _products = await fetch("/api/products", { method: "GET" })
             .then((res) => res.json());
         setProducts(_products);
     };

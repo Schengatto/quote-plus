@@ -22,22 +22,22 @@ const QuoteList = () => {
 
     const handleEdit = (event: any, _selectedQuote: Partial<QuoteList>) => {
         event.stopPropagation();
-        router.push(`/quote/${_selectedQuote.id}`);
+        router.push(`/quotes/${_selectedQuote.id}`);
     };
 
     const handleClone = (event: any, _selectedQuote: Partial<QuoteList>) => {
         event.stopPropagation();
         setSelectedQuote(_selectedQuote);
-        router.push("/quote/create");
+        router.push("/quotes/create");
     };
 
     const handleExportPdf = (event: any, _selectedQuote: Partial<QuoteList>) => {
         event.stopPropagation();
-        window.open(`/api/quote/pdf/${_selectedQuote.id}`, "_blank");
+        window.open(`/api/quotes/pdf/${_selectedQuote.id}`, "_blank");
     };
 
     const handleCreateNew = () => {
-        router.push("/quote/create");
+        router.push("/quotes/create");
     };
 
     const handleDelete = async (event: any, quote: Partial<QuoteList>) => {
@@ -48,7 +48,7 @@ const QuoteList = () => {
 
     const deleteQuote = async (quote: Partial<QuoteList>) => {
         setDialog(null);
-        await fetch(`/api/quote/${quote.id}`, { method: "DELETE" });
+        await fetch(`/api/quotes/${quote.id}`, { method: "DELETE" });
         await fetchQuotes();
     };
 
@@ -56,7 +56,7 @@ const QuoteList = () => {
         doActionWithLoader(
             setIsLoading,
             async () => {
-                const _quotes = await fetch("/api/quote", { method: "GET" })
+                const _quotes = await fetch("/api/quotes", { method: "GET" })
                     .then((res) => res.json());
                 setProducts(_quotes);
             },

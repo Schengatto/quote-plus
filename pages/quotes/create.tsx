@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
 import { useI18nStore } from "@/store/i18n";
 import { useQuotesStore } from "@/store/quotes";
-import { CategoryApiModel } from "@/types/api/category";
+import { CategoryApiModel } from "@/types/api/categories";
 import { Product, Quote, Template } from "@prisma/client";
 import { Parser } from "html-to-react";
 import { useRouter } from "next/router";
@@ -74,14 +74,14 @@ const QuoteCreate = () => {
 
     const handleBack = () => {
         setSelectedQuote(null);
-        router.push("/quote");
+        router.push("/quotes");
     };
 
     const handleSave = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
-            const endpoint = "/api/quote";
+            const endpoint = "/api/quotes";
             const body: Partial<Quote> = {
                 name: quoteName,
                 content: quoteContent,
@@ -97,24 +97,24 @@ const QuoteCreate = () => {
             if (!response.id) {
                 throw Error("Preventivo non creato!");
             }
-            router.push("/quote");
+            router.push("/quotes");
         } catch (error: any) {
-            alert(`Qualcosa è andato storto durante il salvataggio, ${error.message}`);
+            alert(`${t("common.error.onSave")}, ${error.message}`);
         }
     };
 
     const fetchCategories = async () => {
-        const _categories = await fetch("/api/category", { method: "GET" }).then((res) => res.json());
+        const _categories = await fetch("/api/categories", { method: "GET" }).then((res) => res.json());
         setCategories(_categories);
     };
 
     const fetchProducts = async () => {
-        const _products = await fetch(`/api/product?categoryId=${selectedCategory}`, { method: "GET" }).then((res) => res.json());
+        const _products = await fetch(`/api/products?categoryId=${selectedCategory}`, { method: "GET" }).then((res) => res.json());
         setProducts(_products);
     };
 
     const fetchUserTemplates = async () => {
-        const _templates = await fetch(`/api/template?userId=${user!.id}`, { method: "GET" })
+        const _templates = await fetch(`/api/templates?userId=${user!.id}`, { method: "GET" })
             .then((res) => res.json());
         setTemplates(_templates);
     };

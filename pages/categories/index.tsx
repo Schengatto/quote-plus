@@ -2,7 +2,7 @@ import { Category } from "@prisma/client";
 import AppLayout from "@/layouts/Layout";
 import { MdEdit, MdDelete, MdAddCircleOutline } from "react-icons/md";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { CategoryApiModel } from "@/types/api/category";
+import { CategoryApiModel } from "@/types/api/categories";
 import { useI18nStore } from "@/store/i18n";
 import { useAppStore } from "@/store/app";
 import { doActionWithLoader } from "@/utils/actions";
@@ -18,7 +18,7 @@ const Categories = () => {
     const { setIsLoading, setDialog } = useAppStore();
 
     const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
-    const [ selectedCategory, setSelectedCategory ] = useState<Partial<CategoryApiModel> | null>(null);
+    const [ selectedCategory, setSelectedCategory ] = useState<Partial<CategoryApiModel>>({});
     const [ categories, setCategories ] = useState<CategoryApiModel[]>([]);
     const [ availableParentCategories, setAvailableParentCategories ] = useState<Category[]>([]);
 
@@ -35,17 +35,17 @@ const Categories = () => {
 
     const handleNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
-        setSelectedCategory((prev) => ({ ...prev, name: e.target.value }));
+        setSelectedCategory((prev: Partial<Category>) => ({ ...prev, name: e.target.value }));
     };
 
     const handleParentChanged = (e: ChangeEvent<HTMLSelectElement>) => {
         e.preventDefault();
         const parentId: number | null = !!e.currentTarget.value ? Number(e.currentTarget.value) : null;
-        setSelectedCategory((prev) => ({ ...prev, parentId: parentId }));
+        setSelectedCategory((prev: Partial<Category>) => ({ ...prev, parentId: parentId }));
     };
 
     const handleBack = () => {
-        setSelectedCategory(null);
+        setSelectedCategory({});
         setIsInputFormActive(false);
     };
 
@@ -57,11 +57,11 @@ const Categories = () => {
 
     const deleteCategory = async (categoryId: number) => {
         setDialog(null);
-        await doActionWithLoader(setIsLoading, () => fetch(`/api/category/${categoryId}`, { method: "DELETE" }), (error) => alert(error));
+        await doActionWithLoader(setIsLoading, () => fetch(`/api/categories/${categoryId}`, { method: "DELETE" }), (error) => alert(error));
         await fetchCategories();
         if (selectedCategory?.id === categoryId) {
             setIsInputFormActive(false);
-            setSelectedCategory(null);
+            setSelectedCategory({});
         }
     };
 
@@ -70,7 +70,7 @@ const Categories = () => {
         if (selectedCategory === null || !selectedCategory.name) return;
 
         const method = selectedCategory.id ? "PATCH" : "POST";
-        const endpoint = selectedCategory.id ? `/api/category/${selectedCategory.id}` : "/api/category";
+        const endpoint = selectedCategory.id ? `/api/categories/${selectedCategory.id}` : "/api/categories";
         const body = {
             id: selectedCategory.id,
             name: selectedCategory.name,
@@ -85,10 +85,10 @@ const Categories = () => {
                     .then((res) => res.json());
 
                 if (!response.id) {
-                    alert(`Qualcosa è andato storto durante il salvataggio, ${response.message}`);
+                    alert(`${t("common.error.onSave")}, ${response.message}`);
                 }
             },
-            (error: any) => alert(`Qualcosa è andato storto durante il salvataggio, ${error.message}`)
+            (error: any) => alert(`${t("common.error.onSave")}, ${error.message}`)
         );
         await fetchCategories();
         setIsInputFormActive(false);
@@ -96,7 +96,7 @@ const Categories = () => {
 
     const fetchCategories = async () => {
         doActionWithLoader(setIsLoading, async () => {
-            const _categories = await fetch("/api/category", { method: "GET" }).then((res) => res.json());
+            const _categories = await fetch("/api/categories", { method: "GET" }).then((res) => res.json());
             setCategories(_categories);
         });
     };

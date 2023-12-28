@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
 import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
-import { BrandApiModel } from "@/types/api/brand";
+import { BrandApiModel } from "@/types/api/brands";
 import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Brand } from "@prisma/client";
@@ -51,7 +51,7 @@ const Brands = () => {
 
     const deleteBrand = async (brandId: number) => {
         setDialog(null);
-        await doActionWithLoader(setIsLoading, () => fetch(`/api/brand/${brandId}`, { method: "DELETE" }));
+        await doActionWithLoader(setIsLoading, () => fetch(`/api/brands/${brandId}`, { method: "DELETE" }));
 
         if (selectedBrand?.id === brandId) {
             setIsInputFormActive(false);
@@ -65,7 +65,7 @@ const Brands = () => {
         if (selectedBrand === null || !selectedBrand.name) return;
 
         const method = selectedBrand.id ? "PATCH" : "POST";
-        const endpoint = selectedBrand.id ? `/api/brand/${selectedBrand.id}` : "/api/brand";
+        const endpoint = selectedBrand.id ? `/api/brands/${selectedBrand.id}` : "/api/brands";
 
         await doActionWithLoader(
             setIsLoading,
@@ -74,10 +74,10 @@ const Brands = () => {
                     .then((res) => res.json());
 
                 if (!response.id) {
-                    alert(`Qualcosa è andato storto durante il salvataggio, ${response.message}`);
+                    alert(`${t("common.error.onSave")}, ${response.message}`);
                 }
             },
-            (error: any) => alert(`Qualcosa è andato storto durante il salvataggio, ${error.message}`)
+            (error: any) => alert(`${t("common.error.onSave")}, ${error.message}`)
         );
 
         await fetchBrands();
@@ -86,7 +86,7 @@ const Brands = () => {
 
     const fetchBrands = async () => {
         doActionWithLoader(setIsLoading, async () => {
-            const _brands = await fetch("/api/brand", { method: "GET" })
+            const _brands = await fetch("/api/brands", { method: "GET" })
                 .then((res) => res.json());
             setBrands(_brands);
         });

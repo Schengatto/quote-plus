@@ -25,19 +25,19 @@ const QuoteEdit = () => {
     }, [ quoteContent ]);
 
     const handleBack = () => {
-        router.push("/quote");
+        router.push("/quotes");
     };
 
     const handleExportPdf = async () => {
-        window.open(`/api/quote/pdf/${params.id}`, "_blank");
+        window.open(`/api/quotes/pdf/${params.id}`, "_blank");
     };
 
     const handleEdit = async () => {
-        router.push(`/quote/edit/${params.id}`);
+        router.push(`/quotes/edit/${params.id}`);
     };
 
     const fetchSelectedQuote = async () => {
-        const _quote = await fetch(`/api/quote/${params.id}`, { method: "GET" }).then((res) => res.json());
+        const _quote = await fetch(`/api/quotes/${params.id}`, { method: "GET" }).then((res) => res.json());
         setQuoteContent(_quote.content);
         setSelectedQuote(_quote);
     };

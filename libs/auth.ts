@@ -1,4 +1,4 @@
-import { AuthenticatedUser } from "@/types/api/user";
+import { AuthenticatedUser } from "@/types/api/users";
 import { JWTPayload, jwtVerify } from "jose";
 
 export const getJwtSecretKey = (): Uint8Array => {

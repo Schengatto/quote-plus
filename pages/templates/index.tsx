@@ -52,15 +52,15 @@ const Templates = () => {
 
         try {
             const method = selectedTemplate.id ? "PATCH" : "POST";
-            const endpoint = selectedTemplate.id ? `/api/template/${selectedTemplate.id}` : "/api/template";
+            const endpoint = selectedTemplate.id ? `/api/templates/${selectedTemplate.id}` : "/api/templates";
             const response = await fetch(endpoint, { method: method, body: JSON.stringify(selectedTemplate) })
                 .then((res) => res.json());
 
             if (!response.id) {
-                alert(`Qualcosa è andato storto durante il salvataggio, ${response.message}`);
+                alert(`${t("common.error.onSave")}, ${response.message}`);
             }
         } catch (error: any) {
-            alert(`Qualcosa è andato storto durante il salvataggio, ${error.message}`);
+            alert(`${t("common.error.onSave")}, ${error.message}`);
         }
         await fetchTemplates();
         setIsInputFormActive(false);
@@ -74,13 +74,13 @@ const Templates = () => {
 
     const deleteTemplate = async (template: Template) => {
         setDialog(null);
-        await fetch(`/api/template/${template.id}`, { method: "DELETE" });
+        await fetch(`/api/templates/${template.id}`, { method: "DELETE" });
         await fetchTemplates();
     };
 
     const fetchTemplates = async () => {
         doActionWithLoader(setIsLoading, async () => {
-            const _templates = await fetch(`/api/template?userId=${auth?.id}`, { method: "GET" })
+            const _templates = await fetch(`/api/templates?userId=${auth?.id}`, { method: "GET" })
                 .then((res) => res.json());
             setTemplates(_templates);
         });

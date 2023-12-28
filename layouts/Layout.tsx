@@ -39,7 +39,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
             </Head>
             {auth &&
                 <main className="bg-gray-900 h-screen">
-                    <div className="h-[7vh] z-10 fixed w-full bg-gray-900 text-white uppercase flex justify-between p-4">
+                    <div className="h-[7vh] min-h-[4.5em] z-10 fixed w-full bg-gray-900 text-white uppercase flex justify-between p-4">
                         <div>
                             <button className="side-menu__toggle-button"
                                 type="button"

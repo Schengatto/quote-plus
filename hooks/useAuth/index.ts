@@ -1,6 +1,6 @@
 "use client";
 import { verifyJwtToken } from "@/libs/auth";
-import { AuthenticatedUser } from "@/types/api/user";
+import { AuthenticatedUser } from "@/types/api/users";
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 

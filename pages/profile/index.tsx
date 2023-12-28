@@ -56,7 +56,7 @@ const UserProfile = () => {
         doActionWithLoader(
             setIsLoading,
             async () => {
-                const result: any | Partial<User> | ErrorResponseData = await fetch(`/api/user/${user?.id}`, {
+                const result: any | Partial<User> | ErrorResponseData = await fetch(`/api/users/${user?.id}`, {
                     method: "PATCH",
                     body: JSON.stringify({
                         activeTemplateId: selectedTemplate || null,
@@ -79,7 +79,7 @@ const UserProfile = () => {
         await doActionWithLoader(
             setIsLoading,
             async () => {
-                const result: any | Partial<User> | ErrorResponseData = await fetch(`/api/user/${user?.id}`, {
+                const result: any | Partial<User> | ErrorResponseData = await fetch(`/api/users/${user?.id}`, {
                     method: "PATCH",
                     body: JSON.stringify({
                         username: username ? username : undefined,
@@ -99,7 +99,7 @@ const UserProfile = () => {
     const handleDelete = async () => {
         const deleteAccount = async () => {
             setDialog(null);
-            await fetch(`/api/user/${user?.id}`, { method: "DELETE" });
+            await fetch(`/api/users/${user?.id}`, { method: "DELETE" });
             handleLogout();
         };
 
@@ -108,13 +108,13 @@ const UserProfile = () => {
     };
 
     const fetchUserTemplates = async () => {
-        const _templates = await fetch(`/api/template?userId=${user!.id}`, { method: "GET" })
+        const _templates = await fetch(`/api/templates?userId=${user!.id}`, { method: "GET" })
             .then((res) => res.json());
         setTemplates(_templates);
     };
 
     const fetchUserInfo = async () => {
-        const _user = await fetch(`/api/user/${user?.id}`, { method: "GET" }).then(res => res.json());
+        const _user = await fetch(`/api/users/${user?.id}`, { method: "GET" }).then(res => res.json());
         setUsername(_user?.username);
         setSelectedTemplate(_user.activeTemplateId);
     };

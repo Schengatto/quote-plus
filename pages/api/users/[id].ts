@@ -1,6 +1,6 @@
 import { verifyJwtToken } from "@/libs/auth";
 import doWithPrisma from "@/libs/prisma";
-import { AuthenticatedUser } from "@/types/api/user";
+import { AuthenticatedUser } from "@/types/api/users";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

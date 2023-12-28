@@ -1,8 +1,8 @@
 import { verifyJwtToken } from "@/libs/auth";
 import { NextRequest, NextResponse } from "next/server";
-import { AuthenticatedUser } from "./types/api/user";
+import { AuthenticatedUser } from "./types/api/users";
 
-const NO_AUTH_PAGES = ["/", "/api/user/auth"];
+const NO_AUTH_PAGES = ["/", "/api/users/auth"];
 
 const isAuthPages = (url: string): boolean =>
     !url.startsWith("/api/translations") && !NO_AUTH_PAGES.some((page) => page === url);
@@ -23,19 +23,19 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    if (url.includes("/api/brand") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("brands")) {
+    if (url.includes("/api/brandss") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("brands")) {
         return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
     }
 
-    if (url.includes("/api/category") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("categories")) {
+    if (url.includes("/api/categories") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("categories")) {
         return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
     }
 
-    if (url.includes("/api/product") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("products")) {
+    if (url.includes("/api/productss") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("products")) {
         return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
     }
 
-    if (url.includes("/api/quote") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("quotes")) {
+    if (url.includes("/api/quotess") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("quotes")) {
         return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
     }
 
@@ -46,11 +46,11 @@ export const config = {
     matcher: [
         "/api/:path*",
         "/home",
-        "/product/:path*",
-        "/quote/:path*",
-        "/category/:path*",
-        "/brand/:path*",
+        "/products/:path*",
+        "/quotes/:path*",
+        "/categories/:path*",
+        "/brands/:path*",
         "/profile/:path*",
-        "/template/:path*",
+        "/templates/:path*",
     ],
 };

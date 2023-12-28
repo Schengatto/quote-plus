@@ -36,11 +36,11 @@ const SideMenu: FunctionComponent = () => {
                 {hasGrants([ "quotes" ]) &&
                     <div className="w-full" >
                         <div className="side-menu__category">{t("sideMenu.item.quotes")}</div>
-                        <div className="side-menu__item" onClick={() => navigateTo("/quote/create")}>
+                        <div className="side-menu__item" onClick={() => navigateTo("/quotes/create")}>
                             <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
                             <div className="ml-2">{t("sideMenu.item.newQuote")}</div>
                         </div>
-                        <div className="side-menu__item" onClick={() => navigateTo("/quote")}>
+                        <div className="side-menu__item" onClick={() => navigateTo("/quotes")}>
                             <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineFolderOpen /></div>
                             <div className="ml-2">{t("sideMenu.item.quotesArchive")}</div>
                         </div>
@@ -51,21 +51,21 @@ const SideMenu: FunctionComponent = () => {
                         <div className="side-menu__category">{t("sideMenu.item.catalog")}</div>
                         {hasGrants([ "categories" ]) &&
                             <div className="side-menu__item"
-                                onClick={() => navigateTo("/category")}>
+                                onClick={() => navigateTo("/categories")}>
                                 <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
                                 <div className="ml-2">{t("sideMenu.item.categories")}</div>
                             </div>
                         }
                         {hasGrants([ "products" ]) &&
                             <div className="side-menu__item"
-                                onClick={() => navigateTo("/product")}>
+                                onClick={() => navigateTo("/products")}>
                                 <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
                                 <div className="ml-2 ">{t("sideMenu.item.products")}</div>
                             </div>
                         }
                         {hasGrants([ "brands" ]) &&
                             <div className="side-menu__item"
-                                onClick={() => navigateTo("/brand")}>
+                                onClick={() => navigateTo("/brands")}>
                                 <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
                                 <div className="ml-2 ">{t("sideMenu.item.brands")}</div>
                             </div>
@@ -79,7 +79,7 @@ const SideMenu: FunctionComponent = () => {
                         <div className="ml-2 ">{t("sideMenu.item.editUserOptions")}</div>
                     </div>
                     <div className="side-menu__item"
-                        onClick={() => navigateTo("/template")}>
+                        onClick={() => navigateTo("/templates")}>
                         <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
                         <div className="ml-2 ">{t("sideMenu.item.manageTemplates")}</div>
                     </div>

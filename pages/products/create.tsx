@@ -1,20 +1,23 @@
 import TextEditor from "@/components/TextEditor";
 import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
+import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
-import { CategoryApiModel } from "@/types/api/category";
+import { useProductsStore } from "@/store/products";
+import { CategoryApiModel } from "@/types/api/categories";
+import { doActionWithLoader } from "@/utils/actions";
 import { Brand, Currency, Product } from "@prisma/client";
-import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
-const ProductEdit = () => {
+const ProductCreate = () => {
 
     const router = useRouter();
-    const params = useParams();
     const user = useAuth();
 
     const { t } = useI18nStore();
+    const { setIsLoading } = useAppStore();
+    const { setSelectedProduct, selectedProduct } = useProductsStore();
 
     const [ product, setProduct ] = useState<Partial<Product>>({});
     const [ brands, setBrands ] = useState<Brand[]>([]);
@@ -56,14 +59,15 @@ const ProductEdit = () => {
     };
 
     const handleBack = () => {
-        router.push("/product");
+        setSelectedProduct(null);
+        router.push("/products");
     };
 
     const handleSaveProduct = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
-            const endpoint = `/api/product/${params.id}`;
+            const endpoint = "/api/products";
             const body: Partial<Product> = {
                 id: product.id,
                 name: product.name,
@@ -72,31 +76,32 @@ const ProductEdit = () => {
                 categoryId: product.categoryId,
                 photo: null,
                 description: product.description,
+                tags: product.tags,
                 price: product.price,
                 currencyId: product.currencyId,
-                createdById: product.createdById ?? 0
+                createdById: user?.id || 0
             };
-            const response = await fetch(endpoint, { method: "PATCH", body: JSON.stringify(body) }).then(
+            const response = await fetch(endpoint, { method: "POST", body: JSON.stringify(body) }).then(
                 (res) => res.json()
             );
 
             if (!response.id) {
                 throw Error("Prodotto non creato!");
             }
-            router.push("/product");
+            router.push("/products");
         } catch (error: any) {
-            alert(`Qualcosa è andato storto durante il salvataggio, ${error.message}`);
+            alert(`${t("common.error.onSave")}, ${error.message}`);
         }
     };
 
     const fetchBrands = async () => {
-        const _brands = await fetch("/api/brand", { method: "GET" })
+        const _brands = await fetch("/api/brands", { method: "GET" })
             .then((res) => res.json());
         setBrands(_brands);
     };
 
     const fetchCategories = async () => {
-        const _categories = await fetch("/api/category", { method: "GET" }).then((res) => res.json());
+        const _categories = await fetch("/api/categories", { method: "GET" }).then((res) => res.json());
         setCategories(_categories);
     };
 
@@ -107,23 +112,23 @@ const ProductEdit = () => {
     };
 
     useEffect(() => {
-        if (!user || !params?.id) return;
+        doActionWithLoader(
+            setIsLoading,
+            async () => {
+                await Promise.all([ fetchBrands(), fetchCategories(), fetchCurrency() ]);
+                if (selectedProduct) setProduct({ ...selectedProduct, id: undefined });
+            }
+        );
+        return () => setSelectedProduct(null);
+    }, [ selectedProduct ]);
 
+    useEffect(() => {
+        if (!user) return;
         if (!user?.userRole.grants?.includes("products")) {
             router.push("/");
             return;
         }
-
-        const fetchProduct = async () => {
-            const _product = await fetch(`/api/product/${params.id}`, { method: "GET" }).then((res) => res.json());
-            setProduct(_product);
-        };
-
-        fetchBrands();
-        fetchCategories();
-        fetchCurrency();
-        fetchProduct();
-    }, [ params, user, router ]);
+    }, [ router, user ]);
 
     return (
         <AppLayout>
@@ -135,8 +140,8 @@ const ProductEdit = () => {
                             <div className="font-extrabold text-lg uppercase">{t("products.form.code")}</div>
                             <input
                                 type="text"
-                                required
                                 value={product.code}
+                                required
                                 className="text-input"
                                 onChange={handleCodeChanged} />
                         </div>
@@ -144,16 +149,16 @@ const ProductEdit = () => {
                             <div className="font-extrabold text-lg uppercase">{t("products.form.name")}</div>
                             <input
                                 type="text"
-                                required
                                 value={product.name}
+                                required
                                 className="text-input"
                                 onChange={handleNameChanged} />
                         </div>
                         <div className='w-full my-4'>
                             <div className='font-extrabold text-lg uppercase'>{t("products.form.category")}</div>
                             <select className='text-input'
-                                required
                                 value={product.categoryId}
+                                required
                                 onChange={handleCategoryChanged} >
                                 <option value={undefined}></option>
                                 {categories.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
@@ -162,8 +167,8 @@ const ProductEdit = () => {
                         <div className='w-full my-4'>
                             <div className='font-extrabold text-lg uppercase'>{t("products.form.brand")}</div>
                             <select className='text-input'
-                                required
                                 value={product.brandId}
+                                required
                                 onChange={handleBrandChanged} >
                                 <option value={undefined}></option>
                                 {brands.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
@@ -178,27 +183,28 @@ const ProductEdit = () => {
                         <div className='w-full my-4 grid-cols-3 grid grid-template-columns: repeat(3, minmax(0, 1fr)) gap-2'>
                             <div>
                                 <div className='font-extrabold text-lg uppercase'>{t("products.form.tags")}</div>
-                                <input className='text-input'
+                                <input
                                     type="text"
                                     value={product.tags}
-                                    onChange={handleTagsChanged} >
-                                </input>
+                                    required
+                                    className="text-input"
+                                    onChange={handleTagsChanged} />
                             </div>
                             <div>
                                 <div className='font-extrabold text-lg uppercase'>{t("products.form.price")}</div>
                                 <input
                                     type="number"
                                     min={0}
-                                    required
                                     value={product.price}
+                                    required
                                     className="text-input"
                                     onChange={handlePriceChanged} />
                             </div>
                             <div>
                                 <div className='font-extrabold text-lg uppercase'>{t("products.form.currency")}</div>
                                 <select className='text-input'
-                                    required
                                     value={product.currencyId}
+                                    required
                                     onChange={handleCurrencyChanged} >
                                     <option value={undefined}></option>
                                     {currencies.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
@@ -226,4 +232,4 @@ const ProductEdit = () => {
     );
 };
 
-export default ProductEdit;
+export default ProductCreate;

@@ -29,7 +29,7 @@ const LoginPage = () => {
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const endpoint = "/api/user/auth";
+            const endpoint = "/api/users/auth";
             const response = await fetch(endpoint, { method: "POST", body: JSON.stringify(credentials) }).then(
                 (res) => res.json()
             );
@@ -90,11 +90,6 @@ const LoginPage = () => {
                         </form>
                     </div>
                 </div>
-                {/* <div className="mt-5">
-          <button type="button" className="btn-secondary">
-            <span className="uppercase font-bold text-lg">{t("login.resetPassword")}</span>
-          </button>
-        </div> */}
             </main>
         </>
     );
