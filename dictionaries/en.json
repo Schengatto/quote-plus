@@ -11,7 +11,7 @@
   "login.form.title": "user login",
   "login.form.username": "username",
   "login.form.password": "password",
-  "login.form.loginBtn": "login to the program",
+  "login.form.loginBtn": "sign in",
   "login.resetPassword": "recover password",
   "navbar.welcome": "welcome",
   "sideMenu.item.welcome": "welcome",

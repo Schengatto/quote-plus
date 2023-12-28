@@ -1,18 +1,25 @@
+import { verifyJwtToken } from "@/libs/auth";
 import doWithPrisma from "@/libs/prisma";
+import { AuthenticatedUser } from "@/types/api/users";
 import { Template } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
 
-    if (isNaN(Number(id)) || !req.method || ![ "DELETE", "PATCH" ].includes(req.method)) {
+    if (isNaN(Number(id)) || !req.method || !["DELETE", "PATCH"].includes(req.method)) {
         res.status(405).json({ message: "Method not allowed" });
         return;
     }
 
     try {
         if (req.method === "DELETE") {
-            await doWithPrisma((prisma) => prisma.template.delete({ where: { id: Number(id) } }));
+            const { cookies } = req;
+            const token = cookies["token"];
+            const verifiedToken = token && (await verifyJwtToken(token));
+            const userId = (verifiedToken as AuthenticatedUser).id;
+
+            await doWithPrisma((prisma) => prisma.template.delete({ where: { id: Number(id), createdById: userId } }));
             res.status(204).json({});
         } else if (req.method === "PATCH") {
             const template: Partial<Template> = JSON.parse(req.body);
