@@ -101,7 +101,7 @@ const ProductEdit = () => {
     };
 
     const fetchCurrency = async () => {
-        const _currencies = await fetch("/api/currency", { method: "GET" })
+        const _currencies = await fetch("/api/currencies", { method: "GET" })
             .then((res) => res.json());
         setCurrencies(_currencies);
     };

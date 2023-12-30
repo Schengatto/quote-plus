@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useI18nStore } from "@/store/i18n";
 import { useRouter } from "next/navigation";
 import { FunctionComponent } from "react";
-import { MdEditDocument, MdExitToApp, MdManageAccounts, MdOutlineEdit, MdOutlineFolderOpen, MdOutlineHouse, MdSignLanguage, MdStorage } from "react-icons/md";
+import { MdEditDocument, MdExitToApp, MdManageAccounts, MdOutlineEdit, MdOutlineFolderOpen, MdOutlineHouse, MdSettings, MdSignLanguage, MdStorage } from "react-icons/md";
 import Cookies from "universal-cookie";
 
 const SideMenu: FunctionComponent = () => {
@@ -72,7 +72,7 @@ const SideMenu: FunctionComponent = () => {
                         }
                     </div>
                 }
-                {hasGrants([ "users-management" ]) &&
+                {hasGrants([ "users-management", "tenant-config" ]) &&
                     <div className="w-full">
                         <div className="side-menu__category">{t("sideMenu.item.admin")}</div>
                         {hasGrants([ "users-management" ]) &&
@@ -80,6 +80,13 @@ const SideMenu: FunctionComponent = () => {
                                 onClick={() => navigateTo("/users-management")}>
                                 <div className="ml-5 flex flex-col items-center justify-center"><MdManageAccounts /></div>
                                 <div className="ml-2">{t("sideMenu.item.usersManagement")}</div>
+                            </div>
+                        }
+                        {hasGrants([ "tenant-config" ]) &&
+                            <div className="side-menu__item"
+                                onClick={() => navigateTo("/settings")}>
+                                <div className="ml-5 flex flex-col items-center justify-center"><MdSettings /></div>
+                                <div className="ml-2">{t("sideMenu.item.settings")}</div>
                             </div>
                         }
                     </div>

@@ -5,6 +5,7 @@ import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import { useQuotesStore } from "@/store/quotes";
 import { CategoryApiModel } from "@/types/api/categories";
+import { TenantPlaceholders } from "@/types/tenants";
 import { doActionWithLoader } from "@/utils/actions";
 import { Product, Quote, Template } from "@prisma/client";
 import { Parser } from "html-to-react";
@@ -22,6 +23,7 @@ const QuoteEdit = () => {
     const { setIsLoading } = useAppStore();
     const { selectedQuote, setSelectedQuote } = useQuotesStore();
 
+    const [ placeholders, setPlaceholders ] = useState<Partial<TenantPlaceholders>>({});
     const [ quoteContent, setQuoteContent ] = useState<string>("");
     const [ products, setProducts ] = useState<Product[]>([]);
     const [ templates, setTemplates ] = useState<Template[]>([]);
@@ -66,12 +68,12 @@ const QuoteEdit = () => {
             if (!selectedProduct) return prev;
 
             const _productDescription = selectedProduct.description
-                .replaceAll("{{prezzo}}", String(selectedProduct.price))
-                .replaceAll("{{valuta}}", "€")
-                .replaceAll("{{prezzo-scontato}}", String((selectedProduct.price / 100) * (100 - selectedProductDiscount)));
+                .replaceAll(placeholders.price!, String(selectedProduct.price))
+                .replaceAll(placeholders.currency!, "€")
+                .replaceAll(placeholders["discounted-price"]!, String((selectedProduct.price / 100) * (100 - selectedProductDiscount)));
 
-            return prev.includes("{{prodotti}}")
-                ? prev.replaceAll("{{prodotti}}", `${_productDescription}{{prodotti}}`)
+            return prev.includes(placeholders.products!)
+                ? prev.replaceAll(placeholders.products!, `${_productDescription}{{prodotti}}`)
                 : prev.concat(_productDescription);
         });
     };
@@ -127,12 +129,21 @@ const QuoteEdit = () => {
         setQuoteContent(_quote.content);
     };
 
+    const fetchTenantPlaceholders = async () => {
+        doActionWithLoader(setIsLoading, async () => {
+            const _tenant = await fetch(`/api/tenants/${user?.tenantId}`, { method: "GET" })
+                .then((res) => res.json());
+            setPlaceholders(_tenant.placeholders);
+        });
+    };
+
     useEffect(() => {
         if (!user || !params?.id) return;
         if (!user?.userRole.grants?.includes("quotes")) {
             router.push("/");
             return;
         }
+        fetchTenantPlaceholders();
 
         doActionWithLoader(setIsLoading, async () => await Promise.all([ fetchCategories(), fetchUserTemplates(), fetchSelectedQuote() ]));
     }, [ params, user ]);

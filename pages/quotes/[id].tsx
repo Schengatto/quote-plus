@@ -1,6 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
 import { useI18nStore } from "@/store/i18n";
+import { removeAllPlaceholders } from "@/utils/placeholders";
 import { Quote } from "@prisma/client";
 import { Parser } from "html-to-react";
 import { useParams } from "next/navigation";
@@ -21,7 +22,7 @@ const QuoteEdit = () => {
     const [ quoteOverview, setQuoteOverview ] = useState<string>("");
 
     useEffect(() => {
-        setQuoteOverview(() => quoteContent.replaceAll("{{prodotti}}", ""));
+        setQuoteOverview(() => removeAllPlaceholders(quoteContent));
     }, [ quoteContent ]);
 
     const handleBack = () => {

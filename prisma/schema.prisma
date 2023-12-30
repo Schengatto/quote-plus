@@ -10,15 +10,16 @@ datasource db {
 }
 
 model Tenant {
-    id   String @id @default(uuid())
-    name String @unique
-    user User[]
+    id           String @id @default(uuid())
+    name         String @unique
+    placeholders Json   @default("{\"products\": \"{{products}}\", \"price\": \"{{price}}\", \"currency\": \"{{currency}}\", \"discounted-price\": \"{{discounted-price}}\"}") @map("extra_data")
+    user         User[]
 }
 
 model UserRole {
     id     String   @id @default(uuid())
     name   String   @unique
-    grants String[] @default(["quotes", "categories", "brands", "products", "delete-account", "users-management"])
+    grants String[] @default(["quotes", "categories", "brands", "products", "delete-account", "users-management", "tenant-config"])
     user   User[]
 }
 

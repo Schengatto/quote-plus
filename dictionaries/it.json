@@ -31,6 +31,7 @@
   "sideMenu.item.admin": "amministrazione",
   "sideMenu.item.usersManagement": "gestione utenti",
   "sideMenu.item.logout": "esci dal programma",
+  "sideMenu.item.settings": "impostazioni",
   "brands.table.title": "elenco marchi",
   "brands.button.addBrand": "aggiungi marchio",
   "brands.form.title": "compila i campi",
@@ -101,5 +102,10 @@
   "usersManagement.form.username": "username",
   "usersManagement.form.role": "ruolo",
   "usersManagement.form.password": "password",
-  "usersManagement.button.save": "salva"
+  "usersManagement.button.save": "salva",
+  "tenants.form.title": "configurazione segnaposto",
+  "tenants.form.products": "prodotti",
+  "tenants.form.price": "prezzo",
+  "tenants.form.currency": "valuta",
+  "tenants.form.discountedPrice": "prezzo scontato"
 }

@@ -1,4 +1,5 @@
 import doWithPrisma from "@/libs/prisma";
+import { removeAllPlaceholders } from "@/utils/placeholders";
 import { Quote } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -14,7 +15,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (req.method === "GET") {
             const quote: Quote = await doWithPrisma((prisma) => prisma.quote.findUnique({ where: { id: Number(id) } }));
 
-            const html = `<!DOCTYPE html><html><body>${quote.content.replaceAll("{{prodotti}}", "")}</body></html>`;
+            const content = removeAllPlaceholders(quote.content);
+            const html = `<!DOCTYPE html><html><body>${content}</body></html>`;
 
             const puppeteer = require("puppeteer");
             const chromium = require("@sparticuz/chromium");

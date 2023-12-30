@@ -1,6 +1,5 @@
-import { getAuthUserFromRequest, verifyJwtToken } from "@/libs/auth";
+import { getAuthUserFromRequest } from "@/libs/auth";
 import doWithPrisma from "@/libs/prisma";
-import { AuthenticatedUser } from "@/types/api/users";
 import { Template } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 

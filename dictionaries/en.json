@@ -31,6 +31,7 @@
   "sideMenu.item.admin": "administration",
   "sideMenu.item.usersManagement": "users management",
   "sideMenu.item.logout": "logout",
+  "sideMenu.item.settings": "settings",
   "brands.table.title": "brands list",
   "brands.button.addBrand": "add brand",
   "brands.form.title": "fill in the fields",
@@ -101,5 +102,10 @@
   "usersManagement.form.username": "username",
   "usersManagement.form.role": "role",
   "usersManagement.form.password": "password",
-  "usersManagement.button.save": "save"
+  "usersManagement.button.save": "save",
+  "tenants.form.title": "placeholders settings",
+  "tenants.form.products": "products",
+  "tenants.form.price": "price",
+  "tenants.form.currency": "currency",
+  "tenants.form.discountedPrice": "discounted price"
 }

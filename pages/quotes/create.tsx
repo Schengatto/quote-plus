@@ -1,9 +1,12 @@
 import TextEditor from "@/components/TextEditor";
 import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
+import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import { useQuotesStore } from "@/store/quotes";
 import { CategoryApiModel } from "@/types/api/categories";
+import { TenantPlaceholders } from "@/types/tenants";
+import { doActionWithLoader } from "@/utils/actions";
 import { Product, Quote, Template } from "@prisma/client";
 import { Parser } from "html-to-react";
 import { useRouter } from "next/router";
@@ -15,8 +18,10 @@ const QuoteCreate = () => {
     const user = useAuth();
 
     const { t } = useI18nStore();
+    const { setIsLoading } = useAppStore();
     const { selectedQuote, setSelectedQuote } = useQuotesStore();
 
+    const [ placeholders, setPlaceholders ] = useState<Partial<TenantPlaceholders>>({});
     const [ quoteName, setQuoteName ] = useState<string>(selectedQuote?.name ?? "");
     const [ quoteContent, setQuoteContent ] = useState<string>(selectedQuote?.content ?? "");
     const [ products, setProducts ] = useState<Product[]>([]);
@@ -62,12 +67,12 @@ const QuoteCreate = () => {
             if (!selectedProduct) return prev;
 
             const _productDescription = selectedProduct.description
-                .replaceAll("{{prezzo}}", String(selectedProduct.price))
-                .replaceAll("{{valuta}}", "€")
-                .replaceAll("{{prezzo-scontato}}", String((selectedProduct.price / 100) * (100 - selectedProductDiscount)));
+                .replaceAll(placeholders.price!, String(selectedProduct.price))
+                .replaceAll(placeholders.currency!, "€")
+                .replaceAll(placeholders["discounted-price"]!, String((selectedProduct.price / 100) * (100 - selectedProductDiscount)));
 
-            return prev.includes("{{prodotti}}")
-                ? prev.replaceAll("{{prodotti}}", `${_productDescription}{{prodotti}}`)
+            return prev.includes(placeholders.products!)
+                ? prev.replaceAll(placeholders.products!, `${_productDescription}{{prodotti}}`)
                 : prev.concat(_productDescription);
         });
     };
@@ -119,6 +124,14 @@ const QuoteCreate = () => {
         setTemplates(_templates);
     };
 
+    const fetchTenantPlaceholders = async () => {
+        doActionWithLoader(setIsLoading, async () => {
+            const _tenant = await fetch(`/api/tenants/${user?.tenantId}`, { method: "GET" })
+                .then((res) => res.json());
+            setPlaceholders(_tenant.placeholders);
+        });
+    };
+
     useEffect(() => {
         if (!user) return;
 
@@ -127,6 +140,7 @@ const QuoteCreate = () => {
             return;
         }
 
+        fetchTenantPlaceholders();
         fetchCategories();
         fetchUserTemplates();
 
