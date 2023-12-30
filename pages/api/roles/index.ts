@@ -7,7 +7,7 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<ErrorResponseData | User[] | Partial<User>>
 ) {
-    if (!req.method || !["GET"].includes(req.method)) {
+    if (!req.method || ![ "GET" ].includes(req.method)) {
         res.status(405).json({ message: "Method not allowed" });
         return;
     }

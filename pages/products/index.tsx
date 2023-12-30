@@ -77,10 +77,10 @@ const ProductList = () => {
             <div className="m-8">
                 <table className="items-table">
                     <thead>
-                        <tr className="bg-gray-900">
+                        <tr className="table-header">
                             <th colSpan={6} className="text-white uppercase p-2 text-lg">{t("products.table.title")}</th>
                         </tr>
-                        <tr className="bg-gray-700">
+                        <tr className="bg-gray-700 border-2 border-gray-700">
                             <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("products.table.head.ref")}</th>
                             <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("products.table.head.product")}</th>
                             <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("products.table.head.category")}</th>

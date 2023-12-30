@@ -7,7 +7,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
 
-    if (isNaN(Number(id)) || !req.method || !["DELETE", "PATCH"].includes(req.method)) {
+    if (isNaN(Number(id)) || !req.method || ![ "DELETE", "PATCH" ].includes(req.method)) {
         res.status(405).json({ message: "Method not allowed" });
         return;
     }

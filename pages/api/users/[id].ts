@@ -1,12 +1,11 @@
-import { getAuthUserFromRequest, verifyJwtToken } from "@/libs/auth";
+import { getAuthUserFromRequest } from "@/libs/auth";
 import doWithPrisma from "@/libs/prisma";
-import { AuthenticatedUser } from "@/types/api/users";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const id: number | undefined = req.query?.id ? Number(req.query.id) : Number(undefined);
 
-    if (isNaN(id) || !req.method || !["DELETE", "PATCH", "GET"].includes(req.method)) {
+    if (isNaN(id) || !req.method || ![ "DELETE", "PATCH", "GET" ].includes(req.method)) {
         res.status(405).json({ message: "Method not allowed" });
         return;
     }

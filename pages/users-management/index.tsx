@@ -17,10 +17,10 @@ const UserManagementPage = () => {
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
-    const [selectedUser, setSelectedUser] = useState<Partial<User>>({});
-    const [users, setUsers] = useState<AuthenticatedUser[]>([]);
-    const [roles, setRoles] = useState<UserRole[]>([]);
+    const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
+    const [ selectedUser, setSelectedUser ] = useState<Partial<User>>({});
+    const [ users, setUsers ] = useState<AuthenticatedUser[]>([]);
+    const [ roles, setRoles ] = useState<UserRole[]>([]);
 
     const handleCreateNew = () => {
         if (!auth) return;
@@ -44,7 +44,6 @@ const UserManagementPage = () => {
         setSelectedUser((prev: Partial<AuthenticatedUser>) => ({ ...prev, userRoleId: roleId }));
     };
 
-
     const handleBack = () => {
         setSelectedUser({});
         setIsInputFormActive(false);
@@ -53,7 +52,7 @@ const UserManagementPage = () => {
     const handleSave = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log(selectedUser)
+        console.log(selectedUser);
         if (selectedUser === null || !selectedUser.username || !selectedUser.password || !selectedUser.userRoleId) return;
 
         try {
@@ -102,13 +101,13 @@ const UserManagementPage = () => {
         if (!auth) return;
         fetchUsers();
         fetchRoles();
-    }, [auth]);
+    }, [ auth ]);
 
     return (
         <AppLayout>
             <div className="m-8">
                 <table className="items-table">
-                    <thead className="bg-gray-900">
+                    <thead className="table-header">
                         <tr>
                             <th colSpan={3} className="text-white uppercase p-2 text-lg">{t("usersManagement.table.title")}</th>
                         </tr>

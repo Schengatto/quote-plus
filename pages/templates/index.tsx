@@ -95,7 +95,7 @@ const Templates = () => {
         <AppLayout>
             <div className="m-8">
                 <table className="items-table">
-                    <thead className="bg-gray-900">
+                    <thead className="table-header">
                         <tr>
                             <th colSpan={3} className="text-white uppercase p-2 text-lg">{t("templates.table.title")}</th>
                         </tr>

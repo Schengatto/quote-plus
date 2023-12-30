@@ -83,10 +83,10 @@ const QuoteList = () => {
             <div className="m-8">
                 <table className="items-table">
                     <thead>
-                        <tr className="bg-gray-900">
+                        <tr className="table-header">
                             <th colSpan={7} className="text-white uppercase p-2 text-lg">{t("quotes.table.title")}</th>
                         </tr>
-                        <tr className="bg-gray-700">
+                        <tr className="bg-gray-700 border-2 border-gray-700">
                             <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("quotes.table.head.date")}</th>
                             <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("quotes.table.head.ref")}</th>
                             <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("quotes.table.head.owner")}</th>
