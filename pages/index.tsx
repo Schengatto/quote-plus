@@ -1,5 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
+import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
+import { errorDialog } from "@/utils/dialog";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
@@ -14,9 +16,10 @@ const LoginPage = () => {
     const router = useRouter();
     const user = useAuth();
 
-    const { t } = useI18nStore();
+    const { t, setCurrentLanguage } = useI18nStore();
+    const { setDialog } = useAppStore();
 
-    const [ credentials, setCredentials ] = useState<UserCredentials>({ username: "", password: "" });
+    const [credentials, setCredentials] = useState<UserCredentials>({ username: "", password: "" });
 
     const handleUsernameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setCredentials((prev) => ({ ...prev, username: e.target.value }));
@@ -39,15 +42,17 @@ const LoginPage = () => {
             }
             router.push("/home");
         } catch (error: any) {
-            alert(error.message);
+            errorDialog(t, "common.error.userNotFound").then(content => setDialog(content));
         }
     };
 
     useEffect(() => {
         if (user) {
             router.push("/home");
+        } else {
+            setCurrentLanguage("en");
         }
-    }, [ user ]);
+    }, [user]);
 
     return (
         <>

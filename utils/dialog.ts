@@ -14,3 +14,14 @@ export const genericDeleteItemsDialog = async (
         ],
     };
 };
+
+export const errorDialog = async (
+    t: (key: string) => string,
+    message: string
+) => {
+    return {
+        title: t("common.warning"),
+        message: t(message) || message,
+        closeActionLabel: t("common.ok"),
+    };
+};
