@@ -7,7 +7,7 @@ import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Quote, Product as QuoteList } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { MdAddCircleOutline, MdCopyAll, MdDelete, MdEdit, MdOutlinePictureAsPdf, MdPictureAsPdf } from "react-icons/md";
 
 const QuoteList = () => {
@@ -16,9 +16,16 @@ const QuoteList = () => {
     const user = useAuth();
 
     const { t } = useI18nStore();
-    const [ quotes, setProducts ] = useState<Quote[]>([]);
+    const [quotes, setProducts] = useState<Quote[]>([]);
     const { setIsLoading, setDialog } = useAppStore();
     const { setSelectedQuote } = useQuotesStore();
+
+    const [searchTerm, setSearchTerm] = useState<string>("");
+
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        setSearchTerm(e.target.value);
+    };
 
     const handleEdit = (event: any, _selectedQuote: Partial<QuoteList>) => {
         event.stopPropagation();
@@ -56,7 +63,7 @@ const QuoteList = () => {
         doActionWithLoader(
             setIsLoading,
             async () => {
-                const _quotes = await fetch("/api/quotes", { method: "GET" })
+                const _quotes = await fetch(`/api/quotes?search=${searchTerm}`, { method: "GET" })
                     .then((res) => res.json());
                 setProducts(_quotes);
             },
@@ -76,7 +83,11 @@ const QuoteList = () => {
 
         setSelectedQuote(null);
         fetchQuotes();
-    }, [ user ]);
+    }, [user]);
+
+    useEffect(() => {
+        fetchQuotes();
+    }, [searchTerm]);
 
     return (
         <AppLayout>
@@ -90,10 +101,14 @@ const QuoteList = () => {
                             <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("quotes.table.head.date")}</th>
                             <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("quotes.table.head.ref")}</th>
                             <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("quotes.table.head.owner")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left"></th>
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left"></th>
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left"></th>
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left"></th>
+                            <th colSpan={4}>
+                                <input
+                                    required
+                                    type="text"
+                                    className="text-input"
+                                    placeholder="search quote"
+                                    onChange={handleSearch} />
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
