@@ -40,7 +40,7 @@
   "brands.form.title": "compila i campi",
   "brands.form.name": "nome marchio",
   "brands.button.save": "salva",
-  "brands.warning.deleteDisabled": "non è possibile eliminare questo marchio perchè è associata a dei prodotti",
+  "brands.warning.deleteDisabled": "non è possibile eliminare questo marchio perchè risulta associato a dei prodotti",
   "categories.table.title": "Elenco categorie e sottocategorie",
   "categories.button.addCategory": "aggiungi categoria",
   "categories.form.title": "compila i campi",

@@ -19,7 +19,7 @@ const Home = () => {
     };
 
     const menuItems = [
-        { label: "sideMenu.item.newQuote", icon: MdEdit, grant: "quotes", onClick: () => router.push("/quotes/creates", { scroll: false }) },
+        { label: "sideMenu.item.newQuote", icon: MdEdit, grant: "quotes", onClick: () => router.push("/quotes/create", { scroll: false }) },
         { label: "sideMenu.item.quotesArchive", icon: MdOutlineFolderOpen, grant: "quotes", onClick: () => router.push("/quotes", { scroll: false }) },
         { label: "sideMenu.item.categories", icon: MdEdit, grant: "categories", onClick: () => router.push("/categorys", { scroll: false }) },
         { label: "sideMenu.item.products", icon: MdEdit, grant: "products", onClick: () => router.push("/products", { scroll: false }) },
