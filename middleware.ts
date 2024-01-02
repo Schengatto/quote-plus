@@ -22,6 +22,9 @@ export async function middleware(request: NextRequest) {
             return response;
         }
     }
+    if (request.method === "GET") {
+        return NextResponse.next();
+    }
 
     if (url.includes("/brands") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("brands")) {
         return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
