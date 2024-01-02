@@ -110,5 +110,6 @@
   "tenants.form.products": "prodotti",
   "tenants.form.price": "prezzo",
   "tenants.form.currency": "valuta",
-  "tenants.form.discountedPrice": "prezzo scontato"
+  "tenants.form.discountedPrice": "prezzo scontato",
+  "settings.button.downloadQuotesBackup": "scarica backup preventivi"
 }

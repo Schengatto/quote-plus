@@ -110,5 +110,6 @@
   "tenants.form.products": "products",
   "tenants.form.price": "price",
   "tenants.form.currency": "currency",
-  "tenants.form.discountedPrice": "discounted price"
+  "tenants.form.discountedPrice": "discounted price",
+  "settings.button.downloadQuotesBackup": "download quotes backup"
 }

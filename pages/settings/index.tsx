@@ -5,7 +5,7 @@ import { useI18nStore } from "@/store/i18n";
 import { TenantPlaceholders } from "@/types/tenants";
 import { doActionWithLoader } from "@/utils/actions";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { MdOutlineSave } from "react-icons/md";
+import { MdBackup, MdOutlineSave } from "react-icons/md";
 
 const defaultTenantPlaceholders = {
     products: "{{products}}",
@@ -21,8 +21,8 @@ const TenantsPage = () => {
     const { t } = useI18nStore();
     const { setIsLoading } = useAppStore();
 
-    const [ tenantId, setTenantId ] = useState<String>();
-    const [ placeholders, setPlaceholders ] = useState<TenantPlaceholders>(defaultTenantPlaceholders);
+    const [tenantId, setTenantId] = useState<String>();
+    const [placeholders, setPlaceholders] = useState<TenantPlaceholders>(defaultTenantPlaceholders);
 
     const handleValueChange = (e: ChangeEvent<HTMLInputElement>, key: string) => {
         e.preventDefault();
@@ -47,6 +47,19 @@ const TenantsPage = () => {
         await fetchTenant();
     };
 
+    const handleDownloadQuotesBackup = async () => {
+        const quotes = await fetch("/api/quotes").then((res) => res.json());
+        const jsonString = JSON.stringify(quotes, undefined, 2);
+
+        let dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(jsonString);
+        let link = document.createElement("a");
+        link.setAttribute("href", dataUri);
+        link.setAttribute("download", `quotes${new Date().toISOString()}.json`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     const fetchTenant = async () => {
         doActionWithLoader(setIsLoading, async () => {
             const _tenant = await fetch(`/api/tenants/${auth?.tenantId}`, { method: "GET" })
@@ -59,7 +72,7 @@ const TenantsPage = () => {
     useEffect(() => {
         if (!auth) return;
         fetchTenant();
-    }, [ auth ]);
+    }, [auth]);
 
     return (
         <AppLayout>
@@ -120,6 +133,23 @@ const TenantsPage = () => {
                             </div>
                         </form>
                     }
+                </div>
+            </div>
+            <div className="m-8">
+                <div className="card-header">Backup</div>
+                <div className="card-body">
+
+                    <div className="flex justify-center items-center gap-4">
+                        <button
+                            type="button"
+                            className="btn-primary"
+                            onClick={handleDownloadQuotesBackup}>
+                            <div>
+                                <MdBackup />
+                            </div>
+                            <div className="uppercase font-bold text-lg">{t("settings.button.downloadQuotesBackup")}</div>
+                        </button>
+                    </div>
                 </div>
             </div>
         </AppLayout>
