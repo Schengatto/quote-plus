@@ -21,8 +21,8 @@ const TenantsPage = () => {
     const { t } = useI18nStore();
     const { setIsLoading } = useAppStore();
 
-    const [tenantId, setTenantId] = useState<String>();
-    const [placeholders, setPlaceholders] = useState<TenantPlaceholders>(defaultTenantPlaceholders);
+    const [ tenantId, setTenantId ] = useState<String>();
+    const [ placeholders, setPlaceholders ] = useState<TenantPlaceholders>(defaultTenantPlaceholders);
 
     const handleValueChange = (e: ChangeEvent<HTMLInputElement>, key: string) => {
         e.preventDefault();
@@ -72,7 +72,7 @@ const TenantsPage = () => {
     useEffect(() => {
         if (!auth) return;
         fetchTenant();
-    }, [auth]);
+    }, [ auth ]);
 
     return (
         <AppLayout>

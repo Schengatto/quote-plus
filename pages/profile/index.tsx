@@ -125,7 +125,7 @@ const UserProfile = () => {
         fetchUserTemplates();
         fetchUserInfo();
 
-    }, []);
+    }, [ user ]);
 
     return (
         <AppLayout>

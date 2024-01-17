@@ -19,7 +19,7 @@ const LoginPage = () => {
     const { t, setCurrentLanguage } = useI18nStore();
     const { setDialog } = useAppStore();
 
-    const [credentials, setCredentials] = useState<UserCredentials>({ username: "", password: "" });
+    const [ credentials, setCredentials ] = useState<UserCredentials>({ username: "", password: "" });
 
     const handleUsernameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setCredentials((prev) => ({ ...prev, username: e.target.value }));
@@ -52,7 +52,7 @@ const LoginPage = () => {
         } else {
             setCurrentLanguage("en");
         }
-    }, [user]);
+    }, [ user ]);
 
     return (
         <>
