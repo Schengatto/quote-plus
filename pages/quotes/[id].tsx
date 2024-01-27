@@ -50,7 +50,7 @@ const QuoteEdit = () => {
             return;
         }
         fetchSelectedQuote();
-    }, [ user ]);
+    }, [ user, router, params ]);
 
     return (
         <AppLayout>

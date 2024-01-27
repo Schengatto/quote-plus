@@ -83,7 +83,7 @@ const QuoteList = () => {
 
         setSelectedQuote(null);
         fetchQuotes();
-    }, [ user ]);
+    }, [ user, router, setIsLoading ]);
 
     useEffect(() => {
         fetchQuotes();

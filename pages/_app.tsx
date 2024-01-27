@@ -19,7 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
         };
 
         doActionWithLoader(setIsLoading, () => fetchTranslations(currentLanguage));
-    }, [ currentLanguage ]);
+    }, [ currentLanguage, setTranslations, setIsLoading ]);
 
     return <>
         {isLoading

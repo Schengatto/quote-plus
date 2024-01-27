@@ -70,7 +70,7 @@ const ProductList = () => {
 
         doActionWithLoader(setIsLoading, fetchProducts);
         setSelectedProduct(null);
-    }, [ user, router ]);
+    }, [ user, router, setIsLoading, setSelectedProduct ]);
 
     return (
         <AppLayout>

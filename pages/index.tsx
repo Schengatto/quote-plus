@@ -52,7 +52,7 @@ const LoginPage = () => {
         } else {
             setCurrentLanguage("en");
         }
-    }, [ user ]);
+    }, [ user, router, setCurrentLanguage ]);
 
     return (
         <>

@@ -1,5 +1,6 @@
 module.exports = {
-    "extends": "next/core-web-vitals",
+    "extends": ["next/core-web-vitals", "plugin:sonarjs/recommended"],
+    "plugins": ["sonarjs"],
     "globals": {
         "NodeJS": true,
     },

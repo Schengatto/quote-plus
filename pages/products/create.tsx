@@ -116,17 +116,18 @@ const ProductCreate = () => {
             setIsLoading,
             async () => {
                 await Promise.all([ fetchBrands(), fetchCategories(), fetchCurrency() ]);
-                if (selectedProduct) setProduct({ ...selectedProduct, id: undefined });
+                if (selectedProduct) {
+                    setProduct({ ...selectedProduct, id: undefined });
+                };
             }
         );
         return () => setSelectedProduct(null);
-    }, [ selectedProduct ]);
+    }, [ selectedProduct, setIsLoading, setSelectedProduct ]);
 
     useEffect(() => {
         if (!user) return;
         if (!user?.userRole.grants?.includes("products")) {
             router.push("/");
-            return;
         }
     }, [ router, user ]);
 

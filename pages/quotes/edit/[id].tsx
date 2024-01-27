@@ -146,7 +146,7 @@ const QuoteEdit = () => {
         fetchTenantPlaceholders();
 
         doActionWithLoader(setIsLoading, async () => await Promise.all([ fetchCategories(), fetchUserTemplates(), fetchSelectedQuote() ]));
-    }, [ params, user ]);
+    }, [ params, user, router, setIsLoading ]);
 
     useEffect(() => {
         if (selectedCategory) {

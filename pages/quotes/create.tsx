@@ -147,7 +147,7 @@ const QuoteCreate = () => {
         return () => {
             setSelectedQuote(null);
         };
-    }, [ user ]);
+    }, [ user, router, setSelectedQuote ]);
 
     useEffect(() => {
         if (selectedCategory) {

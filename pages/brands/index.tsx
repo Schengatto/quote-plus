@@ -7,7 +7,7 @@ import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Brand } from "@prisma/client";
 import { useRouter } from "next/router";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
 
 const Brands = () => {
@@ -100,7 +100,7 @@ const Brands = () => {
         }
 
         fetchBrands();
-    }, [ user ]);
+    }, [ user, router ]);
 
     return (
         <AppLayout>
