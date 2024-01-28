@@ -42,32 +42,39 @@ const TextEditor: React.FunctionComponent<any> = ({ initialValue, onChange }) =>
         onChange(editorRef.current.getContent());
     };
 
-    return (<>
-        <Editor
-            id="editor-description"
-            apiKey={process.env.tinymceApiKey}
-            onInit={(evt, editor) => editorRef.current = editor}
-            onFocusOut={propagateChanges}
-            initialValue={initialValue}
-            init={{
-                language: currentLanguage,
-                branding: false,
-                height: 400,
-                menubar: true,
-                plugins: plugins,
-                toolbar:
-                    "formatselect | bold italic underline strikethrough | forecolor backcolor blockquote | link image media | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat",
-                image_advtab: true,
-                templates: [
-                    {
-                        title: "Prodotto - Prezzo prodotto",
-                        description: "Aggiunge le informazioni del prezzo del prodotto",
-                        content: "<p>Prezzo listino: {{prezzo}} &euro; + IVA</p> <p><strong>Prezzo scontato a Voi riservato {{prezzo-scontato}} &euro; + IVA</strong></p>"
-                    },
-                ],
-            }}
-        />
-    </>);
+    const toolbar = [
+        "formatselect",
+        "bold italic underline strikethrough",
+        "forecolor backcolor blockquote",
+        "link image media",
+        "alignleft aligncenter alignright alignjustify",
+        "numlist bullist outdent indent",
+        "removeformat"
+    ].join(" | ");
+
+    return <Editor
+        id="editor-description"
+        apiKey={process.env.tinymceApiKey}
+        onInit={(evt, editor) => editorRef.current = editor}
+        onFocusOut={propagateChanges}
+        initialValue={initialValue}
+        init={{
+            language: currentLanguage,
+            branding: false,
+            height: 400,
+            menubar: true,
+            plugins: plugins,
+            toolbar: toolbar,
+            image_advtab: true,
+            templates: [
+                {
+                    title: "Prodotto - Prezzo prodotto",
+                    description: "Aggiunge le informazioni del prezzo del prodotto",
+                    content: "<p>Prezzo listino: {{prezzo}} &euro; + IVA</p> <p><strong>Prezzo scontato a Voi riservato {{prezzo-scontato}} &euro; + IVA</strong></p>"
+                },
+            ],
+        }}
+    />;
 };
 
 export default TextEditor;

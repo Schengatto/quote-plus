@@ -7,7 +7,7 @@ import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Quote, Product as QuoteList } from "@prisma/client";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { MdAddCircleOutline, MdCopyAll, MdDelete, MdEdit, MdOutlinePictureAsPdf, MdPictureAsPdf } from "react-icons/md";
 
 const QuoteList = () => {
@@ -59,7 +59,7 @@ const QuoteList = () => {
         await fetchQuotes();
     };
 
-    const fetchQuotes = async () => {
+    const fetchQuotes = useCallback(async () => {
         doActionWithLoader(
             setIsLoading,
             async () => {
@@ -69,7 +69,7 @@ const QuoteList = () => {
             },
             (error: any) => alert(error.message)
         );
-    };
+    }, [ searchTerm, setIsLoading ]);
 
     const formatDate = (date: string | Date) => {
         return new Date(date).toLocaleDateString();
@@ -83,11 +83,11 @@ const QuoteList = () => {
 
         setSelectedQuote(null);
         fetchQuotes();
-    }, [ user, router, setIsLoading ]);
+    }, [ user, router, fetchQuotes, setSelectedQuote ]);
 
     useEffect(() => {
         fetchQuotes();
-    }, [ searchTerm ]);
+    }, [ searchTerm, fetchQuotes ]);
 
     return (
         <AppLayout>

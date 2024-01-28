@@ -7,7 +7,7 @@ import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Template, User } from "@prisma/client";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { MdDeleteOutline, MdOutlineSave } from "react-icons/md";
 import Cookies from "universal-cookie";
 
@@ -107,17 +107,17 @@ const UserProfile = () => {
             .then(content => setDialog(content));
     };
 
-    const fetchUserTemplates = async () => {
+    const fetchUserTemplates = useCallback(async () => {
         const _templates = await fetch(`/api/templates?userId=${user!.id}`, { method: "GET" })
             .then((res) => res.json());
         setTemplates(_templates);
-    };
+    }, [ user ]);
 
-    const fetchUserInfo = async () => {
+    const fetchUserInfo = useCallback(async () => {
         const _user = await fetch(`/api/users/${user?.id}`, { method: "GET" }).then(res => res.json());
         setUsername(_user?.username);
         setSelectedTemplate(_user.activeTemplateId);
-    };
+    }, [ user ]);
 
     useEffect(() => {
         if (!user) return;
@@ -125,7 +125,7 @@ const UserProfile = () => {
         fetchUserTemplates();
         fetchUserInfo();
 
-    }, [ user ]);
+    }, [ user, fetchUserInfo, fetchUserTemplates ]);
 
     return (
         <AppLayout>

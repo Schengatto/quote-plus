@@ -84,13 +84,13 @@ const Brands = () => {
         setIsInputFormActive(false);
     };
 
-    const fetchBrands = async () => {
+    const fetchBrands = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
             const _brands = await fetch("/api/brands", { method: "GET" })
                 .then((res) => res.json());
             setBrands(_brands);
         });
-    };
+    }, [ setIsLoading ]);
 
     useEffect(() => {
         if (!user) return;
@@ -100,7 +100,7 @@ const Brands = () => {
         }
 
         fetchBrands();
-    }, [ user, router ]);
+    }, [ user, router, fetchBrands ]);
 
     return (
         <AppLayout>

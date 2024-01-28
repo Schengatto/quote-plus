@@ -1,7 +1,7 @@
 import { Category } from "@prisma/client";
 import AppLayout from "@/layouts/Layout";
 import { MdEdit, MdDelete, MdAddCircleOutline } from "react-icons/md";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import { CategoryApiModel } from "@/types/api/categories";
 import { useI18nStore } from "@/store/i18n";
 import { useAppStore } from "@/store/app";
@@ -94,12 +94,12 @@ const Categories = () => {
         setIsInputFormActive(false);
     };
 
-    const fetchCategories = async () => {
+    const fetchCategories = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
             const _categories = await fetch("/api/categories", { method: "GET" }).then((res) => res.json());
             setCategories(_categories);
         });
-    };
+    }, [ setIsLoading ]);
 
     const categoryLabel = (category: CategoryApiModel): string => {
         return category.parent
@@ -115,7 +115,7 @@ const Categories = () => {
         }
 
         fetchCategories();
-    }, [ router, user ]);
+    }, [ router, user, fetchCategories ]);
 
     useEffect(() => {
         const notTheSelectedOne = ((c: Category) => c.id !== selectedCategory?.id);

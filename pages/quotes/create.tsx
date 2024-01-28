@@ -10,7 +10,7 @@ import { doActionWithLoader } from "@/utils/actions";
 import { Product, Quote, Template } from "@prisma/client";
 import { Parser } from "html-to-react";
 import { useRouter } from "next/router";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 
 const QuoteCreate = () => {
 
@@ -108,29 +108,29 @@ const QuoteCreate = () => {
         }
     };
 
-    const fetchCategories = async () => {
+    const fetchCategories = useCallback(async () => {
         const _categories = await fetch("/api/categories", { method: "GET" }).then((res) => res.json());
         setCategories(_categories);
-    };
+    }, []);
 
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         const _products = await fetch(`/api/products?categoryId=${selectedCategory}`, { method: "GET" }).then((res) => res.json());
         setProducts(_products);
-    };
+    }, [ selectedCategory ]);
 
-    const fetchUserTemplates = async () => {
+    const fetchUserTemplates = useCallback(async () => {
         const _templates = await fetch(`/api/templates?userId=${user!.id}`, { method: "GET" })
             .then((res) => res.json());
         setTemplates(_templates);
-    };
+    }, [ user ]);
 
-    const fetchTenantPlaceholders = async () => {
+    const fetchTenantPlaceholders = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
             const _tenant = await fetch(`/api/tenants/${user?.tenantId}`, { method: "GET" })
                 .then((res) => res.json());
             setPlaceholders(_tenant.placeholders);
         });
-    };
+    }, [ user, setIsLoading ]);
 
     useEffect(() => {
         if (!user) return;
@@ -147,13 +147,13 @@ const QuoteCreate = () => {
         return () => {
             setSelectedQuote(null);
         };
-    }, [ user, router, setSelectedQuote ]);
+    }, [ user, router, setSelectedQuote, fetchTenantPlaceholders, fetchCategories, fetchUserTemplates ]);
 
     useEffect(() => {
         if (selectedCategory) {
             fetchProducts();
         }
-    }, [ selectedCategory ]);
+    }, [ selectedCategory, fetchProducts ]);
 
     useEffect(() => {
         setQuoteOverview(() => quoteContent.replaceAll("{{prodotti}}", ""));
@@ -216,7 +216,7 @@ const QuoteCreate = () => {
                                 <button
                                     type="button"
                                     disabled={!selectedProduct}
-                                    className="bg-gray-900 text-white hover:bg-stone-400 disabled:bg-gray-900 disabled:opacity-50 border-2 border-gray-900 rounded-full p-2 w-80 flex items-center justify-center gap-2"
+                                    className="btn-primary"
                                     onClick={handleAddSelectedProduct}>
                                     <div className="uppercase font-bold text-lg">{t("quotes.button.addProduct")}</div>
                                 </button>

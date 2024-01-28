@@ -6,7 +6,7 @@ import { useI18nStore } from "@/store/i18n";
 import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Template } from "@prisma/client";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
 
 const Templates = () => {
@@ -78,18 +78,18 @@ const Templates = () => {
         await fetchTemplates();
     };
 
-    const fetchTemplates = async () => {
+    const fetchTemplates = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
             const _templates = await fetch(`/api/templates?userId=${auth?.id}`, { method: "GET" })
                 .then((res) => res.json());
             setTemplates(_templates);
         });
-    };
+    }, [ auth, setTemplates, setIsLoading ]);
 
     useEffect(() => {
         if (!auth) return;
         fetchTemplates();
-    }, [ auth ]);
+    }, [ auth, fetchTemplates ]);
 
     return (
         <AppLayout>

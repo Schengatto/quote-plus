@@ -4,7 +4,7 @@ import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import { TenantPlaceholders } from "@/types/tenants";
 import { doActionWithLoader } from "@/utils/actions";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import { MdBackup, MdOutlineSave } from "react-icons/md";
 
 const defaultTenantPlaceholders = {
@@ -60,19 +60,19 @@ const TenantsPage = () => {
         document.body.removeChild(link);
     };
 
-    const fetchTenant = async () => {
+    const fetchTenant = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
             const _tenant = await fetch(`/api/tenants/${auth?.tenantId}`, { method: "GET" })
                 .then((res) => res.json());
             setTenantId(_tenant.id);
             setPlaceholders(_tenant.placeholders);
         });
-    };
+    }, [ auth, setIsLoading ]);
 
     useEffect(() => {
         if (!auth) return;
         fetchTenant();
-    }, [ auth ]);
+    }, [ auth, fetchTenant ]);
 
     return (
         <AppLayout>

@@ -11,7 +11,7 @@ import { Product, Quote, Template } from "@prisma/client";
 import { Parser } from "html-to-react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 
 const QuoteEdit = () => {
 
@@ -107,35 +107,35 @@ const QuoteEdit = () => {
         }
     };
 
-    const fetchCategories = async () => {
+    const fetchCategories = useCallback(async () => {
         const _categories = await fetch("/api/categories", { method: "GET" }).then((res) => res.json());
         setCategories(_categories);
-    };
+    }, []);
 
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         const _products = await fetch(`/api/products?categoryId=${selectedCategory}`, { method: "GET" }).then((res) => res.json());
         setProducts(_products);
-    };
+    }, [ selectedCategory ]);
 
-    const fetchUserTemplates = async () => {
+    const fetchUserTemplates = useCallback(async () => {
         const _templates = await fetch(`/api/templates?userId=${user!.id}`, { method: "GET" })
             .then((res) => res.json());
         setTemplates(_templates);
-    };
+    }, [ user ]);
 
-    const fetchSelectedQuote = async () => {
+    const fetchSelectedQuote = useCallback(async () => {
         const _quote = await fetch(`/api/quotes/${params.id}`, { method: "GET" }).then((res) => res.json());
         setSelectedQuote(_quote);
         setQuoteContent(_quote.content);
-    };
+    }, [ params, setSelectedQuote ]);
 
-    const fetchTenantPlaceholders = async () => {
+    const fetchTenantPlaceholders = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
             const _tenant = await fetch(`/api/tenants/${user?.tenantId}`, { method: "GET" })
                 .then((res) => res.json());
             setPlaceholders(_tenant.placeholders);
         });
-    };
+    }, [ user, setIsLoading ]);
 
     useEffect(() => {
         if (!user || !params?.id) return;
@@ -146,13 +146,13 @@ const QuoteEdit = () => {
         fetchTenantPlaceholders();
 
         doActionWithLoader(setIsLoading, async () => await Promise.all([ fetchCategories(), fetchUserTemplates(), fetchSelectedQuote() ]));
-    }, [ params, user, router, setIsLoading ]);
+    }, [ params, user, router, setIsLoading, fetchCategories, fetchSelectedQuote, fetchTenantPlaceholders, fetchUserTemplates ]);
 
     useEffect(() => {
         if (selectedCategory) {
             fetchProducts();
         }
-    }, [ selectedCategory ]);
+    }, [ selectedCategory, fetchProducts ]);
 
     useEffect(() => {
         setQuoteOverview(() => quoteContent.replaceAll("{{prodotti}}", ""));

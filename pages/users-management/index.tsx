@@ -7,7 +7,7 @@ import { AuthenticatedUser } from "@/types/api/users";
 import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { User, UserRole } from "@prisma/client";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
 
 const UserManagementPage = () => {
@@ -81,27 +81,27 @@ const UserManagementPage = () => {
         await fetchUsers();
     };
 
-    const fetchUsers = async () => {
+    const fetchUsers = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
             const _users = await fetch("/api/users", { method: "GET" })
                 .then((res) => res.json());
             setUsers(_users);
         });
-    };
+    }, [ setIsLoading ]);
 
-    const fetchRoles = async () => {
+    const fetchRoles = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
             const _roles = await fetch("/api/roles", { method: "GET" })
                 .then((res) => res.json());
             setRoles(_roles);
         });
-    };
+    }, [ setIsLoading ]);
 
     useEffect(() => {
         if (!auth) return;
         fetchUsers();
         fetchRoles();
-    }, [ auth ]);
+    }, [ auth, fetchUsers, fetchRoles ]);
 
     return (
         <AppLayout>

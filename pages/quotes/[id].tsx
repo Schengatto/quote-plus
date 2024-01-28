@@ -6,7 +6,7 @@ import { Quote } from "@prisma/client";
 import { Parser } from "html-to-react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const QuoteEdit = () => {
 
@@ -37,11 +37,11 @@ const QuoteEdit = () => {
         router.push(`/quotes/edit/${params.id}`);
     };
 
-    const fetchSelectedQuote = async () => {
+    const fetchSelectedQuote = useCallback(async () => {
         const _quote = await fetch(`/api/quotes/${params.id}`, { method: "GET" }).then((res) => res.json());
         setQuoteContent(_quote.content);
         setSelectedQuote(_quote);
-    };
+    }, [ params ]);
 
     useEffect(() => {
         if (!user || !params?.id) return;
@@ -50,7 +50,7 @@ const QuoteEdit = () => {
             return;
         }
         fetchSelectedQuote();
-    }, [ user, router, params ]);
+    }, [ user, router, params, fetchSelectedQuote ]);
 
     return (
         <AppLayout>
