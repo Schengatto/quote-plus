@@ -13,7 +13,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
 
     const auth = useAuth();
 
-    const { t, setCurrentLanguage } = useI18nStore();
+    const { t, setCurrentLanguage, currentLanguage } = useI18nStore();
     const [isMenuVisible, setIsMenuVisible] = useState<boolean>(true);
 
     const toggleMenu = () => {
@@ -22,7 +22,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
 
     useEffect(() => {
         if (!auth) return;
-        const userLanguage = (auth?.extraData as any).language || "en";
+        const userLanguage = currentLanguage || (auth?.extraData as any).language || "en";
         setCurrentLanguage(userLanguage );
     }, [auth])
 
