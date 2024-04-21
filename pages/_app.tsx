@@ -12,6 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
     const { isLoading, setIsLoading } = useAppStore();
 
     useEffect(() => {
+        if (!currentLanguage) return;
         const fetchTranslations = async (locale: string) => {
             const response = await fetch(`/api/translations/${locale}`);
             const _translations = await response.json();

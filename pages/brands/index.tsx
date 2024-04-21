@@ -62,7 +62,7 @@ const Brands = () => {
 
     const handleSave = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (selectedBrand === null || !selectedBrand.name) return;
+        if (!selectedBrand?.name) return;
 
         const method = selectedBrand.id ? "PATCH" : "POST";
         const endpoint = selectedBrand.id ? `/api/brands/${selectedBrand.id}` : "/api/brands";

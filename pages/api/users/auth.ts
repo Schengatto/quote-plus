@@ -32,7 +32,7 @@ export default async function handler(
                 .setExpirationTime("12h")
                 .sign(getJwtSecretKey());
             res.status(200);
-            res.setHeader("Set-Cookie", `token=${token}; Path=/`);
+            res.setHeader("Set-Cookie", `token=${token}; Path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`);
             res.json({ ...userData, password: undefined });
         }
     } catch (error: any) {

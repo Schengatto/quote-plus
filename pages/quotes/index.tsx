@@ -5,40 +5,40 @@ import { useI18nStore } from "@/store/i18n";
 import { useQuotesStore } from "@/store/quotes";
 import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
-import { Quote, Product as QuoteList } from "@prisma/client";
+import { Quote } from "@prisma/client";
 import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { MdAddCircleOutline, MdCopyAll, MdDelete, MdEdit, MdOutlinePictureAsPdf, MdPictureAsPdf } from "react-icons/md";
+import { MdAddCircleOutline, MdCopyAll, MdDelete, MdEdit, MdOutlinePictureAsPdf } from "react-icons/md";
 
-const QuoteList = () => {
+const QuoteComponent = () => {
 
     const router = useRouter();
     const user = useAuth();
 
     const { t } = useI18nStore();
-    const [ quotes, setProducts ] = useState<Quote[]>([]);
+    const [quotes, setProducts] = useState<Quote[]>([]);
     const { setIsLoading, setDialog } = useAppStore();
     const { setSelectedQuote } = useQuotesStore();
 
-    const [ searchTerm, setSearchTerm ] = useState<string>("");
+    const [searchTerm, setSearchTerm] = useState<string>("");
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         setSearchTerm(e.target.value);
     };
 
-    const handleEdit = (event: any, _selectedQuote: Partial<QuoteList>) => {
+    const handleEdit = (event: any, _selectedQuote: Partial<Quote>) => {
         event.stopPropagation();
         router.push(`/quotes/${_selectedQuote.id}`);
     };
 
-    const handleClone = (event: any, _selectedQuote: Partial<QuoteList>) => {
+    const handleClone = (event: any, _selectedQuote: Partial<Quote>) => {
         event.stopPropagation();
         setSelectedQuote(_selectedQuote);
         router.push("/quotes/create");
     };
 
-    const handleExportPdf = (event: any, _selectedQuote: Partial<QuoteList>) => {
+    const handleExportPdf = (event: any, _selectedQuote: Partial<Quote>) => {
         event.stopPropagation();
         window.open(`/api/quotes/pdf/${_selectedQuote.id}`, "_blank");
     };
@@ -47,13 +47,13 @@ const QuoteList = () => {
         router.push("/quotes/create");
     };
 
-    const handleDelete = async (event: any, quote: Partial<QuoteList>) => {
+    const handleDelete = async (event: any, quote: Partial<Quote>) => {
         event.stopPropagation();
         await genericDeleteItemsDialog(() => deleteQuote(quote), t)
             .then(content => setDialog(content));
     };
 
-    const deleteQuote = async (quote: Partial<QuoteList>) => {
+    const deleteQuote = async (quote: Partial<Quote>) => {
         setDialog(null);
         await fetch(`/api/quotes/${quote.id}`, { method: "DELETE" });
         await fetchQuotes();
@@ -69,7 +69,7 @@ const QuoteList = () => {
             },
             (error: any) => alert(error.message)
         );
-    }, [ searchTerm, setIsLoading ]);
+    }, [searchTerm, setIsLoading]);
 
     const formatDate = (date: string | Date) => {
         return new Date(date).toLocaleDateString();
@@ -83,11 +83,11 @@ const QuoteList = () => {
 
         setSelectedQuote(null);
         fetchQuotes();
-    }, [ user, router, fetchQuotes, setSelectedQuote ]);
+    }, [user, router, fetchQuotes, setSelectedQuote]);
 
     useEffect(() => {
         fetchQuotes();
-    }, [ searchTerm, fetchQuotes ]);
+    }, [searchTerm, fetchQuotes]);
 
     return (
         <AppLayout>
@@ -140,4 +140,4 @@ const QuoteList = () => {
     );
 };
 
-export default QuoteList;
+export default QuoteComponent;

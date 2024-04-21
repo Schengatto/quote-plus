@@ -39,7 +39,9 @@ const LoginPage = () => {
             if (!response.id) {
                 throw Error("Utente non trovato");
             }
-            setCurrentLanguage((response?.extraData as any).language || "en");
+            const userLanguage = (response?.extraData as any).language || "en";
+            localStorage.setItem("userLanguage", userLanguage);
+            setCurrentLanguage(userLanguage);
             router.push("/home");
         } catch (error: any) {
             errorDialog(t, "common.error.userNotFound").then((content) => setDialog(content));

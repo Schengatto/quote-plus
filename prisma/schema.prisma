@@ -110,3 +110,46 @@ model Quote {
     updatedById Int      @map(name: "updated_by_id")
     updatedBy   String   @map(name: "updated_by")
 }
+
+model Contact {
+    id          Int           @id @default(autoincrement())
+    phoneNumber String        @unique
+    firstName   String?
+    lastName    String?
+    company     String?
+    mobile      String?
+    mobile2     String?
+    home        String?
+    home2       String?
+    business    String?
+    business2   String?
+    email       String?
+    businessFax String?
+    homeFax     String?
+    pager       String?
+    other       String?
+    createdAt   DateTime      @default(now()) @map(name: "created_at")
+    createdBy   String        @map(name: "created_by")
+    updatedAt   DateTime      @updatedAt @map(name: "updated_at")
+    updatedBy   String        @map(name: "updated_by")
+    notes       ContactNote[]
+}
+
+enum ContactNoteStatus {
+    OPEN
+    PENDING
+    CLOSED
+}
+
+model ContactNote {
+    id        Int               @id @default(autoincrement())
+    contactId Int               @map(name: "contact_id")
+    contact   Contact           @relation(fields: [contactId], references: [id])
+    note      String
+    event     String
+    status    ContactNoteStatus
+    createdAt DateTime          @default(now()) @map(name: "created_at")
+    createdBy String            @map(name: "created_by")
+    updatedAt DateTime          @updatedAt @map(name: "updated_at")
+    updatedBy String            @map(name: "updated_by")
+}
