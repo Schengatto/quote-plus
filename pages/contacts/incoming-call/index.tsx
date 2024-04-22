@@ -20,8 +20,8 @@ const IncomingCall = () => {
 
     const { contacts } = useContactsStore();
 
-    const phoneNumber = searchParams.get("phone-number");
-    const displayName = searchParams.get("display-name");
+    const phoneNumber = searchParams.get("phone-number") ?? searchParams.get("phoneNumber");
+    const displayName = searchParams.get("display-name") ?? searchParams.get("displayName");
 
     const defaultContact: Partial<Contact> = {
         firstName: displayName ?? "",
