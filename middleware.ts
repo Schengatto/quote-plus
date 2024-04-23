@@ -63,5 +63,6 @@ export const config = {
         "/profile/:path*",
         "/templates/:path*",
         "/users-management/:path*",
+        "/contacts/:path*",
     ],
 };
