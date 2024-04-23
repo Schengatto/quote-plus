@@ -129,7 +129,7 @@ const IncomingCall = () => {
             throw Error("Contatto e nota non salvati!");
         }
 
-        return Number(contactId);
+        return Number(contactResponse.id);
     }
 
     const saveNewContactNote = async (contactId: number) => {
@@ -163,9 +163,9 @@ const IncomingCall = () => {
     };
 
     useEffect(() => {
-        if (!contacts) return;
-        const contactMatch = (c: Contact) => c.phoneNumber == phoneNumber || c.firstName == displayName || c.mobile == phoneNumber;
-        const storedContact: Contact | null = contacts.find(contactMatch) || null;
+        if (!contacts || !phoneNumber) return;
+        const contactMatch = (c: Contact) => !!c.phoneNumber && (c.phoneNumber == phoneNumber || c.mobile == phoneNumber || c.firstName == displayName);
+        const storedContact: Contact | null = contacts.find(c => contactMatch(c)) || null;
         setIsContactPreset(!!storedContact);
 
         setContactData(storedContact || defaultContact);
