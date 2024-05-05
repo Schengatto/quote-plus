@@ -104,26 +104,6 @@ const SideMenu: FunctionComponent = () => {
                         }
                     </div>
                 }
-                <div className="w-full">
-                    <div className="side-menu__category">{t("sideMenu.item.user")}</div>
-                    <div className="side-menu__item"
-                        onClick={() => navigateTo("/profile")}>
-                        <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
-                        <div className="ml-2 ">{t("sideMenu.item.editUserOptions")}</div>
-                    </div>
-                    <div className="side-menu__item"
-                        onClick={() => navigateTo("/templates")}>
-                        <div className="ml-5 flex flex-col items-center justify-center"><MdEditDocument /></div>
-                        <div className="ml-2 ">{t("sideMenu.item.manageTemplates")}</div>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <div className="side-menu__item"
-                        onClick={handleLogout}>
-                        <div className="ml-5 flex flex-col items-center justify-center"><MdExitToApp /></div>
-                        <div className="ml-2 ">{t("sideMenu.item.logout")}</div>
-                    </div>
-                </div>
             </div>
         </>
     );

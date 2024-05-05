@@ -12,12 +12,16 @@ interface ContactData {
     value: any;
 }
 
+interface ContactNoteWithContact extends ContactNote {
+    contact: {id: string, firstName: string, phoneNumber: string}
+}
+
 const Notes = () => {
 
     const { t } = useI18nStore();
     const { setIsLoading } = useAppStore();
 
-    const [ notes, setNotes ] = useState<ContactNote[]>([]);
+    const [ notes, setNotes ] = useState<ContactNoteWithContact[]>([]);
     const [ searchHistory, setSearchHistory ] = useState<string>("");
 
     const fetchNotes = useCallback(async () => {
@@ -31,7 +35,7 @@ const Notes = () => {
         setSearchHistory(e.target.value);
     };
 
-    const applyNotesHistoryFilter = ({ note }: ContactNote): boolean => {
+    const applyNotesHistoryFilter = ({ note }: ContactNoteWithContact): boolean => {
         return !searchHistory || note.toLowerCase().includes(searchHistory.toLocaleLowerCase());
     };
 
@@ -60,7 +64,8 @@ const Notes = () => {
                                 author={note.createdBy}
                                 date={note.updatedAt}
                                 status={note.status}
-                                note={note.note} />
+                                note={note.note}
+                                contact={note.contact} />
                         ))}
                 </div>
             </div>

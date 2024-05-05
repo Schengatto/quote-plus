@@ -2,8 +2,11 @@ import SideMenu from "@/components/SideMenu";
 import { useAuth } from "@/hooks/useAuth";
 import { useI18nStore } from "@/store/i18n";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
-import { MdMenu, MdMenuOpen } from "react-icons/md";
+import { MdMenu, MdMenuOpen, MdOutlineAccountCircle } from "react-icons/md";
+import Cookies from "universal-cookie";
+
 
 interface LayoutProps {
     children: ReactNode
@@ -12,12 +15,28 @@ interface LayoutProps {
 const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
 
     const auth = useAuth();
+    const router = useRouter();
 
     const { t, setCurrentLanguage, currentLanguage } = useI18nStore();
     const [isMenuVisible, setIsMenuVisible] = useState<boolean>(true);
+    const [isUserMenuVisible, setIsUserMenuVisible] = useState<boolean>(false);
 
     const toggleMenu = () => {
         setIsMenuVisible((prev: boolean) => !prev);
+    };
+
+    const toggleUserMenu = () => {
+        setIsUserMenuVisible((prev: boolean) => !prev);
+    }
+
+    const handleLogout = () => {
+        const cookies = new Cookies();
+        cookies.remove("token");
+        router.push("/");
+    };
+
+    const navigateTo = (page: string) => {
+        router.push(page);
     };
 
     useEffect(() => {
@@ -48,14 +67,31 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                             </button>
                         </div>
                         <div>
-                            <div className="text-lg font-bold">
-                                {t("navbar.welcome")} {auth.username}
-                            </div>
-                            <div className="text-right">
-                                <small>v. {process.env.appVersion}</small>
+                            <div className="side-menu__item p-1 text-lg font-bold cursor-pointer flex bg-slate-600" onClick={toggleUserMenu}>
+                                <div className="mr-2 mt-1"><MdOutlineAccountCircle /></div>
+                                <div> {auth.username}</div>
                             </div>
                         </div>
                     </div>
+                    {isUserMenuVisible 
+                        && <div className="bg-sky-800 fixed z-10 right-0 top-14">
+                            <div className="w-full">
+                                <div className="side-menu__item"
+                                    onClick={() => navigateTo("/profile")}>
+                                    <div className="ml-2 ">{t("sideMenu.item.editUserOptions")}</div>
+                                </div>
+                                <div className="side-menu__item"
+                                    onClick={() => navigateTo("/templates")}>
+                                    <div className="ml-2 ">{t("sideMenu.item.manageTemplates")}</div>
+                                </div>
+                            </div>
+                            <div className="w-full">
+                                <div className="side-menu__item"
+                                    onClick={handleLogout}>
+                                    <div className="ml-2 ">{t("sideMenu.item.logout")}</div>
+                                </div>
+                            </div>
+                        </div>}
                     <div className="flex bg-gray-900">
                         {isMenuVisible &&
                             <div className="fixed top-[7vh] md:sticky h-[93vh] w-[400px] flex flex-col items-center text-white bg-gray-900 z-10">
