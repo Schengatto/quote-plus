@@ -42,6 +42,7 @@
   "sideMenu.item.settings": "settings",
   "sideMenu.item.contacts": "contacts",
   "sideMenu.item.contactsList": "contacts list",
+  "sideMenu.item.notesList": "contacts notes",
   "brands.table.title": "brands list",
   "brands.button.addBrand": "add brand",
   "brands.form.title": "fill in the fields",

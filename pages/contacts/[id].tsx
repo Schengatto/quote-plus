@@ -29,19 +29,19 @@ const EditContact = () => {
         businessFax: "",
         company: "",
         home: ""
-    }
+    };
 
-    const [selectedContact, setSelectedContact] = useState<Partial<Contact>>(defaultContact);
-    const [notes, setNotes] = useState<ContactNote[]>([]);
-    const [selectedNote, setSelectedNote] = useState<Partial<ContactNote>>({ status: "OPEN" });
-    const [searchHistory, setSearchHistory] = useState<string>("");
+    const [ selectedContact, setSelectedContact ] = useState<Partial<Contact>>(defaultContact);
+    const [ notes, setNotes ] = useState<ContactNote[]>([]);
+    const [ selectedNote, setSelectedNote ] = useState<Partial<ContactNote>>({ status: "OPEN" });
+    const [ searchHistory, setSearchHistory ] = useState<string>("");
 
     const fetchContactNotes = useCallback(async (contactId: number) => {
         doActionWithLoader(setIsLoading, async () => {
             const _contactsNotes = await fetch(`/api/contacts/${contactId}/notes`, { method: "GET" }).then((res) => res.json());
             setNotes(_contactsNotes);
         });
-    }, [setIsLoading]);
+    }, [ setIsLoading ]);
 
     const handleFirstNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setSelectedContact((prev) => ({ ...prev, firstName: e.target.value }));
@@ -84,7 +84,7 @@ const EditContact = () => {
             await fetch(`/api/contacts/${contactId}/notes/${note.id}`, { method: "PATCH", body: JSON.stringify({ ...note, status }) }).then((res) => res.json());
             await fetchContactNotes(contactId);
         });
-    }
+    };
 
     const handleNoteDelete = (noteId: number) => {
         const contactId = selectedContact.id;
@@ -93,17 +93,17 @@ const EditContact = () => {
             await fetch(`/api/contacts/${contactId}/notes/${noteId}`, { method: "DELETE" });
             await fetchContactNotes(contactId);
         });
-    }
+    };
 
     const applyNotesHistoryFilter = ({ note }: ContactNote): boolean => {
         return !searchHistory || note.toLowerCase().includes(searchHistory.toLocaleLowerCase());
-    }
+    };
 
     const handleSaveCurrentContact = async (e: FormEvent<HTMLFormElement>): Promise<number> => {
         e.preventDefault();
         let contactId = selectedContact.id;
 
-        const contactEndpoint = contactId ? `/api/contacts/${contactId}` : `/api/contacts`;
+        const contactEndpoint = contactId ? `/api/contacts/${contactId}` : "/api/contacts";
         const contactBody: Partial<Contact> = contactId
             ? {
                 ...selectedContact,
@@ -124,7 +124,7 @@ const EditContact = () => {
         }
 
         return Number(contactId);
-    }
+    };
 
     const saveNewContactNote = async (contactId: number) => {
         const noteEndpoint = `/api/contacts/${contactId}/notes`;
@@ -142,7 +142,7 @@ const EditContact = () => {
         if (!noteResponse.id) {
             throw Error("Nota non salvata!");
         }
-    }
+    };
 
     const handleSaveNote = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -166,13 +166,12 @@ const EditContact = () => {
             setSelectedContact(_contact);
         };
         fetchContact();
-    }, [params]);
-
+    }, [ params ]);
 
     useEffect(() => {
         if (!selectedContact?.id) return;
         fetchContactNotes(selectedContact?.id);
-    }, [selectedContact]);
+    }, [ selectedContact ]);
 
     return (
         <AppLayout>
@@ -244,8 +243,6 @@ const EditContact = () => {
 
                                         </>
                                     )}
-
-
 
                                     <div className="flex justify-center items-center gap-2 flex-wrap">
                                         <button

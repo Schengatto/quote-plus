@@ -16,11 +16,11 @@ const QuoteComponent = () => {
     const user = useAuth();
 
     const { t } = useI18nStore();
-    const [quotes, setProducts] = useState<Quote[]>([]);
+    const [ quotes, setProducts ] = useState<Quote[]>([]);
     const { setIsLoading, setDialog } = useAppStore();
     const { setSelectedQuote } = useQuotesStore();
 
-    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [ searchTerm, setSearchTerm ] = useState<string>("");
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -69,7 +69,7 @@ const QuoteComponent = () => {
             },
             (error: any) => alert(error.message)
         );
-    }, [searchTerm, setIsLoading]);
+    }, [ searchTerm, setIsLoading ]);
 
     const formatDate = (date: string | Date) => {
         return new Date(date).toLocaleDateString();
@@ -83,11 +83,11 @@ const QuoteComponent = () => {
 
         setSelectedQuote(null);
         fetchQuotes();
-    }, [user, router, fetchQuotes, setSelectedQuote]);
+    }, [ user, router, fetchQuotes, setSelectedQuote ]);
 
     useEffect(() => {
         fetchQuotes();
-    }, [searchTerm, fetchQuotes]);
+    }, [ searchTerm, fetchQuotes ]);
 
     return (
         <AppLayout>

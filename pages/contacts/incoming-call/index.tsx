@@ -33,21 +33,21 @@ const IncomingCall = () => {
         businessFax: "",
         company: "",
         home: ""
-    }
+    };
 
-    const [contactData, setContactData] = useState<Partial<Contact>>(defaultContact);
-    const [selectedContanct, setSelectedContanct] = useState<Partial<Contact>>({});
-    const [isContactPreset, setIsContactPreset] = useState<boolean>(false);
-    const [notes, setNotes] = useState<ContactNote[]>([]);
-    const [selectedNote, setSelectedNote] = useState<Partial<ContactNote>>({ status: "OPEN" });
-    const [searchHistory, setSearchHistory] = useState<string>("");
+    const [ contactData, setContactData ] = useState<Partial<Contact>>(defaultContact);
+    const [ selectedContanct, setSelectedContanct ] = useState<Partial<Contact>>({});
+    const [ isContactPreset, setIsContactPreset ] = useState<boolean>(false);
+    const [ notes, setNotes ] = useState<ContactNote[]>([]);
+    const [ selectedNote, setSelectedNote ] = useState<Partial<ContactNote>>({ status: "OPEN" });
+    const [ searchHistory, setSearchHistory ] = useState<string>("");
 
     const fetchContactNotes = useCallback(async (contactId: number) => {
         doActionWithLoader(setIsLoading, async () => {
             const _contactsNotes = await fetch(`/api/contacts/${contactId}/notes`, { method: "GET" }).then((res) => res.json());
             setNotes(_contactsNotes);
         });
-    }, [setIsLoading]);
+    }, [ setIsLoading ]);
 
     const handleFirstNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setSelectedContanct((prev) => ({ ...prev, firstName: e.target.value }));
@@ -90,7 +90,7 @@ const IncomingCall = () => {
             await fetch(`/api/contacts/${contactId}/notes/${note.id}`, { method: "PATCH", body: JSON.stringify({ ...note, status }) }).then((res) => res.json());
             await fetchContactNotes(contactId);
         });
-    }
+    };
 
     const handleNoteDelete = (noteId: number) => {
         const contactId = contactData.id;
@@ -99,16 +99,16 @@ const IncomingCall = () => {
             await fetch(`/api/contacts/${contactId}/notes/${noteId}`, { method: "DELETE" });
             await fetchContactNotes(contactId);
         });
-    }
+    };
 
     const applyNotesHistoryFilter = ({ note }: ContactNote): boolean => {
         return !searchHistory || note.toLowerCase().includes(searchHistory.toLocaleLowerCase());
-    }
+    };
 
     const saveCurrentContact = async (): Promise<number> => {
         let contactId = contactData.id;
 
-        const contactEndpoint = contactId ? `/api/contacts/${contactId}` : `/api/contacts`;
+        const contactEndpoint = contactId ? `/api/contacts/${contactId}` : "/api/contacts";
         const contactBody: Partial<Contact> = contactId
             ? {
                 ...contactData,
@@ -130,7 +130,7 @@ const IncomingCall = () => {
         }
 
         return Number(contactResponse.id);
-    }
+    };
 
     const saveNewContactNote = async (contactId: number) => {
         const noteEndpoint = `/api/contacts/${contactId}/notes`;
@@ -148,7 +148,7 @@ const IncomingCall = () => {
         if (!noteResponse.id) {
             throw Error("Nota non salvata!");
         }
-    }
+    };
 
     const handleSaveNote = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -169,17 +169,16 @@ const IncomingCall = () => {
         setIsContactPreset(!!storedContact);
 
         setContactData(storedContact || defaultContact);
-    }, [phoneNumber, displayName, contacts]);
+    }, [ phoneNumber, displayName, contacts ]);
 
     useEffect(() => {
         if (!contactData.id) {
-            setSelectedContanct({ phoneNumber: phoneNumber ?? "", firstName: displayName })
+            setSelectedContanct({ phoneNumber: phoneNumber ?? "", firstName: displayName });
             return;
         };
         setSelectedContanct(contactData);
         fetchContactNotes(contactData.id);
-    }, [contactData]);
-
+    }, [ contactData ]);
 
     return (
         <AppLayout>

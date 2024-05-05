@@ -12,7 +12,7 @@ export default async function handler(
 ) {
     const { id, note_id } = req.query;
 
-    if (isNaN(Number(id)) || isNaN(Number(note_id)) || !req.method || !["PATCH", "DELETE"].includes(req.method)) {
+    if (isNaN(Number(id)) || isNaN(Number(note_id)) || !req.method || ![ "PATCH", "DELETE" ].includes(req.method)) {
         res.status(405).json({ message: "Method not allowed" });
         return;
     }

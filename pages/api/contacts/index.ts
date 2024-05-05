@@ -10,7 +10,7 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<ResponseData | Contact[] | Partial<Contact>>
 ) {
-    if (!req.method || !["GET", "POST"].includes(req.method)) {
+    if (!req.method || ![ "GET", "POST" ].includes(req.method)) {
         res.status(405).json({ message: "Method not allowed" });
         return;
     }

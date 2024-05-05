@@ -12,7 +12,7 @@ export default async function handler(
 ) {
     const { id } = req.query;
 
-    if (isNaN(Number(id)) || !req.method || !["GET", "POST"].includes(req.method)) {
+    if (isNaN(Number(id)) || !req.method || ![ "GET", "POST" ].includes(req.method)) {
         res.status(405).json({ message: "Method not allowed" });
         return;
     }
@@ -20,7 +20,7 @@ export default async function handler(
     try {
         if (req.method === "POST") {
             const contactNote: Partial<ContactNote> = JSON.parse(req.body);
-            console.log(req.body)
+            console.log(req.body);
             const { id } = await doWithPrisma((prisma) => prisma.contactNote.create({ data: contactNote as any }));
             res.status(201).json({ id });
         } else if (req.method === "GET") {
