@@ -42,6 +42,10 @@ export async function middleware(request: NextRequest) {
         return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
     }
 
+    if (url.includes("/contacts") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("quotes")) {
+        return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
+    }
+
     if (
         url.includes("/users-management") &&
         !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("users-management")

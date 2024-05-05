@@ -22,6 +22,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
     const [isUserMenuVisible, setIsUserMenuVisible] = useState<boolean>(false);
 
     const toggleMenu = () => {
+        setIsUserMenuVisible(false);
         setIsMenuVisible((prev: boolean) => !prev);
     };
 
@@ -74,19 +75,19 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                         </div>
                     </div>
                     {isUserMenuVisible 
-                        && <div className="bg-sky-800 fixed z-10 right-0 top-14">
+                        && <div className="bg-slate-600 fixed z-20 right-0 top-14">
                             <div className="w-full">
-                                <div className="side-menu__item"
+                                <div className="user-menu-option"
                                     onClick={() => navigateTo("/profile")}>
                                     <div className="ml-2 ">{t("sideMenu.item.editUserOptions")}</div>
                                 </div>
-                                <div className="side-menu__item"
+                                <div className="user-menu-option"
                                     onClick={() => navigateTo("/templates")}>
                                     <div className="ml-2 ">{t("sideMenu.item.manageTemplates")}</div>
                                 </div>
                             </div>
                             <div className="w-full">
-                                <div className="side-menu__item"
+                                <div className="user-menu-option"
                                     onClick={handleLogout}>
                                     <div className="ml-2 ">{t("sideMenu.item.logout")}</div>
                                 </div>

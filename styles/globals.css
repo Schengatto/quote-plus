@@ -48,4 +48,7 @@
     .card-body {
         @apply bg-white p-4 flex flex-col items-center justify-center;
     }
+    .user-menu-option {
+        @apply capitalize border border-gray-900 text-white text-xl font-bold w-full text-left p-3 flex cursor-pointer hover:bg-sky-600 hover:text-white ;
+    }
 }
