@@ -17,7 +17,7 @@ const Notes = () => {
     const { t } = useI18nStore();
     const { setIsLoading } = useAppStore();
 
-    const [ notes, setNotes ] = useState([]);
+    const [ notes, setNotes ] = useState<ContactNote[]>([]);
     const [ searchHistory, setSearchHistory ] = useState<string>("");
 
     const fetchNotes = useCallback(async () => {
