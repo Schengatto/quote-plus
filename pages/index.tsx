@@ -86,7 +86,7 @@ const LoginPage = () => {
                             </div>
                             <div className='flex items-center justify-center mt-5'>
                                 <button type='submit' className='btn-primary'>
-                                    <span className='uppercase font-bold text-lg'>{t("login.form.loginBtn")}</span>
+                                    <span className='uppercase font-bold text-sm'>{t("login.form.loginBtn")}</span>
                                 </button>
                             </div>
                         </form>

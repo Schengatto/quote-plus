@@ -28,7 +28,7 @@ export default async function handler(
                     include: {
                         category: { select: { id: true, name: true, parent: { select: { id: true, name: true } } } },
                     },
-                    orderBy: { name : "asc" },
+                    orderBy: { code : "asc" },
                 })
             );
             res.status(200).json(products);

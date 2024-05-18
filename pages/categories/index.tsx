@@ -130,7 +130,7 @@ const Categories = () => {
                 <table className='items-table'>
                     <thead className='table-header'>
                         <tr>
-                            <th colSpan={3} className='text-white uppercase p-2 text-lg'>
+                            <th colSpan={3} className='text-white uppercase p-2 text-sm'>
                                 {t("categories.table.title")}
                             </th>
                         </tr>
@@ -138,7 +138,7 @@ const Categories = () => {
                     <tbody>
                         {categories.map((c: Required<CategoryApiModel>) => (
                             <tr key={c.id} className={`table-row ${c.id === selectedCategory?.id && "!table-row-active"}`} onClick={(e) => handleEdit(e, c)}>
-                                <td className='mx-2 text-lg font-bold p-3 w-auto truncate max-w-0'>{categoryLabel(c)}</td>
+                                <td className='mx-2 text-sm font-bold p-3 w-auto truncate max-w-0'>{categoryLabel(c)}</td>
                                 <td className='w-10 cursor-pointer' onClick={(e) => handleEdit(e, c)}>
                                     <button>
                                         <MdEdit />
@@ -166,7 +166,7 @@ const Categories = () => {
                         <div>
                             <MdAddCircleOutline />
                         </div>
-                        <div className='uppercase font-bold text-lg'>{t("categories.button.addCategory")}</div>
+                        <div className='uppercase font-bold text-sm'>{t("categories.button.addCategory")}</div>
                     </button>
                 </div>
                 :
@@ -180,7 +180,7 @@ const Categories = () => {
                     <div className='card-body'>
                         <form className="w-[90%]" onSubmit={handleSave}>
                             <div className='w-full my-4'>
-                                <div className='font-extrabold text-lg uppercase'>{t("categories.form.name")}</div>
+                                <div className='font-extrabold text-sm uppercase'>{t("categories.form.name")}</div>
                                 <input
                                     type='text'
                                     value={selectedCategory?.name}
@@ -189,7 +189,7 @@ const Categories = () => {
                                 />
                             </div>
                             <div className='w-full my-4'>
-                                <div className='font-extrabold text-lg uppercase'>{t("categories.form.parentName")}</div>
+                                <div className='font-extrabold text-sm uppercase'>{t("categories.form.parentName")}</div>
                                 <select className='text-input'
                                     value={selectedCategory?.parentId ? Number(selectedCategory.parentId) : undefined}
                                     disabled={!availableParentCategories.length}
@@ -210,7 +210,7 @@ const Categories = () => {
                                     type="button"
                                     className="btn-secondary"
                                     onClick={handleBack}>
-                                    <div className="uppercase font-bold text-lg">{t("common.back")}</div>
+                                    <div className="uppercase font-bold text-sm">{t("common.back")}</div>
                                 </button>
 
                                 {selectedCategory?.id
@@ -219,7 +219,7 @@ const Categories = () => {
                                         className="btn-danger"
                                         disabled={!!selectedCategory.products?.length}
                                         onClick={(e) => handleDelete(e, selectedCategory.id!)}>
-                                        <div className="uppercase font-bold text-lg">{t("common.delete")}</div>
+                                        <div className="uppercase font-bold text-sm">{t("common.delete")}</div>
                                     </button>
                                 }
 
@@ -227,7 +227,7 @@ const Categories = () => {
                                     type='submit'
                                     className='btn-primary'
                                 >
-                                    <div className='uppercase font-bold text-lg'>{t("categories.button.save")}</div>
+                                    <div className='uppercase font-bold text-sm'>{t("categories.button.save")}</div>
                                 </button>
                             </div>
                         </form>

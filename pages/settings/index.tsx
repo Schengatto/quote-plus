@@ -82,7 +82,7 @@ const TenantsPage = () => {
                     {tenantId &&
                         <form onSubmit={handleSave}>
                             <div className="w-full my-4">
-                                <div className="font-extrabold text-lg uppercase">{t("tenants.form.products")}</div>
+                                <div className="font-extrabold text-sm uppercase">{t("tenants.form.products")}</div>
                                 <input
                                     type="text"
                                     value={placeholders.products}
@@ -92,7 +92,7 @@ const TenantsPage = () => {
                             </div>
 
                             <div className="w-full my-4">
-                                <div className="font-extrabold text-lg uppercase">{t("tenants.form.price")}</div>
+                                <div className="font-extrabold text-sm uppercase">{t("tenants.form.price")}</div>
                                 <input
                                     type="text"
                                     value={placeholders.price}
@@ -102,7 +102,7 @@ const TenantsPage = () => {
                             </div>
 
                             <div className="w-full my-4">
-                                <div className="font-extrabold text-lg uppercase">{t("tenants.form.currency")}</div>
+                                <div className="font-extrabold text-sm uppercase">{t("tenants.form.currency")}</div>
                                 <input
                                     type="text"
                                     value={placeholders.currency}
@@ -112,7 +112,7 @@ const TenantsPage = () => {
                             </div>
 
                             <div className="w-full my-4">
-                                <div className="font-extrabold text-lg uppercase">{t("tenants.form.discountedPrice")}</div>
+                                <div className="font-extrabold text-sm uppercase">{t("tenants.form.discountedPrice")}</div>
                                 <input
                                     type="text"
                                     value={placeholders["discounted-price"]}
@@ -128,7 +128,7 @@ const TenantsPage = () => {
                                     <div>
                                         <MdOutlineSave />
                                     </div>
-                                    <div className="uppercase font-bold text-lg">{t("common.save")}</div>
+                                    <div className="uppercase font-bold text-sm">{t("common.save")}</div>
                                 </button>
                             </div>
                         </form>
@@ -147,7 +147,7 @@ const TenantsPage = () => {
                             <div>
                                 <MdBackup />
                             </div>
-                            <div className="uppercase font-bold text-lg">{t("settings.button.downloadQuotesBackup")}</div>
+                            <div className="uppercase font-bold text-sm">{t("settings.button.downloadQuotesBackup")}</div>
                         </button>
                     </div>
                 </div>

@@ -68,7 +68,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                             </button>
                         </div>
                         <div>
-                            <div className="side-menu__item p-1 text-lg font-bold cursor-pointer flex bg-slate-600" onClick={toggleUserMenu}>
+                            <div className="side-menu__item p-1 text-sm font-bold cursor-pointer flex bg-slate-600" onClick={toggleUserMenu}>
                                 <div className="mr-2 mt-1"><MdOutlineAccountCircle /></div>
                                 <div> {auth.username}</div>
                             </div>
@@ -95,7 +95,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                         </div>}
                     <div className="flex bg-gray-900">
                         {isMenuVisible &&
-                            <div className="fixed top-[7vh] md:sticky h-[93vh] w-[400px] flex flex-col items-center text-white bg-gray-900 z-10">
+                            <div className="fixed top-[7vh] md:sticky h-[93vh] w-[300px] flex flex-col items-center text-white bg-gray-900 z-10">
                                 <SideMenu />
                             </div>
                         }

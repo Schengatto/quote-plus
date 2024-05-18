@@ -97,13 +97,13 @@ const Templates = () => {
                 <table className="items-table">
                     <thead className="table-header">
                         <tr>
-                            <th colSpan={3} className="text-white uppercase p-2 text-lg">{t("templates.table.title")}</th>
+                            <th colSpan={3} className="text-white uppercase p-2 text-sm">{t("templates.table.title")}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {templates.map((b: Template) =>
                             <tr key={b.id} className={`table-row ${b.id === selectedTemplate?.id && "!table-row-active"}`} onClick={(e) => handleEdit(e, b)}>
-                                <td className="mx-2 text-lg font-bold p-3 w-auto truncate max-w-0">{b.name}</td>
+                                <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{b.name}</td>
                                 <td className="w-10 cursor-pointer " onClick={(e) => handleEdit(e, b)}><div><MdEdit /></div></td>
                                 <td className="w-10 cursor-pointer text-red-600" onClick={(e) => handleDelete(e, b)}><MdDelete /></td>
                             </tr>
@@ -120,7 +120,7 @@ const Templates = () => {
                         <div>
                             <MdAddCircleOutline />
                         </div>
-                        <div className="uppercase font-bold text-lg">{t("templates.button.addTemplate")}</div>
+                        <div className="uppercase font-bold text-sm">{t("templates.button.addTemplate")}</div>
                     </button>
                 </div>
                 :
@@ -129,7 +129,7 @@ const Templates = () => {
                     <div className="card-body">
                         <form className="w-[90%]" onSubmit={handleSave}>
                             <div className="w-full my-4">
-                                <div className="font-extrabold text-lg uppercase">{t("templates.form.name")}</div>
+                                <div className="font-extrabold text-sm uppercase">{t("templates.form.name")}</div>
                                 <input
                                     type="text"
                                     value={selectedTemplate?.name}
@@ -137,7 +137,7 @@ const Templates = () => {
                                     onChange={handleNameChanged} />
                             </div>
                             <div className='w-full my-4'>
-                                <div className='font-extrabold text-lg uppercase'>{t("templates.form.content")}</div>
+                                <div className='font-extrabold text-sm uppercase'>{t("templates.form.content")}</div>
                                 <div className="bg-white">
                                     <TextEditor initialValue={selectedTemplate?.content} onChange={handleContentChanged} />
                                 </div>
@@ -148,13 +148,13 @@ const Templates = () => {
                                     type="button"
                                     className="btn-secondary"
                                     onClick={handleBack}>
-                                    <div className="uppercase font-bold text-lg">{t("common.back")}</div>
+                                    <div className="uppercase font-bold text-sm">{t("common.back")}</div>
                                 </button>
 
                                 <button
                                     type="submit"
                                     className="btn-primary">
-                                    <div className="uppercase font-bold text-lg">{t("templates.button.save")}</div>
+                                    <div className="uppercase font-bold text-sm">{t("templates.button.save")}</div>
                                 </button>
 
                             </div>

@@ -71,19 +71,19 @@ const QuoteEdit = () => {
                                 type="button"
                                 className="btn-secondary"
                                 onClick={handleBack}>
-                                <div className="uppercase font-bold text-lg">{t("common.back")}</div>
+                                <div className="uppercase font-bold text-sm">{t("common.back")}</div>
                             </button>
                             <button
                                 type="button"
                                 className="btn-primary"
                                 onClick={() => handleExportPdf()}>
-                                <div className="uppercase font-bold text-lg">{t("quotes.button.exportPdf")}</div>
+                                <div className="uppercase font-bold text-sm">{t("quotes.button.exportPdf")}</div>
                             </button>
                             <button
                                 type="button"
                                 className="btn-primary"
                                 onClick={() => handleEdit()}>
-                                <div className="uppercase font-bold text-lg">{t("quotes.button.editQuote")}</div>
+                                <div className="uppercase font-bold text-sm">{t("quotes.button.editQuote")}</div>
                             </button>
                         </div>
                     </div>

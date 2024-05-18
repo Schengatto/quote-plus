@@ -138,7 +138,7 @@ const ProductCreate = () => {
                 <div className="card-body">
                     <form className="w-[90%]" onSubmit={handleSaveProduct}>
                         <div className="w-full my-4">
-                            <div className="font-extrabold text-lg uppercase">{t("products.form.code")}</div>
+                            <div className="font-extrabold text-sm uppercase">{t("products.form.code")}</div>
                             <input
                                 type="text"
                                 value={product.code}
@@ -147,7 +147,7 @@ const ProductCreate = () => {
                                 onChange={handleCodeChanged} />
                         </div>
                         <div className="w-full my-4">
-                            <div className="font-extrabold text-lg uppercase">{t("products.form.name")}</div>
+                            <div className="font-extrabold text-sm uppercase">{t("products.form.name")}</div>
                             <input
                                 type="text"
                                 value={product.name}
@@ -156,7 +156,7 @@ const ProductCreate = () => {
                                 onChange={handleNameChanged} />
                         </div>
                         <div className='w-full my-4'>
-                            <div className='font-extrabold text-lg uppercase'>{t("products.form.category")}</div>
+                            <div className='font-extrabold text-sm uppercase'>{t("products.form.category")}</div>
                             <select className='text-input'
                                 value={product.categoryId}
                                 required
@@ -166,7 +166,7 @@ const ProductCreate = () => {
                             </select>
                         </div>
                         <div className='w-full my-4'>
-                            <div className='font-extrabold text-lg uppercase'>{t("products.form.brand")}</div>
+                            <div className='font-extrabold text-sm uppercase'>{t("products.form.brand")}</div>
                             <select className='text-input'
                                 value={product.brandId}
                                 required
@@ -176,14 +176,14 @@ const ProductCreate = () => {
                             </select>
                         </div>
                         <div className='w-full my-4'>
-                            <div className='font-extrabold text-lg uppercase'>{t("products.form.description")}</div>
+                            <div className='font-extrabold text-sm uppercase'>{t("products.form.description")}</div>
                             <div className="bg-white">
                                 <TextEditor initialValue={product.description} onChange={handleDescriptionChanged} />
                             </div>
                         </div>
                         <div className='w-full my-4 grid-cols-3 grid grid-template-columns: repeat(3, minmax(0, 1fr)) gap-2'>
                             <div>
-                                <div className='font-extrabold text-lg uppercase'>{t("products.form.tags")}</div>
+                                <div className='font-extrabold text-sm uppercase'>{t("products.form.tags")}</div>
                                 <input
                                     type="text"
                                     value={product.tags}
@@ -192,7 +192,7 @@ const ProductCreate = () => {
                                     onChange={handleTagsChanged} />
                             </div>
                             <div>
-                                <div className='font-extrabold text-lg uppercase'>{t("products.form.price")}</div>
+                                <div className='font-extrabold text-sm uppercase'>{t("products.form.price")}</div>
                                 <input
                                     type="number"
                                     min={0}
@@ -202,7 +202,7 @@ const ProductCreate = () => {
                                     onChange={handlePriceChanged} />
                             </div>
                             <div>
-                                <div className='font-extrabold text-lg uppercase'>{t("products.form.currency")}</div>
+                                <div className='font-extrabold text-sm uppercase'>{t("products.form.currency")}</div>
                                 <select className='text-input'
                                     value={product.currencyId}
                                     required
@@ -217,13 +217,13 @@ const ProductCreate = () => {
                                 type="button"
                                 className="btn-secondary"
                                 onClick={handleBack}>
-                                <div className="uppercase font-bold text-lg">{t("common.back")}</div>
+                                <div className="uppercase font-bold text-sm">{t("common.back")}</div>
                             </button>
 
                             <button
                                 type="submit"
                                 className="btn-primary">
-                                <div className="uppercase font-bold text-lg">{t("products.button.save")}</div>
+                                <div className="uppercase font-bold text-sm">{t("products.button.save")}</div>
                             </button>
                         </div>
                     </form>

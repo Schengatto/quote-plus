@@ -134,7 +134,7 @@ const UserProfile = () => {
                 <div className="card-body">
                     <form className="w-[90%]">
                         <div className='w-full my-4'>
-                            <div className='font-extrabold text-lg uppercase'>{t("userProfile.form.activeTemplate")}</div>
+                            <div className='font-extrabold text-sm uppercase'>{t("userProfile.form.activeTemplate")}</div>
                             <select className='text-input'
                                 required
                                 value={selectedTemplate || ""}
@@ -145,7 +145,7 @@ const UserProfile = () => {
                         </div>
 
                         <div className='w-full my-4'>
-                            <div className='font-extrabold text-lg uppercase'>{t("options.form.language")}</div>
+                            <div className='font-extrabold text-sm uppercase'>{t("options.form.language")}</div>
                             <select className='text-input'
                                 required
                                 value={selectedLanguage}
@@ -166,7 +166,7 @@ const UserProfile = () => {
                                 <div>
                                     <MdOutlineSave />
                                 </div>
-                                <div className="uppercase font-bold text-lg">{t("userProfile.button.saveAccount")}</div>
+                                <div className="uppercase font-bold text-sm">{t("userProfile.button.saveAccount")}</div>
                             </button>
                         </div>
                     </form>
@@ -178,7 +178,7 @@ const UserProfile = () => {
                 <div className="card-body">
                     <form className="w-[90%]">
                         <div className="w-full my-4">
-                            <div className="font-extrabold text-lg uppercase">{t("userProfile.form.username")}</div>
+                            <div className="font-extrabold text-sm uppercase">{t("userProfile.form.username")}</div>
                             <input
                                 value={username}
                                 type='text'
@@ -187,7 +187,7 @@ const UserProfile = () => {
                             />
                         </div>
                         <div className="w-full my-4">
-                            <div className="font-extrabold text-lg uppercase">{t("userProfile.form.password")}</div>
+                            <div className="font-extrabold text-sm uppercase">{t("userProfile.form.password")}</div>
                             <input
                                 value={password}
                                 type='password'
@@ -205,7 +205,7 @@ const UserProfile = () => {
                                     <div>
                                         <MdDeleteOutline />
                                     </div>
-                                    <div className="uppercase font-bold text-lg">{t("userProfile.button.deleteAccount")}</div>
+                                    <div className="uppercase font-bold text-sm">{t("userProfile.button.deleteAccount")}</div>
                                 </button>
                             }
 
@@ -216,7 +216,7 @@ const UserProfile = () => {
                                 <div>
                                     <MdOutlineSave />
                                 </div>
-                                <div className="uppercase font-bold text-lg">{t("userProfile.button.saveAccount")}</div>
+                                <div className="uppercase font-bold text-sm">{t("userProfile.button.saveAccount")}</div>
                             </button>
                         </div>
                     </form>
