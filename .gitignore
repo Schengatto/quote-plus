@@ -40,3 +40,5 @@ db/db-data
 db/pgadmin-data
 prisma/seed.local.ts
 prisma/seed.*.ts
+backup-database.js
+backup*.sql

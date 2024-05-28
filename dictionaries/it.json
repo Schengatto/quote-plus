@@ -76,6 +76,7 @@
   "products.table.head.ref": "ref",
   "products.table.head.product": "prodotto",
   "products.table.head.category": "categoria",
+  "products.table.head.price": "prezzo",
   "products.button.addProduct": "aggiungi prodotto",
   "products.button.save": "salva prodotto",
   "products.form.title": "compila i campi",

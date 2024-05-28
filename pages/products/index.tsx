@@ -99,6 +99,7 @@ const ProductList = () => {
                             <th className="mx-2 text-white uppercase p-2 text-sm text-left">{t("products.table.head.ref")}</th>
                             <th className="mx-2 text-white uppercase p-2 text-sm text-left">{t("products.table.head.product")}</th>
                             <th className="mx-2 text-white uppercase p-2 text-sm text-left">{t("products.table.head.category")}</th>
+                            <th className="mx-2 text-white uppercase p-2 text-sm text-left">{t("products.table.head.price")}</th>
                             <th className="mx-2 text-white uppercase p-2 text-sm text-left"></th>
                             <th className="mx-2 text-white uppercase p-2 text-sm text-left"></th>
                             <th className="mx-2 text-white uppercase p-2 text-sm text-left"></th>
@@ -110,6 +111,7 @@ const ProductList = () => {
                                 <td className="mx-2 text-sm font-bold p-2 w-auto truncate max-w-0">{p.code}</td>
                                 <td className="mx-2 text-sm font-bold p-2 w-auto truncate max-w-0">{p.name}</td>
                                 <td className="mx-2 text-sm font-bold p-2 w-auto truncate max-w-0">{categoryLabel(p)}</td>
+                                <td className="mx-2 text-sm font-bold p-2 w-auto truncate max-w-0">{p.price}</td>
                                 <td className="w-10 cursor-pointer" onClick={(event) => handleEdit(event, p)}><div><MdEdit /></div></td>
                                 <td className="w-10 cursor-pointer" onClick={(event) => handleClone(event, p)}><div><MdCopyAll /></div></td>
                                 <td className="w-10 cursor-pointer text-red-600" onClick={(event) => handleDelete(event, p)}><MdDelete /></td>
