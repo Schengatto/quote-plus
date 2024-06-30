@@ -4,6 +4,7 @@ import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import { useProductsStore } from "@/store/products";
 import { doActionWithLoader } from "@/utils/actions";
+import { orderAscByProperty } from "@/utils/array";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Product, Product as ProductList } from "@prisma/client";
 import { useRouter } from "next/router";
@@ -18,7 +19,8 @@ const ProductList = () => {
     const { setIsLoading, setDialog } = useAppStore();
     const { setSelectedProduct } = useProductsStore();
 
-    const [products, setProducts] = useState<ProductList[]>([]);
+    const [ products, setProducts ] = useState<ProductList[]>([]);
+    const [ orderBy, setOrderBy ] = useState<string>("code");
 
     const handleEdit = (event: any, _selectedProduct: Partial<ProductList>) => {
         event.stopPropagation();
@@ -52,11 +54,12 @@ const ProductList = () => {
 
     const fetchProducts = async () => {
         const _products = await fetch("/api/products", { method: "GET" })
-            .then((res) => res.json());
-        setProducts(_products);
+            .then((res) => res.json()) ?? [];
+        const _productsWithCategoryLabel = _products.map(p => ( { ...p, categoryLabel: getCategoryLabel(p) } ));
+        setProducts(orderAscByProperty(_productsWithCategoryLabel, orderBy));
     };
 
-    const categoryLabel = ({ category }: any | ProductList): string => {
+    const getCategoryLabel = ({ category }: any | ProductList): string => {
         return category.parent
             ? `${category.parent.name} » ${category.name}`
             : category.name;
@@ -70,6 +73,11 @@ const ProductList = () => {
     };
 
     useEffect(() => {
+        setProducts(orderAscByProperty(products, orderBy));
+    }, [orderBy, setProducts]);
+
+    useEffect(() => {
+
         if (!user) return;
         if (!user?.userRole.grants?.includes("products")) {
             router.push("/");
@@ -109,10 +117,18 @@ const ProductList = () => {
                                 </th>
                             </tr>
                             <tr className="bg-gray-700 border-2 border-gray-700">
-                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-1/12">{t("products.table.head.ref")}</th>
-                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-5/12">{t("products.table.head.product")}</th>
-                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-4/12">{t("products.table.head.category")}</th>
-                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-1/12">{t("products.table.head.price")}</th>
+                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-1/12 cursor-pointer" onClick={() => setOrderBy("code")}>
+                                    {t("products.table.head.ref")}
+                                </th>
+                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-5/12" onClick={() => setOrderBy("name")}>
+                                    {t("products.table.head.product")}
+                                </th>
+                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-4/12 cursor-pointer" onClick={() => setOrderBy("categoryLabel")}>
+                                    {t("products.table.head.category")}
+                                </th>
+                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-1/12" onClick={() => setOrderBy("price")}>
+                                    {t("products.table.head.price")}
+                                </th>
                                 <th className="mx-2 text-white uppercase p-2 text-sm text-center"></th>
                                 <th className="mx-2 text-white uppercase p-2 text-sm text-center"></th>
                                 <th className="mx-2 text-white uppercase p-2 text-sm text-center"></th>
@@ -126,7 +142,7 @@ const ProductList = () => {
                                     <tr key={p.id} className="table-row" onClick={(event) => handleEdit(event, p)}>
                                         <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-left">{p.code}</td>
                                         <td className="mx-2 text-sm font-bold p-2 w-5/12 truncate max-w-0 text-left">{p.name}</td>
-                                        <td className="mx-2 text-sm font-bold p-2 w-4/12 truncate max-w-0 text-left">{categoryLabel(p)}</td>
+                                        <td className="mx-2 text-sm font-bold p-2 w-4/12 truncate max-w-0 text-left">{getCategoryLabel(p)}</td>
                                         <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-right">{p.price} €</td>
                                         <td className="w-10 cursor-pointer" onClick={(event) => handleEdit(event, p)}>
                                             <div className="flex justify-center content-end">

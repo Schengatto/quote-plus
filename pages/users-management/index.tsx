@@ -52,7 +52,6 @@ const UserManagementPage = () => {
     const handleSave = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log(selectedUser);
         if (selectedUser === null || !selectedUser.username || !selectedUser.password || !selectedUser.userRoleId) return;
 
         try {
