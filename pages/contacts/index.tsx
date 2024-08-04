@@ -68,7 +68,7 @@ const Contacts = () => {
                 <table className="items-table">
                     <thead className="table-header">
                         <tr>
-                            <th colSpan={3} className="text-white uppercase p-2 text-lg text-left">{t("contacts.table.title")}</th>
+                            <th colSpan={3} className="text-white uppercase p-2 text-sm text-left">{t("contacts.table.title")}</th>
                             <th colSpan={2}>
                                 <input
                                     required
@@ -79,11 +79,11 @@ const Contacts = () => {
                             </th>
                         </tr>
                         <tr className="bg-gray-700 border-2 border-gray-700">
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("contacts.table.head.firstName")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("contacts.table.head.lastName")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("contacts.table.head.phoneNumber")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("contacts.table.head.email")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left"></th>
+                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("contacts.table.head.firstName")}</th>
+                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("contacts.table.head.lastName")}</th>
+                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("contacts.table.head.phoneNumber")}</th>
+                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("contacts.table.head.email")}</th>
+                            <th className="mx-2 text-white uppercase p-3 text-sm text-left"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -91,10 +91,10 @@ const Contacts = () => {
                             .filter(c => c.firstName?.toLowerCase()?.includes(searchTerm) || c.phoneNumber?.includes(searchTerm))
                             .map((c: Contact) =>
                                 <tr key={c.id} className={`table-row ${c.id === selectedContact?.id && "!table-row-active"}`} onClick={(e) => handleEdit(e, c)}>
-                                    <td className="mx-2 text-lg font-bold p-3 w-auto truncate max-w-0">{c.firstName}</td>
-                                    <td className="mx-2 text-lg font-bold p-3 w-auto truncate max-w-0">{c.lastName}</td>
-                                    <td className="mx-2 text-lg font-bold p-3 w-auto truncate max-w-0">{c.phoneNumber}</td>
-                                    <td className="mx-2 text-lg font-bold p-3 w-auto truncate max-w-0">{c.email}</td>
+                                    <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{c.firstName}</td>
+                                    <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{c.lastName}</td>
+                                    <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{c.phoneNumber}</td>
+                                    <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{c.email}</td>
                                     <td className="w-10 cursor-pointer text-red-600" onClick={(event) => handleDelete(event, c)}><MdDelete /></td>
                                 </tr>
                             )}

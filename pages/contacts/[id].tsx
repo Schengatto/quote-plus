@@ -188,7 +188,7 @@ const EditContact = () => {
                                         <>
                                             <div className="flex gap-4">
                                                 <div className="w-1/3 my-4">
-                                                    <div className="font-extrabold text-lg uppercase">{t("contacts.form.phoneNumber")}</div>
+                                                    <div className="font-extrabold text-sm uppercase">{t("contacts.form.phoneNumber")}</div>
                                                     <input
                                                         type="text"
                                                         value={selectedContact.phoneNumber}
@@ -197,7 +197,7 @@ const EditContact = () => {
                                                         className="text-input" />
                                                 </div>
                                                 <div className="w-1/3 my-4">
-                                                    <div className="font-extrabold text-lg uppercase">{t("contacts.form.firstName")}</div>
+                                                    <div className="font-extrabold text-sm uppercase">{t("contacts.form.firstName")}</div>
                                                     <input
                                                         type="text"
                                                         value={selectedContact.firstName ?? ""}
@@ -206,7 +206,7 @@ const EditContact = () => {
                                                         onChange={handleFirstNameChanged} />
                                                 </div>
                                                 <div className="w-1/3 my-4">
-                                                    <div className="font-extrabold text-lg uppercase">{t("contacts.form.lastName")}</div>
+                                                    <div className="font-extrabold text-sm uppercase">{t("contacts.form.lastName")}</div>
                                                     <input
                                                         type="text"
                                                         value={selectedContact.lastName ?? ""}
@@ -216,7 +216,7 @@ const EditContact = () => {
                                             </div>
                                             <div className="flex gap-4">
                                                 <div className="w-1/3 my-4">
-                                                    <div className="font-extrabold text-lg uppercase">{t("contacts.form.email")}</div>
+                                                    <div className="font-extrabold text-sm uppercase">{t("contacts.form.email")}</div>
                                                     <input
                                                         type="text"
                                                         value={selectedContact.email ?? ""}
@@ -224,7 +224,7 @@ const EditContact = () => {
                                                         onChange={handleEmailChanged} />
                                                 </div>
                                                 <div className="w-1/3 my-4">
-                                                    <div className="font-extrabold text-lg uppercase">{t("contacts.form.home")}</div>
+                                                    <div className="font-extrabold text-sm uppercase">{t("contacts.form.home")}</div>
                                                     <input
                                                         type="text"
                                                         value={selectedContact.home ?? ""}
@@ -232,7 +232,7 @@ const EditContact = () => {
                                                         onChange={handleHomeChanged} />
                                                 </div>
                                                 <div className="w-1/3 my-4">
-                                                    <div className="font-extrabold text-lg uppercase">{t("contacts.form.company")}</div>
+                                                    <div className="font-extrabold text-sm uppercase">{t("contacts.form.company")}</div>
                                                     <input
                                                         type="text"
                                                         value={selectedContact.company ?? ""}
@@ -249,12 +249,12 @@ const EditContact = () => {
                                             type="button"
                                             className="btn-secondary"
                                             onClick={handleBack}>
-                                            <div className="uppercase font-bold text-lg">{t("common.back")}</div>
+                                            <div className="uppercase font-bold text-sm">{t("common.back")}</div>
                                         </button>
                                         <button
                                             type="submit"
                                             className="btn-primary">
-                                            <div className="uppercase font-bold text-lg">{t("common.save")}</div>
+                                            <div className="uppercase font-bold text-sm">{t("common.save")}</div>
                                         </button>
                                     </div>
                                 </form>
@@ -273,7 +273,7 @@ const EditContact = () => {
 
                                 <form onSubmit={handleSaveNote}>
                                     <div className='w-full my-4'>
-                                        <div className='font-extrabold text-lg uppercase'>Status</div>
+                                        <div className='font-extrabold text-sm uppercase'>Status</div>
                                         <select className='text-input uppercase'
                                             required
                                             value={selectedNote.status}
@@ -295,7 +295,7 @@ const EditContact = () => {
                                         <button
                                             type="submit"
                                             className="btn-primary">
-                                            <div className="uppercase font-bold text-lg">{t("contacts.notes.creates")}</div>
+                                            <div className="uppercase font-bold text-sm">{t("contacts.notes.creates")}</div>
                                         </button>
                                     </div>
                                 </form>
@@ -303,7 +303,7 @@ const EditContact = () => {
 
                             <div className="w-full xl:w-1/3 flex flex-col gap-4 my-4">
                                 <div className='w-full'>
-                                    <div className='font-extrabold text-lg uppercase'>{t("common.history")}</div>
+                                    <div className='font-extrabold text-sm uppercase'>{t("common.history")}</div>
                                     <input
                                         required
                                         type="text"

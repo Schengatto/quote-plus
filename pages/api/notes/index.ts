@@ -21,6 +21,8 @@ export default async function handler(
                 prisma.contactNote.findMany({
                     include: {
                         contact: { select: { id: true, firstName: true, phoneNumber: true } }
+                    }, orderBy: {
+                        createdAt: "desc",
                     }
                 })
             );

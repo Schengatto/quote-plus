@@ -153,3 +153,30 @@ model ContactNote {
     updatedAt DateTime          @updatedAt @map(name: "updated_at")
     updatedBy String            @map(name: "updated_by")
 }
+
+model ItemDocument {
+    id        Int      @id @default(autoincrement())
+    type      String
+    code      String
+    date      DateTime
+    itemId    Int      @map(name: "item_id")
+    item      Item     @relation(fields: [itemId], references: [id])
+    createdAt DateTime @default(now()) @map(name: "created_at")
+    createdBy String   @map(name: "created_by")
+    updatedAt DateTime @updatedAt @map(name: "updated_at")
+    updatedBy String   @map(name: "updated_by")
+}
+
+model Item {
+    id            Int            @id @default(autoincrement())
+    code          String
+    product       String
+    dealer        String
+    userReference String
+    documents     ItemDocument[]
+    notes         String
+    createdAt     DateTime       @default(now()) @map(name: "created_at")
+    createdBy     String         @map(name: "created_by")
+    updatedAt     DateTime       @updatedAt @map(name: "updated_at")
+    updatedBy     String         @map(name: "updated_by")
+}

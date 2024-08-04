@@ -22,6 +22,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
     const [isUserMenuVisible, setIsUserMenuVisible] = useState<boolean>(false);
 
     const toggleMenu = () => {
+        setIsUserMenuVisible(false);
         setIsMenuVisible((prev: boolean) => !prev);
     };
 
@@ -42,7 +43,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
     useEffect(() => {
         if (!auth) return;
         const userLanguage = currentLanguage || (auth?.extraData as any).language || "en";
-        setCurrentLanguage(userLanguage );
+        setCurrentLanguage(userLanguage);
     }, [auth])
 
     return (
@@ -58,35 +59,33 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
             </Head>
             {auth &&
                 <main className="bg-gray-900 h-screen">
-                    <div className="h-[7vh] min-h-[4.5em] z-10 fixed w-full bg-gray-900 text-white uppercase flex justify-between p-4">
-                        <div>
-                            <button className="side-menu__toggle-button"
-                                type="button"
-                                onClick={toggleMenu}>
-                                {isMenuVisible ? <MdMenuOpen /> : <MdMenu />}
-                            </button>
-                        </div>
-                        <div>
-                            <div className="side-menu__item p-1 text-lg font-bold cursor-pointer flex bg-slate-600" onClick={toggleUserMenu}>
+                    <div className="h-[2.5vh] min-h-[2.5em] z-10 fixed w-full bg-gray-900 text-white uppercase flex justify-between">
+                        <button className="side-menu__toggle-button ml-2"
+                            type="button"
+                            onClick={toggleMenu}>
+                            {isMenuVisible ? <MdMenuOpen /> : <MdMenu />}
+                        </button>
+                        <div className="mr-1">
+                            <div className="mr-2 mt-1 side-menu__item p-1 text-sm font-bold cursor-pointer flex bg-slate-600" onClick={toggleUserMenu}>
                                 <div className="mr-2 mt-1"><MdOutlineAccountCircle /></div>
                                 <div> {auth.username}</div>
                             </div>
                         </div>
                     </div>
-                    {isUserMenuVisible 
-                        && <div className="bg-sky-800 fixed z-10 right-0 top-14">
+                    {isUserMenuVisible
+                        && <div className="bg-slate-600 fixed z-20 right-0 top-10">
                             <div className="w-full">
-                                <div className="side-menu__item"
+                                <div className="user-menu-option"
                                     onClick={() => navigateTo("/profile")}>
                                     <div className="ml-2 ">{t("sideMenu.item.editUserOptions")}</div>
                                 </div>
-                                <div className="side-menu__item"
+                                <div className="user-menu-option"
                                     onClick={() => navigateTo("/templates")}>
                                     <div className="ml-2 ">{t("sideMenu.item.manageTemplates")}</div>
                                 </div>
                             </div>
                             <div className="w-full">
-                                <div className="side-menu__item"
+                                <div className="user-menu-option"
                                     onClick={handleLogout}>
                                     <div className="ml-2 ">{t("sideMenu.item.logout")}</div>
                                 </div>
@@ -94,11 +93,11 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                         </div>}
                     <div className="flex bg-gray-900">
                         {isMenuVisible &&
-                            <div className="fixed top-[7vh] md:sticky h-[93vh] w-[400px] flex flex-col items-center text-white bg-gray-900 z-10">
+                            <div className="fixed mt-[4vh] md:sticky h-[96vh] w-[300px] flex flex-col items-center text-white bg-gray-900 z-10">
                                 <SideMenu />
                             </div>
                         }
-                        <div className="w-full mt-[7vh] bg-gradient-to-r from-cyan-500 to-blue-500 min-h-[93vh]">
+                        <div className="w-full mt-[4vh] bg-[#F0F8FF] h-[96vh] overflow-auto">
                             {children}
                         </div>
                     </div>

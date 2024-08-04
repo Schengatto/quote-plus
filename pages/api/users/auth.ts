@@ -29,7 +29,7 @@ export default async function handler(
             const token = await new SignJWT({ ...userData })
                 .setProtectedHeader({ alg: "HS256" })
                 .setIssuedAt()
-                .setExpirationTime("12h")
+                // .setExpirationTime("12h")
                 .sign(getJwtSecretKey());
             res.status(200);
             res.setHeader("Set-Cookie", `token=${token}; Path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`);

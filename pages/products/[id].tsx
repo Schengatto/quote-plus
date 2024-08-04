@@ -131,26 +131,29 @@ const ProductEdit = () => {
                 <div className="card-header">{t("products.form.title")}</div>
                 <div className="card-body">
                     <form className="w-[90%]" onSubmit={handleSaveProduct}>
-                        <div className="w-full my-4">
-                            <div className="font-extrabold text-lg uppercase">{t("products.form.code")}</div>
-                            <input
-                                type="text"
-                                required
-                                value={product.code}
-                                className="text-input"
-                                onChange={handleCodeChanged} />
+                    <div className="flex gap-2">
+                            <div className="w-full my-2">
+                                <div className="font-extrabold text-sm uppercase">{t("products.form.code")}</div>
+                                <input
+                                    type="text"
+                                    required
+                                    value={product.code}
+                                    className="text-input"
+                                    onChange={handleCodeChanged} />
+                            </div>
+                            <div className="w-full my-2">
+                                <div className="font-extrabold text-sm uppercase">{t("products.form.name")}</div>
+                                <input
+                                    type="text"
+                                    required
+                                    value={product.name}
+                                    className="text-input"
+                                    onChange={handleNameChanged} />
+                            </div>
                         </div>
-                        <div className="w-full my-4">
-                            <div className="font-extrabold text-lg uppercase">{t("products.form.name")}</div>
-                            <input
-                                type="text"
-                                required
-                                value={product.name}
-                                className="text-input"
-                                onChange={handleNameChanged} />
-                        </div>
-                        <div className='w-full my-4'>
-                            <div className='font-extrabold text-lg uppercase'>{t("products.form.category")}</div>
+                        <div className="flex gap-2">
+                        <div className='w-full my-2'>
+                            <div className='font-extrabold text-sm uppercase'>{t("products.form.category")}</div>
                             <select className='text-input'
                                 required
                                 value={product.categoryId}
@@ -159,8 +162,8 @@ const ProductEdit = () => {
                                 {categories.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
                             </select>
                         </div>
-                        <div className='w-full my-4'>
-                            <div className='font-extrabold text-lg uppercase'>{t("products.form.brand")}</div>
+                        <div className='w-full my-2'>
+                            <div className='font-extrabold text-sm uppercase'>{t("products.form.brand")}</div>
                             <select className='text-input'
                                 required
                                 value={product.brandId}
@@ -169,15 +172,16 @@ const ProductEdit = () => {
                                 {brands.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
                             </select>
                         </div>
-                        <div className='w-full my-4'>
-                            <div className='font-extrabold text-lg uppercase'>{t("products.form.description")}</div>
+                        </div>
+                        <div className='w-full my-2'>
+                            <div className='font-extrabold text-sm uppercase'>{t("products.form.description")}</div>
                             <div className="bg-white">
                                 <TextEditor initialValue={product.description} onChange={handleDescriptionChanged} />
                             </div>
                         </div>
-                        <div className='w-full my-4 grid-cols-3 grid grid-template-columns: repeat(3, minmax(0, 1fr)) gap-2'>
+                        <div className='w-full my-2 grid-cols-3 grid grid-template-columns: repeat(3, minmax(0, 1fr)) gap-2'>
                             <div>
-                                <div className='font-extrabold text-lg uppercase'>{t("products.form.tags")}</div>
+                                <div className='font-extrabold text-sm uppercase'>{t("products.form.tags")}</div>
                                 <input className='text-input'
                                     type="text"
                                     value={product.tags}
@@ -185,7 +189,7 @@ const ProductEdit = () => {
                                 </input>
                             </div>
                             <div>
-                                <div className='font-extrabold text-lg uppercase'>{t("products.form.price")}</div>
+                                <div className='font-extrabold text-sm uppercase'>{t("products.form.price")}</div>
                                 <input
                                     type="number"
                                     min={0}
@@ -195,7 +199,7 @@ const ProductEdit = () => {
                                     onChange={handlePriceChanged} />
                             </div>
                             <div>
-                                <div className='font-extrabold text-lg uppercase'>{t("products.form.currency")}</div>
+                                <div className='font-extrabold text-sm uppercase'>{t("products.form.currency")}</div>
                                 <select className='text-input'
                                     required
                                     value={product.currencyId}
@@ -210,13 +214,13 @@ const ProductEdit = () => {
                                 type="button"
                                 className="btn-secondary"
                                 onClick={handleBack}>
-                                <div className="uppercase font-bold text-lg">{t("common.back")}</div>
+                                <div className="uppercase font-bold text-sm">{t("common.back")}</div>
                             </button>
 
                             <button
                                 type="submit"
                                 className="btn-primary">
-                                <div className="uppercase font-bold text-lg">{t("products.button.save")}</div>
+                                <div className="uppercase font-bold text-sm">{t("products.button.save")}</div>
                             </button>
                         </div>
                     </form>

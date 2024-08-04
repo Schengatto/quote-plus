@@ -61,7 +61,7 @@ const TextEditor: React.FunctionComponent<any> = ({ initialValue, onChange }) =>
         init={{
             language: currentLanguage,
             branding: false,
-            height: 400,
+            height: 600,
             menubar: true,
             plugins: plugins,
             toolbar: toolbar,

@@ -4,13 +4,13 @@
 
 @layer utilities {
     .side-menu__toggle-button {
-        @apply bg-gray-900 text-white hover:bg-stone-400 disabled:opacity-50 disabled:bg-gray-900 border-2 border-gray-900 py-2 px-4 flex items-center justify-center gap-2 text-2xl;
+        @apply bg-gray-900 text-white hover:bg-stone-400 disabled:opacity-50 disabled:bg-gray-900 border-2 border-gray-900 py-1 px-1 flex items-center justify-center gap-2 text-2xl;
     }
     .side-menu__category {
         @apply uppercase text-sky-100 text-xl font-extrabold bg-gray-900 w-full text-left p-2;
     }
     .side-menu__item {
-        @apply capitalize border-2 border-gray-900 text-white text-xl font-bold w-full text-left p-2 flex cursor-pointer hover:bg-sky-600 hover:text-white;
+        @apply capitalize border-2 border-gray-900 text-white font-bold w-full text-left p-1 flex cursor-pointer hover:bg-sky-600 hover:text-white;
     }
     .items-table {
         @apply w-full table-auto divide-y divide-gray-200 dark:divide-gray-900;
@@ -19,7 +19,7 @@
         @apply bg-sky-700 text-white hover:bg-sky-600 disabled:opacity-50 disabled:bg-sky-700 border-2 border-sky-900 py-2 px-4 min-w-[200px] flex items-center justify-center gap-2;
     }
     .btn-secondary {
-        @apply bg-white text-black hover:bg-stone-400 disabled:bg-stone-50 disabled:opacity-50 border-2 border-gray-900 p-2 min-w-[200px] flex items-center justify-center gap-2;
+        @apply bg-white text-black hover:bg-sky-600 hover:text-white disabled:bg-stone-50 disabled:opacity-50 border-2 border-gray-900 p-2 min-w-[200px] flex items-center justify-center gap-2;
     }
     .btn-success {
         @apply bg-green-600 text-white hover:bg-green-800 disabled:opacity-50 disabled:bg-green-600 border-2 border-green-600 p-2 min-w-[200px] flex items-center justify-center gap-2;
@@ -43,9 +43,12 @@
         @apply border-2 border-black;
     }
     .card-header {
-        @apply bg-gray-900 text-white uppercase p-2 text-lg font-bold text-center;
+        @apply bg-gray-900 text-white uppercase p-2 text-sm font-bold text-center;
     }
     .card-body {
         @apply bg-white p-4 flex flex-col items-center justify-center;
+    }
+    .user-menu-option {
+        @apply capitalize border border-gray-900 text-white text-sm font-bold w-full text-left p-1 flex cursor-pointer hover:bg-sky-600 hover:text-white ;
     }
 }

@@ -52,7 +52,6 @@ const UserManagementPage = () => {
     const handleSave = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log(selectedUser);
         if (selectedUser === null || !selectedUser.username || !selectedUser.password || !selectedUser.userRoleId) return;
 
         try {
@@ -109,20 +108,20 @@ const UserManagementPage = () => {
                 <table className="items-table">
                     <thead className="table-header">
                         <tr>
-                            <th colSpan={3} className="text-white uppercase p-2 text-lg">{t("usersManagement.table.title")}</th>
+                            <th colSpan={3} className="text-white uppercase p-2 text-sm">{t("usersManagement.table.title")}</th>
                         </tr>
                         <tr className="bg-gray-700">
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("usersManagement.table.head.username")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("usersManagement.table.head.roleName")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left"></th>
-                            {/* <th className="mx-2 text-white uppercase p-3 text-lg text-left"></th> */}
+                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("usersManagement.table.head.username")}</th>
+                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("usersManagement.table.head.roleName")}</th>
+                            <th className="mx-2 text-white uppercase p-3 text-sm text-left"></th>
+                            {/* <th className="mx-2 text-white uppercase p-3 text-sm text-left"></th> */}
                         </tr>
                     </thead>
                     <tbody>
                         {users.map((u: AuthenticatedUser) =>
                             <tr key={u.id} className="table-row hover:!bg-white hover:!text-black !cursor-auto">
-                                <td className="mx-2 text-lg font-bold p-3 w-auto truncate max-w-0">{u.username}</td>
-                                <td className="mx-2 text-lg font-bold p-3 w-auto truncate max-w-0">{u.userRole.name}</td>
+                                <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{u.username}</td>
+                                <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{u.userRole.name}</td>
                                 {/* <td className="w-10 cursor-pointer " onClick={(e) => handleEdit(e, u)}><div><MdEdit /></div></td> */}
                                 <td className="w-10 cursor-pointer text-red-600" onClick={(e) => handleDelete(e, u)}><MdDelete /></td>
                             </tr>
@@ -139,7 +138,7 @@ const UserManagementPage = () => {
                         <div>
                             <MdAddCircleOutline />
                         </div>
-                        <div className="uppercase font-bold text-lg">{t("usersManagement.button.addUser")}</div>
+                        <div className="uppercase font-bold text-sm">{t("usersManagement.button.addUser")}</div>
                     </button>
                 </div>
                 :
@@ -148,7 +147,7 @@ const UserManagementPage = () => {
                     <div className="card-body">
                         <form className="w-[90%]" onSubmit={handleSave}>
                             <div className="w-full my-4">
-                                <div className="font-extrabold text-lg uppercase">{t("usersManagement.form.username")}</div>
+                                <div className="font-extrabold text-sm uppercase">{t("usersManagement.form.username")}</div>
                                 <input
                                     type="text"
                                     required
@@ -156,7 +155,7 @@ const UserManagementPage = () => {
                                     onChange={handleNameChanged} />
                             </div>
                             <div className='w-full my-4'>
-                                <div className='font-extrabold text-lg uppercase'>{t("usersManagement.form.password")}</div>
+                                <div className='font-extrabold text-sm uppercase'>{t("usersManagement.form.password")}</div>
                                 <input
                                     type="text"
                                     required
@@ -165,7 +164,7 @@ const UserManagementPage = () => {
                             </div>
 
                             <div className='w-full my-4'>
-                                <div className='font-extrabold text-lg uppercase'>{t("usersManagement.form.role")}</div>
+                                <div className='font-extrabold text-sm uppercase'>{t("usersManagement.form.role")}</div>
                                 <select className='text-input'
                                     required
                                     onChange={handleRoleIdChanged} >
@@ -180,13 +179,13 @@ const UserManagementPage = () => {
                                     type="button"
                                     className="btn-secondary"
                                     onClick={handleBack}>
-                                    <div className="uppercase font-bold text-lg">{t("common.back")}</div>
+                                    <div className="uppercase font-bold text-sm">{t("common.back")}</div>
                                 </button>
 
                                 <button
                                     type="submit"
                                     className="btn-primary">
-                                    <div className="uppercase font-bold text-lg">{t("usersManagement.button.save")}</div>
+                                    <div className="uppercase font-bold text-sm">{t("usersManagement.button.save")}</div>
                                 </button>
 
                             </div>

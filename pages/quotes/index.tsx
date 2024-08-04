@@ -95,12 +95,12 @@ const QuoteComponent = () => {
                 <table className="items-table">
                     <thead>
                         <tr className="table-header">
-                            <th colSpan={7} className="text-white uppercase p-2 text-lg">{t("quotes.table.title")}</th>
+                            <th colSpan={7} className="text-white uppercase p-2 text-sm">{t("quotes.table.title")}</th>
                         </tr>
                         <tr className="bg-gray-700 border-2 border-gray-700">
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("quotes.table.head.date")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("quotes.table.head.ref")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-lg text-left">{t("quotes.table.head.owner")}</th>
+                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("quotes.table.head.date")}</th>
+                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("quotes.table.head.ref")}</th>
+                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("quotes.table.head.owner")}</th>
                             <th colSpan={4}>
                                 <input
                                     required
@@ -114,9 +114,9 @@ const QuoteComponent = () => {
                     <tbody>
                         {quotes.map((q: Quote) =>
                             <tr key={q.id} className="table-row" onClick={(event) => handleEdit(event, q)}>
-                                <td className="mx-2 text-lg font-bold p-3 w-auto truncate max-w-0">{formatDate(q.updatedAt)}</td>
-                                <td className="mx-2 text-lg font-bold p-3 w-auto truncate max-w-0">{q.name}</td>
-                                <td className="mx-2 text-lg font-bold p-3 w-auto truncate max-w-0">{q.createdBy}</td>
+                                <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{formatDate(q.updatedAt)}</td>
+                                <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{q.name}</td>
+                                <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{q.createdBy}</td>
                                 <td className="w-10 cursor-pointer" onClick={(event) => handleEdit(event, q)}><div><MdEdit /></div></td>
                                 <td className="w-10 cursor-pointer" onClick={(event) => handleClone(event, q)}><div><MdCopyAll /></div></td>
                                 <td className="w-10 cursor-pointer" onClick={(event) => handleExportPdf(event, q)}><div><MdOutlinePictureAsPdf /></div></td>
@@ -133,7 +133,7 @@ const QuoteComponent = () => {
                     <div>
                         <MdAddCircleOutline />
                     </div>
-                    <div className="uppercase font-bold text-lg">{t("quotes.button.addQuote")}</div>
+                    <div className="uppercase font-bold text-sm">{t("quotes.button.addQuote")}</div>
                 </button>
             </div>
         </AppLayout>

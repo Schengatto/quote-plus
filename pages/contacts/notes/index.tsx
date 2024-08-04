@@ -47,7 +47,7 @@ const Notes = () => {
         <AppLayout>
             <div className= "m-8" >
                 <div className='w-full'>
-                    <div className='font-extrabold text-lg uppercase'>{t("common.history")}</div>
+                    <div className='font-extrabold text-sm uppercase'>{t("common.history")}</div>
                     <input
                         required
                         type="text"

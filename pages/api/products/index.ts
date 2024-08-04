@@ -22,12 +22,14 @@ export default async function handler(
             res.status(201).json({ id });
         } else if (req.method === "GET") {
             const filters = req.query;
+            const orderBy = req.query.orderBy as unknown as string ?? "code";
             const products = await doWithPrisma((prisma) =>
                 prisma.product.findMany({
                     where: { categoryId: filters?.categoryId ? Number(filters.categoryId) : undefined },
                     include: {
                         category: { select: { id: true, name: true, parent: { select: { id: true, name: true } } } },
                     },
+                    orderBy: { [orderBy] : "asc" },
                 })
             );
             res.status(200).json(products);

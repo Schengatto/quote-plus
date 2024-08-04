@@ -69,10 +69,10 @@ const QuoteCreate = () => {
             const _productDescription = selectedProduct.description
                 .replaceAll(placeholders.price!, String(selectedProduct.price))
                 .replaceAll(placeholders.currency!, "€")
-                .replaceAll(placeholders["discounted-price"]!, String((selectedProduct.price / 100) * (100 - selectedProductDiscount)));
+                .replaceAll(placeholders["discounted-price"]!, String(((selectedProduct.price / 100) * (100 - selectedProductDiscount)).toFixed(2)).replace(".", ","));
 
             return prev.includes(placeholders.products!)
-                ? prev.replaceAll(placeholders.products!, `${_productDescription}{{prodotti}}`)
+                ? prev.replaceAll(placeholders.products!, `${_productDescription}{{products}}`)
                 : prev.concat(_productDescription);
         });
     };
@@ -156,7 +156,7 @@ const QuoteCreate = () => {
     }, [ selectedCategory, fetchProducts ]);
 
     useEffect(() => {
-        setQuoteOverview(() => quoteContent.replaceAll("{{prodotti}}", ""));
+        setQuoteOverview(() => quoteContent.replaceAll(placeholders.products || "{{products}}", ""));
     }, [ quoteContent ]);
 
     return (
@@ -166,7 +166,7 @@ const QuoteCreate = () => {
                 <div className="card-body">
                     <form className="w-[90%]" onSubmit={handleSave}>
                         <div className="w-full my-4">
-                            <div className="font-extrabold text-lg uppercase">{t("quotes.form.name")}</div>
+                            <div className="font-extrabold text-sm uppercase">{t("quotes.form.name")}</div>
                             <input
                                 required
                                 type="text"
@@ -175,7 +175,7 @@ const QuoteCreate = () => {
                                 onChange={handleNameChanged} />
                         </div>
                         <div className='w-full my-4'>
-                            <div className='font-extrabold text-lg uppercase'>{t("quotes.form.template")}</div>
+                            <div className='font-extrabold text-sm uppercase'>{t("quotes.form.template")}</div>
                             <select className='text-input'
                                 onChange={handleTemplateChanged} >
                                 <option value={undefined}></option>
@@ -186,7 +186,7 @@ const QuoteCreate = () => {
                         <div id="import-product-template">
                             <div className='w-full my-4 grid-cols-3 grid grid-template-columns: repeat(3, minmax(0, 1fr)) gap-2'>
                                 <div className='w-full my-4'>
-                                    <div className='font-extrabold text-lg uppercase'>{t("quotes.form.category")}</div>
+                                    <div className='font-extrabold text-sm uppercase'>{t("quotes.form.category")}</div>
                                     <select className='text-input'
                                         onChange={handleCategoryChanged} >
                                         <option value={undefined}></option>
@@ -194,7 +194,7 @@ const QuoteCreate = () => {
                                     </select>
                                 </div>
                                 <div className='w-full my-4'>
-                                    <div className='font-extrabold text-lg uppercase'>{t("quotes.form.product")}</div>
+                                    <div className='font-extrabold text-sm uppercase'>{t("quotes.form.product")}</div>
                                     <select className='text-input'
                                         disabled={!selectedCategory}
                                         onChange={handleProductChanged} >
@@ -203,7 +203,7 @@ const QuoteCreate = () => {
                                     </select>
                                 </div>
                                 <div className='w-full my-4'>
-                                    <div className='font-extrabold text-lg uppercase'>{t("quotes.form.discount")}</div>
+                                    <div className='font-extrabold text-sm uppercase'>{t("quotes.form.discount")}</div>
                                     <input
                                         min={0}
                                         max={100}
@@ -218,13 +218,13 @@ const QuoteCreate = () => {
                                     disabled={!selectedProduct}
                                     className="btn-primary"
                                     onClick={handleAddSelectedProduct}>
-                                    <div className="uppercase font-bold text-lg">{t("quotes.button.addProduct")}</div>
+                                    <div className="uppercase font-bold text-sm">{t("quotes.button.addProduct")}</div>
                                 </button>
                             </div>
                         </div>
 
                         <div className='w-full my-4'>
-                            <div className='font-extrabold text-lg uppercase'>{t("quotes.form.description")}</div>
+                            <div className='font-extrabold text-sm uppercase'>{t("quotes.form.description")}</div>
                             <div className="bg-white">
                                 <TextEditor initialValue={quoteContent} onChange={handleContentChanged} />
                             </div>
@@ -232,7 +232,7 @@ const QuoteCreate = () => {
 
                         {quoteOverview
                             && <div className='w-full my-4'>
-                                <div className='font-extrabold text-lg uppercase'>{t("quotes.form.pdfPreview")}</div>
+                                <div className='font-extrabold text-sm uppercase'>{t("quotes.form.pdfPreview")}</div>
                                 <div className="bg-white max-h-96 overflow-auto p-2 w-[210mm] border-2 border-dashed border-black">
                                     {Parser().parse(quoteOverview)}
                                 </div>
@@ -244,13 +244,13 @@ const QuoteCreate = () => {
                                 type="button"
                                 className="btn-secondary"
                                 onClick={handleBack}>
-                                <div className="uppercase font-bold text-lg">{t("common.back")}</div>
+                                <div className="uppercase font-bold text-sm">{t("common.back")}</div>
                             </button>
 
                             <button
                                 type="submit"
                                 className="btn-primary">
-                                <div className="uppercase font-bold text-lg">{t("quotes.button.save")}</div>
+                                <div className="uppercase font-bold text-sm">{t("quotes.button.save")}</div>
                             </button>
                         </div>
                     </form>
