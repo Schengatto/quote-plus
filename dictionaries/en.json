@@ -13,6 +13,7 @@
   "common.error.userNotFound": "User not found. Please, check username and password.",
   "common.open": "open",
   "common.pending": "pending",
+  "common.pendingNotes": "Pending Notes",
   "common.blocked": "blocked",
   "common.closed": "closed",
   "common.history": "history",

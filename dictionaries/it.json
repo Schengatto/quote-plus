@@ -13,6 +13,7 @@
   "common.error.userNotFound": "Utente non trovato, verifica username e password.",
   "common.open": "aperto",
   "common.pending": "in sospeso",
+  "common.pendingNotes": "Attività in sospeso",
   "common.blocked": "bloccato",
   "common.closed": "chiuso",
   "common.history": "cronologia",

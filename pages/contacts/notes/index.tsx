@@ -4,7 +4,6 @@ import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import { doActionWithLoader } from "@/utils/actions";
 import { ContactNote } from "@prisma/client";
-import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 interface ContactData {
@@ -26,8 +25,8 @@ const Notes = () => {
 
     const fetchNotes = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
-            const _contacts = await fetch("/api/notes", { method: "GET" }).then((res) => res.json());
-            setNotes(_contacts);
+            const _notes = await fetch("/api/notes", { method: "GET" }).then((res) => res.json());
+            setNotes(_notes);
         });
     }, [ setIsLoading ]);
 
