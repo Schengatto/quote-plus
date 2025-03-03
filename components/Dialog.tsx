@@ -1,5 +1,6 @@
 import { useAppStore } from "@/store/app";
-import { FunctionComponent } from "react";
+import { useI18nStore } from "@/store/i18n";
+import { FunctionComponent, ReactNode } from "react";
 import { MdWarning } from "react-icons/md";
 
 export interface DialogAction {
@@ -8,18 +9,24 @@ export interface DialogAction {
 }
 
 export interface DialogProps {
-    title: string;
-    message: string;
-    closeActionLabel: string;
+    isVisible?: boolean;
+    title?: string;
+    message?: string;
+    closeActionLabel?: string;
     actions?: DialogAction[];
+    children?: ReactNode | undefined;
 }
 
-const Dialog: FunctionComponent = () => {
+const Dialog: FunctionComponent<DialogProps> = (props: DialogProps) => {
     const { dialog, setDialog } = useAppStore();
+    const { t } = useI18nStore();
+
+    const actions = props.actions || dialog?.actions;
+    const isDialogVisible = props.isVisible || dialog;
 
     return (
         <>
-            {dialog &&
+            {isDialogVisible &&
                 <>
                     <div className="w-full min-h-[100vh] items-center justify-center h-full bg-[#1e6bd769] fixed z-20">
                         <div className="bg-gray-900 text-white w-[50%] m-auto mt-[30vh] p-4 border-4 border-red-500">
@@ -28,15 +35,18 @@ const Dialog: FunctionComponent = () => {
                                     <MdWarning />
                                 </div>
                                 <div>
-                                    <div className="uppercase text-2xl">{dialog.title}</div>
-                                    <div className="text-xl">{dialog.message}</div>
+                                    <div className="uppercase text-2xl">{props.title || dialog?.title}</div>
+                                    <div className="text-xl">{props.message || dialog?.message}</div>
                                 </div>
                             </div>
+                            <div>
+                                {props.children}
+                            </div>
                             <div className="flex flex-wrap justify-center mt-4 gap-2">
-                                <button className="btn-secondary uppercase" onClick={() => setDialog(null)}>
+                                {dialog?.closeActionLabel && <button className="btn-secondary uppercase" onClick={() => setDialog(null)}>
                                     {dialog?.closeActionLabel}
-                                </button>
-                                {dialog.actions?.map((a, index) => (
+                                </button>}
+                                {actions?.map((a, index) => (
                                     <button key={index} className="btn-primary uppercase" onClick={a.callback}>
                                         {a.name}
                                     </button>

@@ -1,4 +1,7 @@
 {
+  "common.edit": "edit",
+  "common.editPrice": "edit price",
+  "common.clone": "clone",
   "common.save": "save",
   "common.update": "update",
   "common.delete": "delete",

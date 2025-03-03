@@ -1,3 +1,5 @@
+import Dialog from "@/components/Dialog";
+import RowActions from "@/components/dropdown";
 import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
 import { useAppStore } from "@/store/app";
@@ -8,7 +10,7 @@ import { orderAscByProperty } from "@/utils/array";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Product, Product as ProductList } from "@prisma/client";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { MdAddCircleOutline, MdCopyAll, MdDelete, MdEdit } from "react-icons/md";
 
 const ProductList = () => {
@@ -18,13 +20,28 @@ const ProductList = () => {
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
     const { setSelectedProduct } = useProductsStore();
+    const [selectedRow, setSelectedRow] = useState<Partial<ProductList> | null>(null);
+    const [newProductPrice, setNewProductPrice] = useState<number>(0);
 
-    const [ products, setProducts ] = useState<ProductList[]>([]);
-    const [ orderBy, setOrderBy ] = useState<string>("code");
+    const [products, setProducts] = useState<ProductList[]>([]);
+    const [orderBy, setOrderBy] = useState<string>("code");
+
+    const preventClick = (event: any, _selectedProduct: Partial<ProductList>) => {
+        event.stopPropagation();
+    };
 
     const handleEdit = (event: any, _selectedProduct: Partial<ProductList>) => {
         event.stopPropagation();
         router.push(`/products/${_selectedProduct.id}`);
+    };
+
+    const handleEditPrice = (event: any, _selectedProduct: Partial<ProductList>) => {
+        setSelectedRow(_selectedProduct);
+        event.stopPropagation();
+    };
+
+    const handlePriceChanged = (e: ChangeEvent<HTMLInputElement>) => {
+        setNewProductPrice(Number(e.target.value));
     };
 
     const handleClone = (event: any, _selectedProduct: Partial<Product>) => {
@@ -55,7 +72,7 @@ const ProductList = () => {
     const fetchProducts = async () => {
         const _products = await fetch("/api/products", { method: "GET" })
             .then((res) => res.json()) ?? [];
-        const _productsWithCategoryLabel = _products.map((p: ProductList) => ( { ...p, categoryLabel: getCategoryLabel(p) } ));
+        const _productsWithCategoryLabel = _products.map((p: ProductList) => ({ ...p, categoryLabel: getCategoryLabel(p) }));
         setProducts(orderAscByProperty(_productsWithCategoryLabel, orderBy));
     };
 
@@ -72,12 +89,55 @@ const ProductList = () => {
         setSearchTerm(e.target.value.toLowerCase());
     };
 
+    const handleSaveProduct = async () => {
+        if (!selectedRow?.id) return;
+
+        try {
+            const endpoint = `/api/products/${selectedRow?.id}`;
+            const body: Partial<Product> = {
+                id: selectedRow.id,
+                name: selectedRow.name,
+                code: selectedRow.code,
+                brandId: selectedRow.brandId,
+                categoryId: selectedRow.categoryId,
+                photo: null,
+                description: selectedRow.description,
+                price: newProductPrice,
+                currencyId: selectedRow.currencyId,
+                createdById: selectedRow.createdById ?? 0
+            };
+            const response = await fetch(endpoint, { method: "PATCH", body: JSON.stringify(body) }).then(
+                (res) => res.json()
+            );
+
+            if (!response.id) {
+                throw Error("Prodotto non creato!");
+            }
+            router.push("/products");
+        } catch (error: any) {
+            alert(`${t("common.error.onSave")}, ${error.message}`);
+        } finally {
+            setSelectedRow(null);
+        }
+    };
+
+    const rowActions = (product: Partial<ProductList>) => [
+        { label: t("common.edit"), onClick: (event: any) => handleEdit(event, product) },
+        { label: t("common.editPrice"), onClick: (event: any) => handleEditPrice(event, product) },
+        { label: t("common.clone"), onClick: (event: any) => handleClone(event, product) },
+        { label: t("common.delete"), onClick: (event: any) => handleDelete(event, product) },
+    ];
+
+    const changePriceDialogActions = [
+        { name: t("common.cancel"), callback: () => setSelectedRow(null) },
+        { name: t("common.update"), callback: handleSaveProduct },
+    ];
+
     useEffect(() => {
         setProducts(orderAscByProperty(products, orderBy));
     }, [orderBy, setProducts]);
 
     useEffect(() => {
-
         if (!user) return;
         if (!user?.userRole.grants?.includes("products")) {
             router.push("/");
@@ -90,6 +150,18 @@ const ProductList = () => {
     return (
         <AppLayout>
             <div className="m-8">
+                <Dialog isVisible={!!selectedRow} title="Modifica prezzo" actions={changePriceDialogActions} >
+                    <p>Inserisci il nuovo prezzo di {selectedRow?.name} - prezz corrente: {selectedRow?.price} €</p>
+                    <div>
+                        <div className='font-extrabold text-sm uppercase'>{t("products.form.price")}</div>
+                        <input
+                            type="number"
+                            min={0}
+                            required
+                            className="text-input"
+                            onChange={handlePriceChanged} />
+                    </div>
+                </Dialog>
                 <div className="my-4">
                     <div className="flex justify-end content-end w-full">
                         <button
@@ -118,6 +190,8 @@ const ProductList = () => {
                             </tr>
                             <tr className="bg-gray-700 border-2 border-gray-700">
                                 <th className="mx-2 text-white uppercase p-2 text-sm text-left w-1/12 cursor-pointer" onClick={() => setOrderBy("code")}>
+                                </th>
+                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-1/12 cursor-pointer" onClick={() => setOrderBy("code")}>
                                     {t("products.table.head.ref")}
                                 </th>
                                 <th className="mx-2 text-white uppercase p-2 text-sm text-left w-5/12" onClick={() => setOrderBy("name")}>
@@ -129,9 +203,6 @@ const ProductList = () => {
                                 <th className="mx-2 text-white uppercase p-2 text-sm text-left w-1/12" onClick={() => setOrderBy("price")}>
                                     {t("products.table.head.price")}
                                 </th>
-                                <th className="mx-2 text-white uppercase p-2 text-sm text-center"></th>
-                                <th className="mx-2 text-white uppercase p-2 text-sm text-center"></th>
-                                <th className="mx-2 text-white uppercase p-2 text-sm text-center"></th>
                             </tr>
                         </thead>
                     </table>
@@ -140,25 +211,11 @@ const ProductList = () => {
                             <tbody>
                                 {products.filter(p => p.name.toLowerCase()?.includes(searchTerm)).map((p: Partial<ProductList>) =>
                                     <tr key={p.id} className="table-row" onClick={(event) => handleEdit(event, p)}>
+                                        <td onClick={(event) => preventClick(event, p)}><RowActions actions={rowActions(p)} /></td>
                                         <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-left">{p.code}</td>
                                         <td className="mx-2 text-sm font-bold p-2 w-5/12 truncate max-w-0 text-left">{p.name}</td>
                                         <td className="mx-2 text-sm font-bold p-2 w-4/12 truncate max-w-0 text-left">{getCategoryLabel(p)}</td>
                                         <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-right">{p.price} €</td>
-                                        <td className="w-10 cursor-pointer" onClick={(event) => handleEdit(event, p)}>
-                                            <div className="flex justify-center content-end">
-                                                <MdEdit />
-                                            </div>
-                                        </td>
-                                        <td className="w-10 cursor-pointer" onClick={(event) => handleClone(event, p)}>
-                                            <div className="flex justify-center content-end">
-                                                <MdCopyAll />
-                                            </div>
-                                        </td>
-                                        <td className="w-10 cursor-pointer text-red-600" onClick={(event) => handleDelete(event, p)}>
-                                            <div className="flex justify-center content-end">
-                                                <MdDelete />
-                                            </div>
-                                        </td>
                                     </tr>
                                 )}
                             </tbody>
