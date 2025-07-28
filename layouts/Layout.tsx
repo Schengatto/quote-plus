@@ -83,20 +83,20 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                         <div className="bg-white border border-gray-200 rounded shadow-md fixed z-30 right-4 top-16 w-48">
                             <div className="py-2">
                                 <div
-                                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                    className="first-letter:uppercase px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                                     onClick={() => navigateTo("/profile")}
                                 >
                                     {t("sideMenu.item.editUserOptions")}
                                 </div>
                                 <div
-                                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                    className="first-letter:uppercase px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                                     onClick={() => navigateTo("/templates")}
                                 >
                                     {t("sideMenu.item.manageTemplates")}
                                 </div>
                                 <div className="border-t my-1" />
                                 <div
-                                    className="px-4 py-2 text-sm text-red-600 hover:bg-red-50 cursor-pointer"
+                                    className="first-letter:uppercase px-4 py-2 text-sm text-red-600 hover:bg-red-50 cursor-pointer"
                                     onClick={handleLogout}
                                 >
                                     {t("sideMenu.item.logout")}

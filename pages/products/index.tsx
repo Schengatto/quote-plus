@@ -8,10 +8,12 @@ import { useProductsStore } from "@/store/products";
 import { doActionWithLoader } from "@/utils/actions";
 import { orderAscByProperty } from "@/utils/array";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
-import { Product, Product as ProductList } from "@prisma/client";
+import { Product } from "@prisma/client";
 import { useRouter } from "next/router";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { MdAddCircleOutline, MdCopyAll, MdDelete, MdEdit } from "react-icons/md";
+import { ChangeEvent, useEffect, useState } from "react";
+import { MdAddCircleOutline } from "react-icons/md";
+
+type ProductList = Product;
 
 const ProductList = () => {
     const router = useRouter();
