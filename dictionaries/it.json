@@ -60,6 +60,7 @@
   "categories.form.parentName": "categoria genitore - solo per sottocategorie",
   "categories.button.save": "salva",
   "categories.warning.deleteDisabled": "non è possibile eliminare questa categoria perchè è associata a dei prodotti",
+  "contacts.button.addContact": "Aggiungi contatto",
   "contacts.table.title": "Contatti",
   "contacts.table.head.firstName": "nome",
   "contacts.table.head.lastName": "cognome",

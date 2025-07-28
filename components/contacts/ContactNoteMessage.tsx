@@ -8,7 +8,7 @@ export interface ContactNoteMessageProps {
     author: string;
     date: Date;
     note: string;
-    contact?: {id: string, firstName: string, phoneNumber: string}
+    contact?: { id: string, firstName: string, phoneNumber: string }
     onStatusChanged?: (status: ContactNoteStatus) => void;
     onNoteDelete?: () => void;
 }
@@ -50,32 +50,44 @@ const ContactNoteMessage: React.FunctionComponent<ContactNoteMessageProps> = ({
     };
 
     return (
-        <div className={`${statusColor} p-2`}>
-            <div className="flex gap-2 justify-between">
-                <div className="flex gap-2">
-                    {onStatusChanged
-                        ? <select className='uppercase bg-transparent'
+        <div className={`rounded-xl shadow-sm border-l-4 ${status === "CLOSED" ? "border-green-400 bg-green-50" : "border-yellow-400 bg-yellow-50"} p-4 mb-4`}>
+            <div className="flex justify-between items-start mb-2">
+                <div className="flex items-center gap-2">
+                    {onStatusChanged ? (
+                        <select
+                            className="uppercase bg-transparent text-xl"
                             required
                             value={status}
-                            onChange={handleNoteStatusChanged} >
-                            <option value="OPEN" className="uppercase">🟡</option>
-                            <option value="CLOSED" className="uppercase">🟢</option>
+                            onChange={handleNoteStatusChanged}
+                        >
+                            <option value="OPEN">🟡</option>
+                            <option value="CLOSED">🟢</option>
                         </select>
-                        : <div>{statusCircle}</div>
-                    }
-                    <div className="font-bold uppercase">{author}</div>
+                    ) : (
+                        <div className="text-xl">{statusCircle}</div>
+                    )}
+                    <span className="font-bold uppercase text-sm text-gray-800">{author}</span>
                 </div>
-                <div className="flex gap-2">
-                    <div className="font-bold">{noteDate}</div>
-                    {onNoteDelete && <div className="text-right cursor-pointer" onClick={onNoteDelete}>❌</div>}
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <span>{noteDate}</span>
+                    {onNoteDelete && (
+                        <button onClick={onNoteDelete} className="text-red-500 hover:text-red-700" title="Delete">
+                            ❌
+                        </button>
+                    )}
                 </div>
             </div>
-            <div className="my-2">{note}</div>
-            {contact 
-                && <div className="flex my-2 font-bold cursor-pointer hover:text-sky-700" onClick={handleContactClick}>
+
+            <p className="text-gray-700 mb-3 whitespace-pre-line">{note}</p>
+
+            {contact && (
+                <div
+                    className="font-semibold text-sm text-blue-700 cursor-pointer hover:underline"
+                    onClick={handleContactClick}
+                >
                     {contact.firstName} - ({contact.phoneNumber})
                 </div>
-            }
+            )}
         </div>
     );
 };

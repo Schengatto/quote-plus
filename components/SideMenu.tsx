@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useI18nStore } from "@/store/i18n";
 import { useRouter } from "next/navigation";
 import { FunctionComponent } from "react";
-import { MdEditDocument, MdExitToApp, MdList, MdManageAccounts, MdOutlineEdit, MdOutlineFolderOpen, MdOutlineHouse, MdPhone, MdSettings, MdSignLanguage, MdStorage } from "react-icons/md";
+import { MdList, MdManageAccounts, MdOutlineEdit, MdOutlineFolderOpen, MdOutlineHouse, MdPhone, MdSettings, MdStorage } from "react-icons/md";
 import Cookies from "universal-cookie";
 
 const SideMenu: FunctionComponent = () => {
@@ -23,89 +23,116 @@ const SideMenu: FunctionComponent = () => {
         router.push("/");
     };
 
+    interface MenuItemProps {
+        icon: React.ReactNode;
+        label: string;
+        onClick: () => void;
+    }
+
+    const MenuItem = ({ icon, label, onClick }: MenuItemProps) => (
+        <div
+            onClick={onClick}
+            className="flex items-center gap-3 py-2 px-4 rounded-md hover:bg-slate-700 cursor-pointer transition-colors"
+        >
+            <div className="text-xl text-sky-400">{icon}</div>
+            <span className="uppercase text-sm text-white">{label}</span>
+        </div>
+    );
+
+    interface SectionProps {
+        title: string;
+        children: React.ReactNode;
+    }
+
+    const MenuSection = ({ title, children }: SectionProps) => (
+        <div className="w-full">
+            <h4 className="uppercase text-xs text-gray-400 font-semibold px-4 mb-1 tracking-wide">{title}</h4>
+            {children}
+        </div>
+    );
+
+
     return (
-        <>
-            <div className="bg-sky-800 w-[98%] overflow-hidden">
-                <div className="w-full">
-                    <div className="side-menu__item"
-                        onClick={() => navigateTo("/home")}>
-                        <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineHouse /></div>
-                        <div className="ml-2">{t("sideMenu.item.home")}</div>
-                    </div>
-                </div>
-                {hasGrants([ "quotes" ]) &&
-                    <div className="w-full" >
-                        <div className="side-menu__category">{t("sideMenu.item.quotes")}</div>
-                        <div className="side-menu__item" onClick={() => navigateTo("/quotes/create")}>
-                            <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineEdit /></div>
-                            <div className="ml-2">{t("sideMenu.item.newQuote")}</div>
-                        </div>
-                        <div className="side-menu__item" onClick={() => navigateTo("/quotes")}>
-                            <div className="ml-5 flex flex-col items-center justify-center"><MdOutlineFolderOpen /></div>
-                            <div className="ml-2">{t("sideMenu.item.quotesArchive")}</div>
-                        </div>
-                    </div>
-                }
-                {hasGrants([ "categories", "brands", "products" ]) &&
-                    <div className="w-full">
-                        <div className="side-menu__category">{t("sideMenu.item.catalog")}</div>
-                        {hasGrants([ "categories" ]) &&
-                            <div className="side-menu__item"
-                                onClick={() => navigateTo("/categories")}>
-                                <div className="ml-5 flex flex-col items-center justify-center"><MdStorage /></div>
-                                <div className="ml-2">{t("sideMenu.item.categories")}</div>
-                            </div>
-                        }
-                        {hasGrants([ "products" ]) &&
-                            <div className="side-menu__item"
-                                onClick={() => navigateTo("/products")}>
-                                <div className="ml-5 flex flex-col items-center justify-center"><MdStorage /></div>
-                                <div className="ml-2 ">{t("sideMenu.item.products")}</div>
-                            </div>
-                        }
-                        {hasGrants([ "brands" ]) &&
-                            <div className="side-menu__item"
-                                onClick={() => navigateTo("/brands")}>
-                                <div className="ml-5 flex flex-col items-center justify-center"><MdStorage /></div>
-                                <div className="ml-2 ">{t("sideMenu.item.brands")}</div>
-                            </div>
-                        }
-                    </div>
-                }
-                <div className="w-full">
-                    <div className="side-menu__category">{t("sideMenu.item.contacts")}</div>
-                    <div className="side-menu__item"
-                        onClick={() => navigateTo("/contacts")}>
-                        <div className="ml-5 flex flex-col items-center justify-center"><MdPhone /></div>
-                        <div className="ml-2">{t("sideMenu.item.contactsList")}</div>
-                    </div>
-                    <div className="side-menu__item"
-                        onClick={() => navigateTo("/contacts/notes")}>
-                        <div className="ml-5 flex flex-col items-center justify-center"><MdList /></div>
-                        <div className="ml-2">{t("sideMenu.item.notesList")}</div>
-                    </div>
-                </div>
-                {hasGrants([ "users-management", "tenant-config" ]) &&
-                    <div className="w-full">
-                        <div className="side-menu__category">{t("sideMenu.item.admin")}</div>
-                        {hasGrants([ "users-management" ]) &&
-                            <div className="side-menu__item"
-                                onClick={() => navigateTo("/users-management")}>
-                                <div className="ml-5 flex flex-col items-center justify-center"><MdManageAccounts /></div>
-                                <div className="ml-2">{t("sideMenu.item.usersManagement")}</div>
-                            </div>
-                        }
-                        {hasGrants([ "tenant-config" ]) &&
-                            <div className="side-menu__item"
-                                onClick={() => navigateTo("/settings")}>
-                                <div className="ml-5 flex flex-col items-center justify-center"><MdSettings /></div>
-                                <div className="ml-2">{t("sideMenu.item.settings")}</div>
-                            </div>
-                        }
-                    </div>
-                }
-            </div>
-        </>
+        <div className="bg-slate-900 w-full h-full py-4 space-y-6">
+            <MenuItem
+                icon={<MdOutlineHouse />}
+                label={t("sideMenu.item.home")}
+                onClick={() => navigateTo("/home")}
+            />
+
+            {hasGrants(["quotes"]) && (
+                <MenuSection title={t("sideMenu.item.quotes")}>
+                    <MenuItem
+                        icon={<MdOutlineEdit />}
+                        label={t("sideMenu.item.newQuote")}
+                        onClick={() => navigateTo("/quotes/create")}
+                    />
+                    <MenuItem
+                        icon={<MdOutlineFolderOpen />}
+                        label={t("sideMenu.item.quotesArchive")}
+                        onClick={() => navigateTo("/quotes")}
+                    />
+                </MenuSection>
+            )}
+
+            {hasGrants(["categories", "brands", "products"]) && (
+                <MenuSection title={t("sideMenu.item.catalog")}>
+                    {hasGrants(["categories"]) && (
+                        <MenuItem
+                            icon={<MdStorage />}
+                            label={t("sideMenu.item.categories")}
+                            onClick={() => navigateTo("/categories")}
+                        />
+                    )}
+                    {hasGrants(["products"]) && (
+                        <MenuItem
+                            icon={<MdStorage />}
+                            label={t("sideMenu.item.products")}
+                            onClick={() => navigateTo("/products")}
+                        />
+                    )}
+                    {hasGrants(["brands"]) && (
+                        <MenuItem
+                            icon={<MdStorage />}
+                            label={t("sideMenu.item.brands")}
+                            onClick={() => navigateTo("/brands")}
+                        />
+                    )}
+                </MenuSection>
+            )}
+
+            <MenuSection title={t("sideMenu.item.contacts")}>
+                <MenuItem
+                    icon={<MdPhone />}
+                    label={t("sideMenu.item.contactsList")}
+                    onClick={() => navigateTo("/contacts")}
+                />
+                <MenuItem
+                    icon={<MdList />}
+                    label={t("sideMenu.item.notesList")}
+                    onClick={() => navigateTo("/contacts/notes")}
+                />
+            </MenuSection>
+
+            {hasGrants(["users-management", "tenant-config"]) && (
+                <MenuSection title={t("sideMenu.item.admin")}>
+                    {hasGrants(["users-management"]) && (
+                        <MenuItem
+                            icon={<MdManageAccounts />}
+                            label={t("sideMenu.item.usersManagement")}
+                            onClick={() => navigateTo("/users-management")}
+                        />
+                    )}
+                    {hasGrants(["tenant-config"]) && (
+                        <MenuItem
+                            icon={<MdSettings />}
+                            label={t("sideMenu.item.settings")}
+                            onClick={() => navigateTo("/settings")}
+                        />
+                    )}
+                </MenuSection>
+            )}
+        </div>
     );
 };
 
