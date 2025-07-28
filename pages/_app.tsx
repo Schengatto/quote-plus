@@ -5,6 +5,7 @@ import "@/styles/globals.css";
 import { useAppStore } from "@/store/app";
 import { doActionWithLoader } from "@/utils/actions";
 import Dialog from "@/components/Dialog";
+import Spinner from "@/components/Spinner";
 
 export default function App({ Component, pageProps }: AppProps) {
 
@@ -20,13 +21,13 @@ export default function App({ Component, pageProps }: AppProps) {
         };
 
         doActionWithLoader(setIsLoading, () => fetchTranslations(currentLanguage));
-    }, [ currentLanguage, setTranslations, setIsLoading ]);
+    }, [currentLanguage, setTranslations, setIsLoading]);
 
     return <>
-        {isLoading
-            && <div className="w-full min-h-[100vh] items-center justify-center h-full bg-[#1e6bd769] fixed z-50">
-                <div className="mx-[50%] my-[40%] w-full text-white text-2xl uppercase">
-                    <h1>Loading ...</h1>
+        {isLoading &&
+            <div className="w-full min-h-[100vh] items-center justify-center h-full bg-[#1e6bd769] fixed z-50">
+                <div className="mx-[50%] my-[40%] w-full text-white text-2xl uppercase flex gap-5">
+                    <Spinner /><h1>Loading ...</h1>
                 </div>
             </div>
         }

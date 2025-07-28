@@ -20,6 +20,7 @@
   "common.blocked": "blocked",
   "common.closed": "closed",
   "common.history": "history",
+  "common.noPendingTasks": "No pending activities",
   "login.form.title": "user login",
   "login.form.username": "username",
   "login.form.password": "password",

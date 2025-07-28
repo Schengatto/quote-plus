@@ -53,6 +53,7 @@ const Home = () => {
                                     note={note.note}
                                     contact={note.contact} />
                             ))}
+                        {!pendingNotes.length && <div>{t("common.noPendingTasks")}!</div>}
                     </div>
                 </div>
             </div>

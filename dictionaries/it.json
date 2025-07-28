@@ -20,6 +20,7 @@
   "common.blocked": "bloccato",
   "common.closed": "chiuso",
   "common.history": "cronologia",
+  "common.noPendingTasks": "Nessuna attività in sospeso",
   "login.form.title": "accesso utente",
   "login.form.username": "username",
   "login.form.password": "password",
