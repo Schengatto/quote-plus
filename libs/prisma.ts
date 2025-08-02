@@ -10,6 +10,7 @@ const doWithPrisma = async (
         result = await callback(prisma);
     } catch (error: any) {
         if (!onError) {
+            console.error(error);
             throw new Error(error.message);
         } else {
             await onError(error);

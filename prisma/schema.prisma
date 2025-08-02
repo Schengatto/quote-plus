@@ -19,7 +19,7 @@ model Tenant {
 model UserRole {
     id     String   @id @default(uuid())
     name   String   @unique
-    grants String[] @default(["quotes", "categories", "brands", "products", "delete-account", "users-management", "tenant-config"])
+    grants String[] @default(["quotes", "categories", "brands", "products", "delete-account", "users-management", "tenant-config", "storage"])
     user   User[]
 }
 
@@ -154,29 +154,19 @@ model ContactNote {
     updatedBy String            @map(name: "updated_by")
 }
 
-model ItemDocument {
+model Item {
     id        Int      @id @default(autoincrement())
     type      String
     code      String
+    category  Int
+    product   String
+    dealer    String
+    reference String
+    document  String
     date      DateTime
-    itemId    Int      @map(name: "item_id")
-    item      Item     @relation(fields: [itemId], references: [id])
+    notes     String
     createdAt DateTime @default(now()) @map(name: "created_at")
     createdBy String   @map(name: "created_by")
     updatedAt DateTime @updatedAt @map(name: "updated_at")
     updatedBy String   @map(name: "updated_by")
-}
-
-model Item {
-    id            Int            @id @default(autoincrement())
-    code          String
-    product       String
-    dealer        String
-    userReference String
-    documents     ItemDocument[]
-    notes         String
-    createdAt     DateTime       @default(now()) @map(name: "created_at")
-    createdBy     String         @map(name: "created_by")
-    updatedAt     DateTime       @updatedAt @map(name: "updated_at")
-    updatedBy     String         @map(name: "updated_by")
 }

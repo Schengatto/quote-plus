@@ -40,6 +40,10 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
 
     useEffect(() => {
         if (!auth) return;
+
+        const isMobile = window?.innerWidth < 768;
+        setIsMenuVisible(!isMobile);
+
         const userLanguage = currentLanguage || (auth?.extraData as any).language || "en";
         setCurrentLanguage(userLanguage);
     }, [auth]);
@@ -111,7 +115,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                                 <SideMenu />
                             </div>
                         )}
-                        <div className={`flex-1 ${isMenuVisible ? "ml-[50px]" : ""} h-[calc(100vh-3.5rem)] overflow-auto`}>
+                        <div className={"flex-1 h-[calc(100vh-3.5rem)] overflow-auto"}>
                             {children}
                         </div>
                     </div>

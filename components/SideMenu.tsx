@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useI18nStore } from "@/store/i18n";
 import { useRouter } from "next/navigation";
 import { FunctionComponent } from "react";
-import { MdList, MdManageAccounts, MdOutlineEdit, MdOutlineFolderOpen, MdOutlineHouse, MdPhone, MdSettings, MdStorage } from "react-icons/md";
+import { MdBuild, MdList, MdManageAccounts, MdOutlineEdit, MdOutlineFolderOpen, MdOutlineHouse, MdPhone, MdSearch, MdSettings, MdShoppingCart, MdStorage } from "react-icons/md";
 import Cookies from "universal-cookie";
 
 const SideMenu: FunctionComponent = () => {
@@ -113,6 +113,26 @@ const SideMenu: FunctionComponent = () => {
                     onClick={() => navigateTo("/contacts/notes")}
                 />
             </MenuSection>
+
+            {hasGrants(["storage"]) && (
+                <MenuSection title={t("sideMenu.item.storage")}>
+                    <MenuItem
+                        icon={<MdSearch />}
+                        label={t("sideMenu.item.storageSearch")}
+                        onClick={() => navigateTo("/storage")}
+                    />
+                    <MenuItem
+                        icon={<MdShoppingCart />}
+                        label={t("sideMenu.item.sales")}
+                        onClick={() => navigateTo("/storage/create?type=sale")}
+                    />
+                    <MenuItem
+                        icon={<MdBuild />}
+                        label={t("sideMenu.item.repairs")}
+                        onClick={() => navigateTo("/storage/create?type=repair")}
+                    />
+                </MenuSection>
+            )}
 
             {hasGrants(["users-management", "tenant-config"]) && (
                 <MenuSection title={t("sideMenu.item.admin")}>

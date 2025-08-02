@@ -22,7 +22,7 @@ async function main() {
         update: {},
         create: {
             name: "basic",
-            grants: ["quotes"],
+            grants: ["quotes", "storage"],
         },
     });
 

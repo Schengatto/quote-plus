@@ -21,16 +21,16 @@ const QuoteCreate = () => {
     const { setIsLoading } = useAppStore();
     const { selectedQuote, setSelectedQuote } = useQuotesStore();
 
-    const [ placeholders, setPlaceholders ] = useState<Partial<TenantPlaceholders>>({});
-    const [ quoteName, setQuoteName ] = useState<string>(selectedQuote?.name ?? "");
-    const [ quoteContent, setQuoteContent ] = useState<string>(selectedQuote?.content ?? "");
-    const [ products, setProducts ] = useState<Product[]>([]);
-    const [ templates, setTemplates ] = useState<Template[]>([]);
-    const [ categories, setCategories ] = useState<CategoryApiModel[]>([]);
-    const [ selectedCategory, setSelectedCategory ] = useState<number | undefined>(undefined);
-    const [ selectedProduct, setSelectedProduct ] = useState<Product | undefined>(undefined);
-    const [ selectedProductDiscount, setSelectedProductDiscount ] = useState<number>(0);
-    const [ quoteOverview, setQuoteOverview ] = useState<string>("");
+    const [placeholders, setPlaceholders] = useState<Partial<TenantPlaceholders>>({});
+    const [quoteName, setQuoteName] = useState<string>(selectedQuote?.name ?? "");
+    const [quoteContent, setQuoteContent] = useState<string>(selectedQuote?.content ?? "");
+    const [products, setProducts] = useState<Product[]>([]);
+    const [templates, setTemplates] = useState<Template[]>([]);
+    const [categories, setCategories] = useState<CategoryApiModel[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<number | undefined>(undefined);
+    const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(undefined);
+    const [selectedProductDiscount, setSelectedProductDiscount] = useState<number>(0);
+    const [quoteOverview, setQuoteOverview] = useState<string>("");
 
     const handleNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -116,13 +116,13 @@ const QuoteCreate = () => {
     const fetchProducts = useCallback(async () => {
         const _products = await fetch(`/api/products?categoryId=${selectedCategory}`, { method: "GET" }).then((res) => res.json());
         setProducts(_products);
-    }, [ selectedCategory ]);
+    }, [selectedCategory]);
 
     const fetchUserTemplates = useCallback(async () => {
         const _templates = await fetch(`/api/templates?userId=${user!.id}`, { method: "GET" })
             .then((res) => res.json());
         setTemplates(_templates);
-    }, [ user ]);
+    }, [user]);
 
     const fetchTenantPlaceholders = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
@@ -130,7 +130,7 @@ const QuoteCreate = () => {
                 .then((res) => res.json());
             setPlaceholders(_tenant.placeholders);
         });
-    }, [ user, setIsLoading ]);
+    }, [user, setIsLoading]);
 
     useEffect(() => {
         if (!user) return;
@@ -147,17 +147,17 @@ const QuoteCreate = () => {
         return () => {
             setSelectedQuote(null);
         };
-    }, [ user, router, setSelectedQuote, fetchTenantPlaceholders, fetchCategories, fetchUserTemplates ]);
+    }, [user, router, setSelectedQuote, fetchTenantPlaceholders, fetchCategories, fetchUserTemplates]);
 
     useEffect(() => {
         if (selectedCategory) {
             fetchProducts();
         }
-    }, [ selectedCategory, fetchProducts ]);
+    }, [selectedCategory, fetchProducts]);
 
     useEffect(() => {
         setQuoteOverview(() => quoteContent.replaceAll(placeholders.products || "{{products}}", ""));
-    }, [ quoteContent ]);
+    }, [quoteContent]);
 
     return (
         <AppLayout>
