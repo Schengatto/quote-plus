@@ -1,5 +1,6 @@
 import SideMenu from "@/components/SideMenu";
 import { useAuth } from "@/hooks/useAuth";
+import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -115,6 +116,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                                 <SideMenu />
                             </div>
                         )}
+
                         <div className={"flex-1 h-[calc(100vh-3.5rem)] overflow-auto"}>
                             {children}
                         </div>

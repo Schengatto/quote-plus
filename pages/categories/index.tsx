@@ -127,6 +127,10 @@ const Categories = () => {
     return (
         <AppLayout>
             <div className='m-8'>
+                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                    <span className="capitalize">{t("categories.table.title")}</span>
+                </div>
+
                 {!isInputFormActive ?
                     <div className='flex item-center justify-end w-full my-4'>
                         <button
@@ -141,77 +145,72 @@ const Categories = () => {
                     </div>
                     :
                     <div className="my-4">
-                        <div className='card-header'>
-                            {selectedCategory?.id
-                                ? categories.find(b => b.id === selectedCategory.id)?.name
-                                : t("categories.form.title")
-                            }
-                        </div>
-                        <div className='card-body'>
-                            <form className="w-[90%]" onSubmit={handleSave}>
-                                <div className='w-full my-4'>
-                                    <div className='font-extrabold text-sm uppercase'>{t("categories.form.name")}</div>
-                                    <input
-                                        type='text'
-                                        value={selectedCategory?.name}
-                                        className='text-input'
-                                        onChange={handleNameChanged}
-                                    />
-                                </div>
-                                <div className='w-full my-4'>
-                                    <div className='font-extrabold text-sm uppercase'>{t("categories.form.parentName")}</div>
-                                    <select className='text-input'
-                                        value={selectedCategory?.parentId ? Number(selectedCategory.parentId) : undefined}
-                                        disabled={!availableParentCategories.length}
-                                        onChange={handleParentChanged} >
-                                        <option value={undefined}></option>
-                                        {availableParentCategories.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
-                                    </select>
-                                </div>
-
-                                {!!selectedCategory?.products?.length &&
-                                    <div className="uppercase py-4 text-center border-4 bg-yellow-200 border-yellow-500 my-4">
-                                        <strong>{t("categories.warning.deleteDisabled")}</strong>
-                                    </div>
+                        <div className="card">
+                            <div className="font-semibold first-letter:capitalize">
+                                {selectedCategory?.id
+                                    ? <><span className="mr-1">{t("common.edit")}:</span>{categories.find(b => b.id === selectedCategory.id)?.name}</>
+                                    : t("categories.form.title")
                                 }
+                            </div>
+                            <div className='card-body'>
+                                <form className="w-full" onSubmit={handleSave}>
+                                    <div className='w-full my-4'>
+                                        <div className='field-label'>{t("categories.form.name")}</div>
+                                        <input
+                                            type='text'
+                                            value={selectedCategory?.name}
+                                            className='text-input'
+                                            onChange={handleNameChanged}
+                                        />
+                                    </div>
+                                    <div className='w-full my-4'>
+                                        <div className='field-label'>{t("categories.form.parentName")}</div>
+                                        <select className='text-input'
+                                            value={selectedCategory?.parentId ? Number(selectedCategory.parentId) : undefined}
+                                            disabled={!availableParentCategories.length}
+                                            onChange={handleParentChanged} >
+                                            <option value={undefined}></option>
+                                            {availableParentCategories.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
+                                        </select>
+                                    </div>
 
-                                <div className="flex justify-center items-center gap-2 flex-wrap">
-                                    <button
-                                        type="button"
-                                        className="btn-secondary"
-                                        onClick={handleBack}>
-                                        <div className="uppercase font-bold text-sm">{t("common.back")}</div>
-                                    </button>
-
-                                    {selectedCategory?.id
-                                        && <button
-                                            type="button"
-                                            className="btn-danger"
-                                            disabled={!!selectedCategory.products?.length}
-                                            onClick={(e) => handleDelete(e, selectedCategory.id!)}>
-                                            <div className="uppercase font-bold text-sm">{t("common.delete")}</div>
-                                        </button>
+                                    {!!selectedCategory?.products?.length &&
+                                        <div className="uppercase py-4 text-center border-4 bg-yellow-200 border-yellow-500 my-4">
+                                            <strong>{t("categories.warning.deleteDisabled")}</strong>
+                                        </div>
                                     }
 
-                                    <button
-                                        type='submit'
-                                        className='btn-primary'
-                                    >
-                                        <div className='uppercase font-bold text-sm'>{t("categories.button.save")}</div>
-                                    </button>
-                                </div>
-                            </form>
+                                    <div className="flex justify-center items-center gap-2 flex-wrap">
+                                        <button
+                                            type="button"
+                                            className="btn-secondary"
+                                            onClick={handleBack}>
+                                            <div className="uppercase font-bold text-sm">{t("common.back")}</div>
+                                        </button>
+
+                                        {selectedCategory?.id
+                                            && <button
+                                                type="button"
+                                                className="btn-danger"
+                                                disabled={!!selectedCategory.products?.length}
+                                                onClick={(e) => handleDelete(e, selectedCategory.id!)}>
+                                                <div className="uppercase font-bold text-sm">{t("common.delete")}</div>
+                                            </button>
+                                        }
+
+                                        <button
+                                            type='submit'
+                                            className='btn-primary'
+                                        >
+                                            <div className='uppercase font-bold text-sm'>{t("categories.button.save")}</div>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 }
                 <table className='items-table'>
-                    <thead className='table-header'>
-                        <tr>
-                            <th colSpan={3} className='text-white uppercase p-2 text-sm'>
-                                {t("categories.table.title")}
-                            </th>
-                        </tr>
-                    </thead>
                     <tbody>
                         {categories.map((c: Required<CategoryApiModel>) => (
                             <tr key={c.id} className={`table-row ${c.id === selectedCategory?.id && "!table-row-active"}`} onClick={(e) => handleEdit(e, c)}>

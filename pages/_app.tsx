@@ -1,12 +1,11 @@
-import { useEffect } from "react";
-import type { AppProps } from "next/app";
+import Dialog from "@/components/Dialog";
+import LoadingIndicator from "@/components/LoadingIndicator";
+import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import "@/styles/globals.css";
-import { useAppStore } from "@/store/app";
 import { doActionWithLoader } from "@/utils/actions";
-import Dialog from "@/components/Dialog";
-import Spinner from "@/components/Spinner";
-import LoadingIndicator from "@/components/LoadingIndicator";
+import type { AppProps } from "next/app";
+import { useEffect } from "react";
 
 export default function App({ Component, pageProps }: AppProps) {
 

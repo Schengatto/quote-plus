@@ -59,7 +59,7 @@
   "brands.form.name": "nome marchio",
   "brands.button.save": "salva",
   "brands.warning.deleteDisabled": "non è possibile eliminare questo marchio perchè risulta associato a dei prodotti",
-  "categories.table.title": "Elenco categorie e sottocategorie",
+  "categories.table.title": "Elenco categorie",
   "categories.button.addCategory": "aggiungi categoria",
   "categories.form.title": "compila i campi",
   "categories.form.name": "nome categoria",
