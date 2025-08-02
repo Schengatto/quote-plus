@@ -8,10 +8,11 @@ import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Item, Product } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import ItemList from ".";
 import { MdDelete } from "react-icons/md";
 import { formatDate } from "date-fns";
+import AutoComplete from "@/components/AutoComplete";
 
 const RepairCreate = () => {
 
@@ -24,11 +25,10 @@ const RepairCreate = () => {
     const { t } = useI18nStore();
     const { setIsLoading } = useAppStore();
 
+    const [items, setItems] = useState<ItemList[]>([]);
     const [categories, setCategories] = useState<CategoryApiModel[]>([]);
-    const [selectedCategory, setSelectedCategory] = useState<number | undefined>(undefined);
 
     const [item, setItem] = useState<Partial<Item>>({});
-    const [products, setProducts] = useState<Product[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(undefined);
 
     const [list, setList] = useState<Item[]>([]);
@@ -46,8 +46,12 @@ const RepairCreate = () => {
         setItem((prev) => ({ ...prev, code: e.target.value }));
     };
 
-    const handleDealerChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setItem((prev) => ({ ...prev, dealer: e.target.value }));
+    const handleDealerSelection = (dealer: string) => {
+        setItem((prev) => ({ ...prev, dealer: dealer }));
+    };
+
+    const handleReferenceSelection = (reference: string) => {
+        setItem((prev) => ({ ...prev, reference: reference }));
     };
 
     const handleReferenceChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -126,6 +130,17 @@ const RepairCreate = () => {
         await deleteProduct(item);
     };
 
+    const fetchItems = async () => {
+        const _items: Item[] = await fetch("/api/storage", { method: "GET" })
+            .then((res) => res.json()) ?? [];
+        const orderedItems = _items.map((i) => ({ ...i, date: new Date(i.date) })).sort((a, b) => b.date.getTime() - a.date.getTime());
+        setItems(orderedItems);
+    };
+
+    const dealers = useMemo(() => Array.from(new Set(items.map(i => i.dealer))), [items]);
+    const references = useMemo(() => Array.from(new Set(items.map(i => i.reference))), [items]);
+
+
     useEffect(() => {
         doActionWithLoader(
             setIsLoading,
@@ -135,6 +150,8 @@ const RepairCreate = () => {
                 };
             }
         );
+
+        doActionWithLoader(setIsLoading, fetchItems);
         return () => setSelectedProduct(undefined);
     }, [selectedProduct, setIsLoading, setSelectedProduct]);
 
@@ -155,7 +172,7 @@ const RepairCreate = () => {
                         Matricole e Riparazioni
                     </div>
                     <div className="mx-2">/</div>
-                    <div className="text-l font-bold">
+                    <div className="text-l font-semibold">
                         Inserimento Nuova {type === "repair" ? "Riparazione" : "Vendita"}
                     </div>
                 </div>
@@ -185,12 +202,12 @@ const RepairCreate = () => {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Rivenditore</label>
-                                <input type="text" required className="text-input" onChange={handleDealerChange} />
+                                <AutoComplete onSelect={handleDealerSelection} suggestions={dealers} required></AutoComplete>
                             </div>
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Utilizzatore/Riferimento</label>
-                                <input type="text" required className="text-input" onChange={handleReferenceChange} />
+                                <AutoComplete onSelect={handleReferenceSelection} suggestions={references} required></AutoComplete>
                             </div>
 
                             <div>

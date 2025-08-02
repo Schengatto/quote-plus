@@ -19,7 +19,7 @@ const ItemList = () => {
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [products, setItems] = useState<ItemList[]>([]);
+    const [items, setItems] = useState<ItemList[]>([]);
 
     const handleCreateNewSale = () => {
         router.push("/storage/create?type=sale");
@@ -41,10 +41,10 @@ const ItemList = () => {
             () => fetch(`/api/storage/${item.id}`, { method: "DELETE" }),
             (error) => alert(error.message)
         );
-        await fetchProducts();
+        await fetchItems();
     };
 
-    const fetchProducts = async () => {
+    const fetchItems = async () => {
         const _items: Item[] = await fetch("/api/storage", { method: "GET" })
             .then((res) => res.json()) ?? [];
         const orderedItems = _items.map((i) => ({ ...i, date: new Date(i.date) })).sort((a, b) => b.date.getTime() - a.date.getTime());
@@ -65,7 +65,7 @@ const ItemList = () => {
         || i.document.toLowerCase()?.includes(searchTerm);
 
     useEffect(() => {
-        setItems(products);
+        setItems(items);
     }, [setItems]);
 
     useEffect(() => {
@@ -74,7 +74,7 @@ const ItemList = () => {
             router.push("/");
         }
 
-        doActionWithLoader(setIsLoading, fetchProducts);
+        doActionWithLoader(setIsLoading, fetchItems);
     }, [user, router, setIsLoading]);
 
     return (
@@ -126,7 +126,7 @@ const ItemList = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
-                            {products.filter(filterList).map((i: Partial<ItemList>) => (
+                            {items.filter(filterList).map((i: Partial<ItemList>) => (
                                 <tr
                                     key={i.id}
                                     className="hover:bg-blue-50 transition-colors duration-200 odd:bg-white even:bg-gray-50"

@@ -3,6 +3,7 @@ export const genericDeleteItemsDialog = async (
     t: (key: string) => string
 ) => {
     return {
+        type: "warning",
         title: t("common.confirmAction"),
         message: t("common.confirmDelete.message"),
         closeActionLabel: t("common.cancel"),
@@ -20,6 +21,7 @@ export const errorDialog = async (
     message: string
 ) => {
     return {
+        type: "error",
         title: t("common.warning"),
         message: t(message) || message,
         closeActionLabel: t("common.ok"),

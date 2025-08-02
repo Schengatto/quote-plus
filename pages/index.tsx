@@ -52,7 +52,7 @@ const LoginPage = () => {
         if (user) {
             router.push("/home");
         } else {
-            setCurrentLanguage(navigator?.language?.split("-")[0] ?? "en");
+            setCurrentLanguage(navigator?.language?.split("-")[0] ?? "it");
         }
     }, [user, router, setCurrentLanguage]);
 
@@ -64,10 +64,15 @@ const LoginPage = () => {
                 <meta name='viewport' content='width=device-width, initial-scale=1' />
                 <link rel='icon' href='/favicon.ico' />
             </Head>
-            <main className='w-full min-h-screen flex items-center justify-center bg-gradient-to-r from-cyan-500 to-blue-500 px-4'>
+            <main className='w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-cyan-200 to-blue-400 px-4'>
+                <div>
+                    <h1 className='text-logo text-6xl font-semibold text-center text-gray-700 mb-6 text-shadow'>
+                        Quote Plus
+                    </h1>
+                </div>
                 <div className='bg-white shadow-lg rounded-2xl w-full max-w-md p-8'>
-                    <h2 className='uppercase text-2xl font-semibold text-center text-gray-800 mb-6'>
-                        {t("login.form.title")}
+                    <h2 className='uppercase text-xl font-semibold text-center text-gray-800 mb-6'>
+                        Login
                     </h2>
                     <form onSubmit={handleLogin} className='space-y-6'>
                         <div>

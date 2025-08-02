@@ -44,7 +44,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
         const isMobile = window?.innerWidth < 768;
         setIsMenuVisible(!isMobile);
 
-        const userLanguage = currentLanguage || (auth?.extraData as any).language || "en";
+        const userLanguage = currentLanguage || (auth?.extraData as any).language || "it";
         setCurrentLanguage(userLanguage);
     }, [auth]);
 
@@ -66,8 +66,8 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                             >
                                 {isMenuVisible ? <MdMenuOpen size={24} /> : <MdMenu size={24} />}
                             </button>
-                            <span className="text-xl font-semibold text-gray-800 tracking-wide">
-                                QuotePlus
+                            <span className="text-logo text-xl font-semibold text-gray-800 tracking-wide">
+                                Quote Plus
                             </span>
                         </div>
                         <div className="relative">
