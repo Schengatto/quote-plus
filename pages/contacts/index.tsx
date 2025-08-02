@@ -9,11 +9,6 @@ import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { MdAddCircleOutline, MdDelete, MdSearch } from "react-icons/md";
 
-interface ContactData {
-    name: string;
-    value: any;
-}
-
 const Contacts = () => {
 
     const router = useRouter();
@@ -69,6 +64,11 @@ const Contacts = () => {
     return (
         <AppLayout>
             <div className="m-8">
+                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                    <span className="capitalize">{t("sideMenu.item.contactsList")}</span>
+                </div>
+
+
                 <div className="my-4">
                     <div className="flex justify-end content-end w-full">
                         <button

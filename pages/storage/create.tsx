@@ -149,8 +149,15 @@ const RepairCreate = () => {
     return (
         <AppLayout>
             <div className="m-8">
-                <div className="text-xl font-semibold text-gray-800 border-b pb-2 mb-4">
-                    Inserimento Nuova {type === "repair" ? "Riparazione" : "Vendita"}
+                <div className="flex text-xl  text-gray-800 border-b pb-2 mb-4">
+                    <div className="cursor-pointer hover:text-blue-800 font-semibold border-b-2 border-gray-700 hover:border-blue-800"
+                        onClick={handleBack}>
+                        Matricole e Riparazioni
+                    </div>
+                    <div className="mx-2">/</div>
+                    <div className="text-l font-bold">
+                        Inserimento Nuova {type === "repair" ? "Riparazione" : "Vendita"}
+                    </div>
                 </div>
 
                 <div className="bg-white shadow-md rounded-xl p-6">
@@ -210,18 +217,21 @@ const RepairCreate = () => {
                     </form>
                 </div>
 
+                <div>
+                    <h2 className="text-l font-semibold text-gray-800 mt-8">Riepilogo {type === "sale" ? "Vendite" : "Riparazioni"} Inserite</h2>
+                </div>
                 <div className="items-table my-6 max-h-[70vh] overflow-y-auto">
                     <table className="min-w-full border rounded-md shadow text-sm">
                         <thead className="bg-gray-100 text-gray-600 uppercase text-xs">
                             <tr>
-                                <th className="px-4 py-2">Code</th>
-                                <th className="px-4 py-2">Prodotto</th>
-                                <th className="px-4 py-2">Rivenditore</th>
-                                <th className="px-4 py-2">Riferimento</th>
-                                <th className="px-4 py-2">Documento</th>
-                                <th className="px-4 py-2">Data</th>
-                                <th className="px-4 py-2">Notes</th>
-                                <th className="px-4 py-2"></th>
+                                <th className="px-4 py-2 text-left">Code</th>
+                                <th className="px-4 py-2 text-left">Prodotto</th>
+                                <th className="px-4 py-2 text-left">Rivenditore</th>
+                                <th className="px-4 py-2 text-left">Riferimento</th>
+                                <th className="px-4 py-2 text-left">Documento</th>
+                                <th className="px-4 py-2 text-left">Data</th>
+                                <th className="px-4 py-2 text-left">Notes</th>
+                                <th className="px-4 py-2 text-left"></th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
@@ -250,12 +260,6 @@ const RepairCreate = () => {
                             )}
                         </tbody>
                     </table>
-                </div>
-
-                <div className="flex justify-center items-center mt-4">
-                    <button type="button" className="btn-secondary" onClick={handleBack}>
-                        <div className="uppercase font-bold text-sm">Torna ad Elenco</div>
-                    </button>
                 </div>
             </div>
         </AppLayout>

@@ -8,7 +8,7 @@ import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Quote } from "@prisma/client";
 import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { MdAddCircleOutline, MdCopyAll, MdDelete, MdEdit, MdOutlinePictureAsPdf } from "react-icons/md";
+import { MdAddCircleOutline, MdCopyAll, MdDelete, MdEdit, MdOutlinePictureAsPdf, MdSearch } from "react-icons/md";
 
 const QuoteComponent = () => {
 
@@ -16,11 +16,11 @@ const QuoteComponent = () => {
     const user = useAuth();
 
     const { t } = useI18nStore();
-    const [ quotes, setProducts ] = useState<Quote[]>([]);
+    const [quotes, setProducts] = useState<Quote[]>([]);
     const { setIsLoading, setDialog } = useAppStore();
     const { setSelectedQuote } = useQuotesStore();
 
-    const [ searchTerm, setSearchTerm ] = useState<string>("");
+    const [searchTerm, setSearchTerm] = useState<string>("");
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -69,7 +69,7 @@ const QuoteComponent = () => {
             },
             (error: any) => alert(error.message)
         );
-    }, [ searchTerm, setIsLoading ]);
+    }, [searchTerm, setIsLoading]);
 
     const formatDate = (date: string | Date) => {
         return new Date(date).toLocaleDateString();
@@ -83,32 +83,49 @@ const QuoteComponent = () => {
 
         setSelectedQuote(null);
         fetchQuotes();
-    }, [ user, router, fetchQuotes, setSelectedQuote ]);
+    }, [user, router, fetchQuotes, setSelectedQuote]);
 
     useEffect(() => {
         fetchQuotes();
-    }, [ searchTerm, fetchQuotes ]);
+    }, [searchTerm, fetchQuotes]);
 
     return (
         <AppLayout>
             <div className="m-8">
-                <table className="items-table">
-                    <thead>
-                        <tr className="table-header">
-                            <th colSpan={7} className="text-white uppercase p-2 text-sm">{t("quotes.table.title")}</th>
-                        </tr>
-                        <tr className="bg-gray-700 border-2 border-gray-700">
-                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("quotes.table.head.date")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("quotes.table.head.ref")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("quotes.table.head.owner")}</th>
-                            <th colSpan={4}>
-                                <input
-                                    required
-                                    type="text"
-                                    className="text-input"
-                                    placeholder="search quote"
-                                    onChange={handleSearch} />
-                            </th>
+                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                    <span className="capitalize">{t("quotes.table.title")}</span>
+                </div>
+
+                <h1></h1>
+                <div className="flex item-center justify-end w-full my-4">
+                    <button
+                        className="btn-primary"
+                        onClick={handleCreateNew}>
+                        <div>
+                            <MdAddCircleOutline />
+                        </div>
+                        <div className="uppercase font-bold text-sm">{t("quotes.button.addQuote")}</div>
+                    </button>
+                </div>
+
+                <div className="flex items-center gap-3 w-full mx-auto border border-gray-300 px-4 py-2 bg-gray-50 shadow-sm my-4">
+                    <MdSearch className="text-gray-500 text-xl" />
+                    <input
+                        required
+                        type="text"
+                        className="w-full bg-transparent focus:outline-none text-sm placeholder-gray-400"
+                        placeholder="Cerca preventivo..."
+                        onChange={handleSearch}
+                    />
+                </div>
+
+                <table className="min-w-full text-sm border rounded-md shadow-sm overflow-hidden">
+                    <thead className="bg-gray-100 text-gray-700 sticky top-0 text-xs uppercase">
+                        <tr>
+                            <th className="px-4 py-3 text-left">{t("quotes.table.head.date")}</th>
+                            <th className="px-4 py-3 text-left">{t("quotes.table.head.ref")}</th>
+                            <th className="px-4 py-3 text-left">{t("quotes.table.head.owner")}</th>
+                            <th className="px-4 py-3 text-left" colSpan={4}>Azioni</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -125,16 +142,6 @@ const QuoteComponent = () => {
                         )}
                     </tbody>
                 </table>
-            </div>
-            <div className="flex item-center justify-center w-full">
-                <button
-                    className="btn-primary"
-                    onClick={handleCreateNew}>
-                    <div>
-                        <MdAddCircleOutline />
-                    </div>
-                    <div className="uppercase font-bold text-sm">{t("quotes.button.addQuote")}</div>
-                </button>
             </div>
         </AppLayout>
     );

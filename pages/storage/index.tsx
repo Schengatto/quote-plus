@@ -24,10 +24,6 @@ const ItemList = () => {
 
     const [products, setItems] = useState<ItemList[]>([]);
 
-    const preventClick = (event: any, _selectedProduct: Partial<ItemList>) => {
-        event.stopPropagation();
-    };
-
     const handleCreateNewSale = () => {
         router.push("/storage/create?type=sale");
     };
@@ -52,9 +48,9 @@ const ItemList = () => {
     };
 
     const fetchProducts = async () => {
-        const _items = await fetch("/api/storage", { method: "GET" })
+        const _items: Item[] = await fetch("/api/storage", { method: "GET" })
             .then((res) => res.json()) ?? [];
-        const orderedItems = _items.map(i => ({ ...i, date: new Date(i.date) })).sort((a, b) => b.date.getTime() - a.date.getTime());
+        const orderedItems = _items.map((i) => ({ ...i, date: new Date(i.date) })).sort((a, b) => b.date.getTime() - a.date.getTime());
         setItems(orderedItems);
     };
 
@@ -86,6 +82,10 @@ const ItemList = () => {
     return (
         <AppLayout>
             <div className="m-8">
+                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                    <span>Matricole e Riparazioni</span>
+                </div>
+
                 <div className="my-4">
                     <div className="flex justify-end content-end w-full gap-4">
                         <button className="btn-primary" onClick={handleCreateNewSale}>
