@@ -112,7 +112,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
 
                     <div className="flex pt-14">
                         {isMenuVisible && (
-                            <div className="w-[300px] fixed md:sticky top-14 h-[calc(100vh-3.5rem)] bg-gray-900 text-white z-10">
+                            <div className="w-[300px] fixed md:sticky top-14 h-[calc(100vh-3.5rem)] bg-gray-900 text-white z-20">
                                 <SideMenu />
                             </div>
                         )}

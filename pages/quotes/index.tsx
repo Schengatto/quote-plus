@@ -91,7 +91,7 @@ const QuoteComponent = () => {
 
     return (
         <AppLayout>
-            <div className="m-8">
+            <div className="m-2 xl:m-8">
                 <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
                     <span className="capitalize">{t("quotes.table.title")}</span>
                 </div>

@@ -35,19 +35,19 @@ const IncomingCall = () => {
         home: ""
     };
 
-    const [ contactData, setContactData ] = useState<Partial<Contact>>(defaultContact);
-    const [ selectedContanct, setSelectedContanct ] = useState<Partial<Contact>>({});
-    const [ isContactPreset, setIsContactPreset ] = useState<boolean>(false);
-    const [ notes, setNotes ] = useState<ContactNote[]>([]);
-    const [ selectedNote, setSelectedNote ] = useState<Partial<ContactNote>>({ status: "OPEN" });
-    const [ searchHistory, setSearchHistory ] = useState<string>("");
+    const [contactData, setContactData] = useState<Partial<Contact>>(defaultContact);
+    const [selectedContanct, setSelectedContanct] = useState<Partial<Contact>>({});
+    const [isContactPreset, setIsContactPreset] = useState<boolean>(false);
+    const [notes, setNotes] = useState<ContactNote[]>([]);
+    const [selectedNote, setSelectedNote] = useState<Partial<ContactNote>>({ status: "OPEN" });
+    const [searchHistory, setSearchHistory] = useState<string>("");
 
     const fetchContactNotes = useCallback(async (contactId: number) => {
         doActionWithLoader(setIsLoading, async () => {
             const _contactsNotes = await fetch(`/api/contacts/${contactId}/notes`, { method: "GET" }).then((res) => res.json());
             setNotes(_contactsNotes);
         });
-    }, [ setIsLoading ]);
+    }, [setIsLoading]);
 
     const handleFirstNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setSelectedContanct((prev) => ({ ...prev, firstName: e.target.value }));
@@ -169,7 +169,7 @@ const IncomingCall = () => {
         setIsContactPreset(!!storedContact);
 
         setContactData(storedContact || defaultContact);
-    }, [ phoneNumber, displayName, contacts ]);
+    }, [phoneNumber, displayName, contacts]);
 
     useEffect(() => {
         if (!contactData.id) {
@@ -178,20 +178,25 @@ const IncomingCall = () => {
         };
         setSelectedContanct(contactData);
         fetchContactNotes(contactData.id);
-    }, [ contactData ]);
+    }, [contactData]);
 
     return (
         <AppLayout>
             <ContactsLayout>
-                <div className="m-8">
-                    <div className="m-8 card">
-                        <div className="card-header">
-                            {t("contacts.event.incomingCall")}
+                <div className="m-2 xl:m-8">
+                    <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                        <span className="capitalize"> {t("contacts.event.incomingCall")}</span>
+                    </div>
+
+                    {!isContactPreset && (
+                        <div className="w-full px-4 py-3 rounded-xl bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 shadow">
+                            <p className="text-lg font-medium">Contatto non presente nel database</p>
+                            <p className="text-sm text-yellow-700">Assicurati di registrare correttamente questo nuovo contatto.</p>
                         </div>
+                    )}
+
+                    <div className="my-8 card">
                         <div className="card-body">
-
-                            {!isContactPreset && <div className="bg-amber-200 w-1/2 text-center text-2xl font-bold">Contact not found!</div>}
-
                             <div className="flex w-full flex-col xl:flex-row gap-4">
                                 <div className="w-full xl:w-2/3">
                                     <form onSubmit={handleSaveNote}>
@@ -199,7 +204,7 @@ const IncomingCall = () => {
                                             <>
                                                 <div className="flex gap-4">
                                                     <div className="w-1/3 my-4">
-                                                        <div className="font-extrabold text-sm uppercase">{t("contacts.form.phoneNumber")}</div>
+                                                        <div className="field-label">{t("contacts.form.phoneNumber")}</div>
                                                         <input
                                                             type="text"
                                                             value={selectedContanct.phoneNumber}
@@ -208,7 +213,7 @@ const IncomingCall = () => {
                                                             className="text-input" />
                                                     </div>
                                                     <div className="w-1/3 my-4">
-                                                        <div className="font-extrabold text-sm uppercase">{t("contacts.form.firstName")}</div>
+                                                        <div className="field-label">{t("contacts.form.firstName")}</div>
                                                         <input
                                                             type="text"
                                                             value={selectedContanct.firstName ?? ""}
@@ -217,7 +222,7 @@ const IncomingCall = () => {
                                                             onChange={handleFirstNameChanged} />
                                                     </div>
                                                     <div className="w-1/3 my-4">
-                                                        <div className="font-extrabold text-sm uppercase">{t("contacts.form.lastName")}</div>
+                                                        <div className="field-label">{t("contacts.form.lastName")}</div>
                                                         <input
                                                             type="text"
                                                             value={selectedContanct.lastName ?? ""}
@@ -227,7 +232,7 @@ const IncomingCall = () => {
                                                 </div>
                                                 <div className="flex gap-4">
                                                     <div className="w-1/3 my-4">
-                                                        <div className="font-extrabold text-sm uppercase">{t("contacts.form.email")}</div>
+                                                        <div className="field-label">{t("contacts.form.email")}</div>
                                                         <input
                                                             type="text"
                                                             value={selectedContanct.email ?? ""}
@@ -235,7 +240,7 @@ const IncomingCall = () => {
                                                             onChange={handleEmailChanged} />
                                                     </div>
                                                     <div className="w-1/3 my-4">
-                                                        <div className="font-extrabold text-sm uppercase">{t("contacts.form.home")}</div>
+                                                        <div className="field-label">{t("contacts.form.home")}</div>
                                                         <input
                                                             type="text"
                                                             value={selectedContanct.home ?? ""}
@@ -243,7 +248,7 @@ const IncomingCall = () => {
                                                             onChange={handleHomeChanged} />
                                                     </div>
                                                     <div className="w-1/3 my-4">
-                                                        <div className="font-extrabold text-sm uppercase">{t("contacts.form.company")}</div>
+                                                        <div className="field-label">{t("contacts.form.company")}</div>
                                                         <input
                                                             type="text"
                                                             value={selectedContanct.company ?? ""}
@@ -256,7 +261,7 @@ const IncomingCall = () => {
                                         )}
 
                                         <div className='w-full my-4'>
-                                            <div className='font-extrabold text-sm uppercase'>Status</div>
+                                            <div className='field-label'>Status</div>
                                             <select className='text-input uppercase'
                                                 required
                                                 value={selectedNote.status}
@@ -270,7 +275,7 @@ const IncomingCall = () => {
                                         <div className="mb-6">
                                             <textarea
                                                 className="border border-gray-900 w-full p-1"
-                                                rows={10}
+                                                rows={3}
                                                 required
                                                 onChange={handleNoteChanged} />
                                         </div>
@@ -286,7 +291,7 @@ const IncomingCall = () => {
                                 </div>
                                 <div className="w-full xl:w-1/3 flex flex-col gap-4 my-4">
                                     <div className='w-full'>
-                                        <div className='font-extrabold text-sm uppercase'>{t("common.history")}</div>
+                                        <div className='field-label'>{t("common.history")}</div>
                                         <input
                                             required
                                             type="text"

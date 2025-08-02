@@ -64,7 +64,7 @@
     }
 
     .card {
-        @apply bg-white shadow-md rounded-xl p-6;
+        @apply bg-white shadow-md p-6;
     }
 
     .card-header {

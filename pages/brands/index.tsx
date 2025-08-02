@@ -104,7 +104,10 @@ const Brands = () => {
 
     return (
         <AppLayout>
-            <div className="m-8">
+            <div className="m-2 xl:m-8">
+                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                    <span className="capitalize">{t("brands.table.title")}</span>
+                </div>
                 {!isInputFormActive ?
                     <div className="flex item-center justify-end w-full my-4">
                         <button
@@ -117,69 +120,66 @@ const Brands = () => {
                         </button>
                     </div>
                     :
-                    <div className="my-4 card">
-                        <div className="card-header">
-                            {selectedBrand?.id
-                                ? brands.find(b => b.id === selectedBrand.id)?.name
-                                : t("brands.form.title")
-                            }
-                        </div>
-                        <div className="card-body">
-                            <form className="w-[90%]" onSubmit={handleSave}>
-                                <div className="w-full my-4">
-                                    <div className="font-extrabold text-sm uppercase">{t("brands.form.name")}</div>
-                                    <input
-                                        type="text"
-                                        value={selectedBrand?.name}
-                                        required
-                                        className="text-input"
-                                        onChange={handleNameChanged} />
-                                </div>
-
-                                {!!selectedBrand?.products?.length &&
-                                    <div className="uppercase py-4 text-center border-4 bg-yellow-200 border-yellow-500 my-4">
-                                        <strong>{t("brands.warning.deleteDisabled")}</strong>
-                                    </div>
+                    <div className="my-4">
+                        <div className="card">
+                            <div className="font-semibold first-letter:capitalize">
+                                {selectedBrand?.id
+                                    ? <><span className="mr-1">{t("common.edit")}:</span>{brands.find(b => b.id === selectedBrand.id)?.name}</>
+                                    : t("brands.button.addBrand")
                                 }
+                            </div>
+                            <div className="card-body">
+                                <form className="w-full" onSubmit={handleSave}>
+                                    <div className="w-full my-4">
+                                        <div className="field-label">{t("brands.form.name")}</div>
+                                        <input
+                                            type="text"
+                                            value={selectedBrand?.name}
+                                            required
+                                            className="text-input"
+                                            onChange={handleNameChanged} />
+                                    </div>
 
-                                <div className="flex justify-center items-center gap-2 flex-wrap">
-
-                                    <button
-                                        type="button"
-                                        className="btn-secondary"
-                                        onClick={handleBack}>
-                                        <div className="uppercase font-bold text-sm">{t("common.back")}</div>
-                                    </button>
-
-                                    {selectedBrand?.id
-                                        && <button
-                                            type="button"
-                                            className="btn-danger"
-                                            disabled={!!selectedBrand.products?.length}
-                                            onClick={(e) => handleDelete(e, selectedBrand.id!)}>
-                                            <div className="uppercase font-bold text-sm">{t("common.delete")}</div>
-                                        </button>
+                                    {!!selectedBrand?.products?.length &&
+                                        <div className="uppercase py-4 text-center border-4 bg-yellow-200 border-yellow-500 my-4">
+                                            <strong>{t("brands.warning.deleteDisabled")}</strong>
+                                        </div>
                                     }
 
-                                    <button
-                                        type="submit"
-                                        disabled={!selectedBrand?.name}
-                                        className="btn-primary">
-                                        <div className="uppercase font-bold text-sm">{t("common.save")}</div>
-                                    </button>
+                                    <div className="flex justify-center items-center gap-2 flex-wrap">
 
-                                </div>
-                            </form>
+                                        <button
+                                            type="button"
+                                            className="btn-secondary"
+                                            onClick={handleBack}>
+                                            <div className="uppercase font-bold text-sm">{t("common.back")}</div>
+                                        </button>
+
+                                        {selectedBrand?.id
+                                            && <button
+                                                type="button"
+                                                className="btn-danger"
+                                                disabled={!!selectedBrand.products?.length}
+                                                onClick={(e) => handleDelete(e, selectedBrand.id!)}>
+                                                <div className="uppercase font-bold text-sm">{t("common.delete")}</div>
+                                            </button>
+                                        }
+
+                                        <button
+                                            type="submit"
+                                            disabled={!selectedBrand?.name}
+                                            className="btn-primary">
+                                            <div className="uppercase font-bold text-sm">{t("common.save")}</div>
+                                        </button>
+
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 }
 
                 <table className="items-table">
-                    <thead className="table-header">
-                        <tr>
-                            <th colSpan={3} className="text-white uppercase p-2 text-sm">{t("brands.table.title")}</th>
-                        </tr>
-                    </thead>
                     <tbody>
                         {brands.map((b: BrandApiModel) =>
                             <tr key={b.id} className={`table-row ${b.id === selectedBrand?.id && "!table-row-active"}`} onClick={(e) => handleEdit(e, b)}>

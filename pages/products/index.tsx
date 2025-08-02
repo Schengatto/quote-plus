@@ -11,7 +11,7 @@ import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Product } from "@prisma/client";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
-import { MdAddCircleOutline } from "react-icons/md";
+import { MdAddCircleOutline, MdSearch } from "react-icons/md";
 
 type ProductList = Product;
 
@@ -151,19 +151,25 @@ const ProductList = () => {
 
     return (
         <AppLayout>
-            <div className="my-8 mx-8">
-                <Dialog isVisible={!!selectedRow} title="Modifica prezzo" actions={changePriceDialogActions} >
-                    <p>Inserisci il nuovo prezzo di {selectedRow?.name} - prezz corrente: {selectedRow?.price} €</p>
-                    <div>
-                        <div className='font-extrabold text-sm uppercase'>{t("products.form.price")}</div>
-                        <input
-                            type="number"
-                            min={0}
-                            required
-                            className="text-input"
-                            onChange={handlePriceChanged} />
-                    </div>
-                </Dialog>
+            <Dialog isVisible={!!selectedRow} title="Modifica prezzo" actions={changePriceDialogActions} >
+                <p className="text-white">Inserisci il nuovo prezzo di {selectedRow?.name} - prezz corrente: {selectedRow?.price} €</p>
+                <div>
+                    <div className='field-label my-2'><span className="text-white">{t("products.form.price")}</span></div>
+                    <input
+                        type="number"
+                        min={0}
+                        required
+                        className="text-input"
+                        onChange={handlePriceChanged} />
+                </div>
+            </Dialog>
+
+            <div className="m-2 xl:m-8">
+
+                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                    <span className="capitalize">{t("products.table.title")}</span>
+                </div>
+
                 <div className="my-4">
                     <div className="flex justify-end content-end w-full">
                         <button
@@ -177,40 +183,38 @@ const ProductList = () => {
                     </div>
                 </div>
                 <div>
-                    <table className="items-table">
-                        <thead>
-                            <tr className="table-header">
-                                <th colSpan={2} className="text-white uppercase p-2 text-sm">{t("products.table.title")}</th>
-                                <th colSpan={5}>
-                                    <input
-                                        required
-                                        type="text"
-                                        className="text-input"
-                                        placeholder="search product"
-                                        onChange={handleSearch} />
-                                </th>
-                            </tr>
-                            <tr className="bg-gray-700 border-2 border-gray-700">
-                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-1/12 cursor-pointer" onClick={() => setOrderBy("code")}>
-                                </th>
-                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-1/12 cursor-pointer" onClick={() => setOrderBy("code")}>
-                                    {t("products.table.head.ref")}
-                                </th>
-                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-5/12" onClick={() => setOrderBy("name")}>
-                                    {t("products.table.head.product")}
-                                </th>
-                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-4/12 cursor-pointer" onClick={() => setOrderBy("categoryLabel")}>
-                                    {t("products.table.head.category")}
-                                </th>
-                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-1/12" onClick={() => setOrderBy("price")}>
-                                    {t("products.table.head.price")}
-                                </th>
-                            </tr>
-                        </thead>
-                    </table>
-                    <div className="items-table max-h-[70vh] overflow-y-auto">
+                    <div className="flex items-center gap-3 w-full mx-auto border border-gray-300 px-4 py-2 bg-gray-50 shadow-sm">
+                        <MdSearch className="text-gray-500 text-xl" />
+                        <input
+                            required
+                            type="text"
+                            className="w-full bg-transparent focus:outline-none text-sm placeholder-gray-400"
+                            placeholder="Cerca per matricola, rivenditore, utilizzatore, riferimento..."
+                            onChange={handleSearch}
+                        />
+                    </div>
+
+                    <div className="max-h-[70vh] overflow-y-auto">
                         <table className="items-table">
-                            <tbody>
+                            <thead className="bg-gray-100 text-gray-700 sticky top-0 text-xs uppercase z-10">
+                                <tr>
+                                    <th className="mx-2 uppercase p-2 text-sm text-left cursor-pointer" onClick={() => setOrderBy("code")}>
+                                    </th>
+                                    <th className="mx-2 uppercase p-2 text-sm text-left w-1/12 cursor-pointer" onClick={() => setOrderBy("code")}>
+                                        {t("products.table.head.ref")}
+                                    </th>
+                                    <th className="mx-2 uppercase p-2 text-sm text-left w-5/12" onClick={() => setOrderBy("name")}>
+                                        {t("products.table.head.product")}
+                                    </th>
+                                    <th className="mx-2 uppercase p-2 text-sm text-left w-4/12 cursor-pointer" onClick={() => setOrderBy("categoryLabel")}>
+                                        {t("products.table.head.category")}
+                                    </th>
+                                    <th className="mx-2 uppercase text-sm text-left w-1/12" onClick={() => setOrderBy("price")}>
+                                        {t("products.table.head.price")}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200 border-none">
                                 {products.filter(p => p.name.toLowerCase()?.includes(searchTerm)).map((p: Partial<ProductList>) =>
                                     <tr key={p.id} className="table-row" onClick={(event) => handleEdit(event, p)}>
                                         <td onClick={(event) => preventClick(event, p)}><RowActions actions={rowActions(p)} /></td>

@@ -4,7 +4,6 @@ import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import { CategoryApiModel } from "@/types/api/categories";
 import { doActionWithLoader } from "@/utils/actions";
-import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Item, Product } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
@@ -165,7 +164,7 @@ const RepairCreate = () => {
 
     return (
         <AppLayout>
-            <div className="m-8">
+            <div className="m-2 xl:m-8">
                 <div className="flex text-xl  text-gray-800 border-b pb-2 mb-4">
                     <div className="cursor-pointer hover:text-blue-800 font-semibold border-b-2 border-gray-700 hover:border-blue-800"
                         onClick={handleBack}>
@@ -177,7 +176,7 @@ const RepairCreate = () => {
                     </div>
                 </div>
 
-                <div className="bg-white shadow-md rounded-xl p-6">
+                <div className="card">
                     <form className="w-full" onSubmit={handleAddItem}>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                             <div>

@@ -1,14 +1,14 @@
-import { Category } from "@prisma/client";
-import AppLayout from "@/layouts/Layout";
-import { MdEdit, MdDelete, MdAddCircleOutline } from "react-icons/md";
-import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
-import { CategoryApiModel } from "@/types/api/categories";
-import { useI18nStore } from "@/store/i18n";
-import { useAppStore } from "@/store/app";
-import { doActionWithLoader } from "@/utils/actions";
-import { useRouter } from "next/router";
 import { useAuth } from "@/hooks/useAuth";
+import AppLayout from "@/layouts/Layout";
+import { useAppStore } from "@/store/app";
+import { useI18nStore } from "@/store/i18n";
+import { CategoryApiModel } from "@/types/api/categories";
+import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
+import { Category } from "@prisma/client";
+import { useRouter } from "next/router";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
+import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
 
 const Categories = () => {
     const router = useRouter();
@@ -126,7 +126,7 @@ const Categories = () => {
 
     return (
         <AppLayout>
-            <div className='m-8'>
+            <div className='m-2 xl:m-8'>
                 <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
                     <span className="capitalize">{t("categories.table.title")}</span>
                 </div>
@@ -149,7 +149,7 @@ const Categories = () => {
                             <div className="font-semibold first-letter:capitalize">
                                 {selectedCategory?.id
                                     ? <><span className="mr-1">{t("common.edit")}:</span>{categories.find(b => b.id === selectedCategory.id)?.name}</>
-                                    : t("categories.form.title")
+                                    : t("categories.button.addCategory")
                                 }
                             </div>
                             <div className='card-body'>

@@ -18,10 +18,8 @@ const RowActions = ({ actions = [] }: RowActionsProps) => {
         setIsOpen(!isOpen);
     };
 
-    // Chiude il dropdown quando si clicca al di fuori
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            // Verifica se il click è FUORI dal dropdown
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 setIsOpen(false);
             }
@@ -37,7 +35,7 @@ const RowActions = ({ actions = [] }: RowActionsProps) => {
         <div className="relative inline-block" ref={dropdownRef}>
             <button
                 onClick={toggleDropdown}
-                className="flex flex-col items-center justify-center w-8 h-8 text-black bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex flex-col items-center justify-center w-8 h-8 text-black rounded-full focus:outline-none hover:text-white"
                 aria-label="Menu opzioni"
             >
                 <MdMoreVert />

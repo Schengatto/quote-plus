@@ -1,4 +1,3 @@
-import TextEditor from "@/components/TextEditor";
 import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
 import { useAppStore } from "@/store/app";
@@ -8,7 +7,7 @@ import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { User, UserRole } from "@prisma/client";
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
-import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
+import { MdAddCircleOutline, MdDelete } from "react-icons/md";
 
 const UserManagementPage = () => {
 
@@ -104,7 +103,7 @@ const UserManagementPage = () => {
 
     return (
         <AppLayout>
-            <div className="m-8">
+            <div className="m-2 xl:m-8">
                 <table className="items-table">
                     <thead className="table-header">
                         <tr>
@@ -142,10 +141,10 @@ const UserManagementPage = () => {
                     </button>
                 </div>
                 :
-                <div className="m-8">
+                <div className="m-2 xl:m-8">
                     <div className="card-header">{t("usersManagement.form.title")}</div>
                     <div className="card-body">
-                        <form className="w-[90%]" onSubmit={handleSave}>
+                        <form className="w-full" onSubmit={handleSave}>
                             <div className="w-full my-4">
                                 <div className="font-extrabold text-sm uppercase">{t("usersManagement.form.username")}</div>
                                 <input

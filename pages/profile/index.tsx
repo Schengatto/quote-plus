@@ -19,11 +19,11 @@ const UserProfile = () => {
     const { t, setCurrentLanguage, currentLanguage } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [ templates, setTemplates ] = useState<Template[]>([]);
-    const [ username, setUsername ] = useState<string>(user?.username || "");
-    const [ password, setPassword ] = useState<string>(user?.password || "");
-    const [ selectedTemplate, setSelectedTemplate ] = useState<number>(user?.activeTemplateId || 0);
-    const [ selectedLanguage, setSelectedLanguage ] = useState<string>(currentLanguage);
+    const [templates, setTemplates] = useState<Template[]>([]);
+    const [username, setUsername] = useState<string>(user?.username || "");
+    const [password, setPassword] = useState<string>(user?.password || "");
+    const [selectedTemplate, setSelectedTemplate] = useState<number>(user?.activeTemplateId || 0);
+    const [selectedLanguage, setSelectedLanguage] = useState<string>(currentLanguage);
 
     const handleUsernameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -111,13 +111,13 @@ const UserProfile = () => {
         const _templates = await fetch(`/api/templates?userId=${user!.id}`, { method: "GET" })
             .then((res) => res.json());
         setTemplates(_templates);
-    }, [ user ]);
+    }, [user]);
 
     const fetchUserInfo = useCallback(async () => {
         const _user = await fetch(`/api/users/${user?.id}`, { method: "GET" }).then(res => res.json());
         setUsername(_user?.username);
         setSelectedTemplate(_user.activeTemplateId);
-    }, [ user ]);
+    }, [user]);
 
     useEffect(() => {
         if (!user) return;
@@ -125,14 +125,16 @@ const UserProfile = () => {
         fetchUserTemplates();
         fetchUserInfo();
 
-    }, [ user, fetchUserInfo, fetchUserTemplates ]);
+    }, [user, fetchUserInfo, fetchUserTemplates]);
 
     return (
         <AppLayout>
-            <div className="m-8">
-                <div className="card-header">{t("userProfile.userOptions.title")}</div>
-                <div className="card-body">
-                    <form className="w-[90%]">
+            <div className="m-2 xl:m-8">
+                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                    <span className="capitalize">{t("userProfile.userOptions.title")}</span>
+                </div>
+                <div className="card">
+                    <form className="w-full">
                         <div className='w-full my-4'>
                             <div className='font-extrabold text-sm uppercase'>{t("userProfile.form.activeTemplate")}</div>
                             <select className='text-input'
@@ -173,10 +175,12 @@ const UserProfile = () => {
                 </div>
             </div>
 
-            <div className="m-8">
-                <div className="card-header">{t("userProfile.accountOptions.title")}</div>
-                <div className="card-body">
-                    <form className="w-[90%]">
+            <div className="m-2 xl:m-8">
+                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                    <span className="capitalize">{t("userProfile.accountOptions.title")}</span>
+                </div>
+                <div className="card">
+                    <form className="w-full">
                         <div className="w-full my-4">
                             <div className="font-extrabold text-sm uppercase">{t("userProfile.form.username")}</div>
                             <input

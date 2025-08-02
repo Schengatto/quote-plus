@@ -27,9 +27,9 @@ export default function App({ Component, pageProps }: AppProps) {
         {isLoading &&
             <>
                 <LoadingIndicator />
-                <div className="w-full min-h-[100vh] items-center justify-center h-full bg-[#99b5dd69] fixed z-50">
-                    <div className="mx-[50%] h-full my-[20%] w-full text-black text-2xl uppercase flex gap-5 font-bold">
-                        <h1>Loading ...</h1>
+                <div className="fixed inset-0 flex items-end justify-center bg-white z-40 bg-opacity-80">
+                    <div className="mb-10 text-xl font-semibold text-gray-600 animate-pulse">
+                        Loading...
                     </div>
                 </div>
             </>

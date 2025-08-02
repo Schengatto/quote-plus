@@ -54,7 +54,7 @@ const SideMenu: FunctionComponent = () => {
 
     return (
         <div className="bg-slate-900 w-[300px] h-full py-2 flex flex-col justify-between">
-            <div className="bg-slate-900 w-full h-full space-y-6">
+            <div className="bg-slate-900 w-full h-full space-y-4">
                 <MenuItem
                     icon={<MdOutlineHouse />}
                     label={t("sideMenu.item.home")}

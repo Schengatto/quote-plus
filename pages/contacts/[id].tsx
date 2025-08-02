@@ -175,7 +175,7 @@ const EditContact = () => {
 
     return (
         <AppLayout>
-            <div className="m-8">
+            <div className="m-2 xl:m-8">
                 <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
                     <span className="capitalize">{t("contacts.title.editContact")}</span>
                 </div>
@@ -264,7 +264,7 @@ const EditContact = () => {
                     </div>
                 </div>
 
-                <div className="flex w-full gap-8 ">
+                <div className="flex w-full flex-col gap-8 xl:flex-row">
                     <div className="w-full">
                         <div>
                             <h2 className="capitalize text-l font-semibold text-gray-800 mt-8">{t("contacts.notes.title")}</h2>

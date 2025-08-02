@@ -161,13 +161,13 @@ const QuoteCreate = () => {
 
     return (
         <AppLayout>
-            <div className="m-8">
+            <div className="m-2 xl:m-8">
                 <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
                     <span className="capitalize">{t("quotes.create.title")}</span>
                 </div>
 
                 <div className="card-body">
-                    <form className="w-[90%]" onSubmit={handleSave}>
+                    <form className="w-full" onSubmit={handleSave}>
                         <div className="w-full my-4">
                             <div className="field-label">{t("quotes.form.name")}</div>
                             <input

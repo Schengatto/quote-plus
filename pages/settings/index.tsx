@@ -5,7 +5,7 @@ import { useI18nStore } from "@/store/i18n";
 import { TenantPlaceholders } from "@/types/tenants";
 import { doActionWithLoader } from "@/utils/actions";
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
-import { MdBackup, MdOutlineSave } from "react-icons/md";
+import { MdDownload, MdOutlineSave } from "react-icons/md";
 
 const defaultTenantPlaceholders = {
     products: "{{products}}",
@@ -21,8 +21,8 @@ const TenantsPage = () => {
     const { t } = useI18nStore();
     const { setIsLoading } = useAppStore();
 
-    const [ tenantId, setTenantId ] = useState<String>();
-    const [ placeholders, setPlaceholders ] = useState<TenantPlaceholders>(defaultTenantPlaceholders);
+    const [tenantId, setTenantId] = useState<String>();
+    const [placeholders, setPlaceholders] = useState<TenantPlaceholders>(defaultTenantPlaceholders);
 
     const handleValueChange = (e: ChangeEvent<HTMLInputElement>, key: string) => {
         e.preventDefault();
@@ -67,60 +67,64 @@ const TenantsPage = () => {
             setTenantId(_tenant.id);
             setPlaceholders(_tenant.placeholders);
         });
-    }, [ auth, setIsLoading ]);
+    }, [auth, setIsLoading]);
 
     useEffect(() => {
         if (!auth) return;
         fetchTenant();
-    }, [ auth, fetchTenant ]);
+    }, [auth, fetchTenant]);
 
     return (
         <AppLayout>
-            <div className="m-8">
-                <div className="card-header">{t("tenants.form.title")}</div>
+            <div className="m-2 xl:m-8">
+                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                    <span className="capitalize">{t("tenants.form.title")}</span>
+                </div>
+
                 <div className="card-body">
                     {tenantId &&
-                        <form onSubmit={handleSave}>
-                            <div className="w-full my-4">
-                                <div className="font-extrabold text-sm uppercase">{t("tenants.form.products")}</div>
-                                <input
-                                    type="text"
-                                    value={placeholders.products}
-                                    required
-                                    className="text-input"
-                                    onChange={(e) => handleValueChange(e, "products")} />
-                            </div>
+                        <form onSubmit={handleSave} className="w-full">
+                            <div className="flex gap-4 w-full flex-col xl:flex-row my-4">
+                                <div className="w-full">
+                                    <div className="field-label">{t("tenants.form.products")}</div>
+                                    <input
+                                        type="text"
+                                        value={placeholders.products}
+                                        required
+                                        className="text-input"
+                                        onChange={(e) => handleValueChange(e, "products")} />
+                                </div>
 
-                            <div className="w-full my-4">
-                                <div className="font-extrabold text-sm uppercase">{t("tenants.form.price")}</div>
-                                <input
-                                    type="text"
-                                    value={placeholders.price}
-                                    required
-                                    className="text-input"
-                                    onChange={(e) => handleValueChange(e, "price")} />
-                            </div>
+                                <div className="w-full">
+                                    <div className="field-label">{t("tenants.form.price")}</div>
+                                    <input
+                                        type="text"
+                                        value={placeholders.price}
+                                        required
+                                        className="text-input"
+                                        onChange={(e) => handleValueChange(e, "price")} />
+                                </div>
 
-                            <div className="w-full my-4">
-                                <div className="font-extrabold text-sm uppercase">{t("tenants.form.currency")}</div>
-                                <input
-                                    type="text"
-                                    value={placeholders.currency}
-                                    required
-                                    className="text-input"
-                                    onChange={(e) => handleValueChange(e, "currency")} />
-                            </div>
+                                <div className="w-full">
+                                    <div className="field-label">{t("tenants.form.currency")}</div>
+                                    <input
+                                        type="text"
+                                        value={placeholders.currency}
+                                        required
+                                        className="text-input"
+                                        onChange={(e) => handleValueChange(e, "currency")} />
+                                </div>
 
-                            <div className="w-full my-4">
-                                <div className="font-extrabold text-sm uppercase">{t("tenants.form.discountedPrice")}</div>
-                                <input
-                                    type="text"
-                                    value={placeholders["discounted-price"]}
-                                    required
-                                    className="text-input"
-                                    onChange={(e) => handleValueChange(e, "discounted-price")} />
+                                <div className="w-full">
+                                    <div className="field-label">{t("tenants.form.discountedPrice")}</div>
+                                    <input
+                                        type="text"
+                                        value={placeholders["discounted-price"]}
+                                        required
+                                        className="text-input"
+                                        onChange={(e) => handleValueChange(e, "discounted-price")} />
+                                </div>
                             </div>
-
                             <div className="flex justify-center items-center gap-4">
                                 <button
                                     type="submit"
@@ -135,21 +139,21 @@ const TenantsPage = () => {
                     }
                 </div>
             </div>
-            <div className="m-8">
-                <div className="card-header">Backup</div>
-                <div className="card-body">
+            <div className="m-2 xl:m-8">
+                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                    <span className="capitalize">Backup</span>
+                </div>
 
-                    <div className="flex justify-center items-center gap-4">
-                        <button
-                            type="button"
-                            className="btn-primary"
-                            onClick={handleDownloadQuotesBackup}>
-                            <div>
-                                <MdBackup />
-                            </div>
-                            <div className="uppercase font-bold text-sm">{t("settings.button.downloadQuotesBackup")}</div>
-                        </button>
-                    </div>
+                <div className="flex items-start gap-4">
+                    <button
+                        type="button"
+                        className="btn-primary"
+                        onClick={handleDownloadQuotesBackup}>
+                        <div>
+                            <MdDownload />
+                        </div>
+                        <div className="uppercase font-bold text-sm">{t("settings.button.downloadQuotesBackup")}</div>
+                    </button>
                 </div>
             </div>
         </AppLayout>

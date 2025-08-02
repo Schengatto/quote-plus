@@ -19,10 +19,10 @@ const ProductCreate = () => {
     const { setIsLoading } = useAppStore();
     const { setSelectedProduct, selectedProduct } = useProductsStore();
 
-    const [ product, setProduct ] = useState<Partial<Product>>({});
-    const [ brands, setBrands ] = useState<Brand[]>([]);
-    const [ categories, setCategories ] = useState<CategoryApiModel[]>([]);
-    const [ currencies, setCurrencies ] = useState<Currency[]>([]);
+    const [product, setProduct] = useState<Partial<Product>>({});
+    const [brands, setBrands] = useState<Brand[]>([]);
+    const [categories, setCategories] = useState<CategoryApiModel[]>([]);
+    const [currencies, setCurrencies] = useState<Currency[]>([]);
 
     const handleCodeChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setProduct((prev) => ({ ...prev, code: e.target.value }));
@@ -115,30 +115,32 @@ const ProductCreate = () => {
         doActionWithLoader(
             setIsLoading,
             async () => {
-                await Promise.all([ fetchBrands(), fetchCategories(), fetchCurrency() ]);
+                await Promise.all([fetchBrands(), fetchCategories(), fetchCurrency()]);
                 if (selectedProduct) {
                     setProduct({ ...selectedProduct, id: undefined });
                 };
             }
         );
         return () => setSelectedProduct(null);
-    }, [ selectedProduct, setIsLoading, setSelectedProduct ]);
+    }, [selectedProduct, setIsLoading, setSelectedProduct]);
 
     useEffect(() => {
         if (!user) return;
         if (!user?.userRole.grants?.includes("products")) {
             router.push("/");
         }
-    }, [ router, user ]);
+    }, [router, user]);
 
     return (
         <AppLayout>
-            <div className="m-8">
-                <div className="card-header">{t("products.form.title")}</div>
+            <div className="m-2 xl:m-8">
+                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                    <span className="capitalize">{t("products.button.addProduct")}</span>
+                </div>
                 <div className="card-body">
-                    <form className="w-[90%]" onSubmit={handleSaveProduct}>
+                    <form className="w-full" onSubmit={handleSaveProduct}>
                         <div className="w-full my-4">
-                            <div className="font-extrabold text-sm uppercase">{t("products.form.code")}</div>
+                            <div className="field-label">{t("products.form.code")}</div>
                             <input
                                 type="text"
                                 value={product.code}
@@ -147,7 +149,7 @@ const ProductCreate = () => {
                                 onChange={handleCodeChanged} />
                         </div>
                         <div className="w-full my-4">
-                            <div className="font-extrabold text-sm uppercase">{t("products.form.name")}</div>
+                            <div className="field-label">{t("products.form.name")}</div>
                             <input
                                 type="text"
                                 value={product.name}
@@ -156,7 +158,7 @@ const ProductCreate = () => {
                                 onChange={handleNameChanged} />
                         </div>
                         <div className='w-full my-4'>
-                            <div className='font-extrabold text-sm uppercase'>{t("products.form.category")}</div>
+                            <div className='field-label'>{t("products.form.category")}</div>
                             <select className='text-input'
                                 value={product.categoryId}
                                 required
@@ -166,7 +168,7 @@ const ProductCreate = () => {
                             </select>
                         </div>
                         <div className='w-full my-4'>
-                            <div className='font-extrabold text-sm uppercase'>{t("products.form.brand")}</div>
+                            <div className='field-label'>{t("products.form.brand")}</div>
                             <select className='text-input'
                                 value={product.brandId}
                                 required
@@ -176,14 +178,14 @@ const ProductCreate = () => {
                             </select>
                         </div>
                         <div className='w-full my-4'>
-                            <div className='font-extrabold text-sm uppercase'>{t("products.form.description")}</div>
+                            <div className='field-label'>{t("products.form.description")}</div>
                             <div className="bg-white">
                                 <TextEditor initialValue={product.description} onChange={handleDescriptionChanged} />
                             </div>
                         </div>
                         <div className='w-full my-4 grid-cols-3 grid grid-template-columns: repeat(3, minmax(0, 1fr)) gap-2'>
                             <div>
-                                <div className='font-extrabold text-sm uppercase'>{t("products.form.tags")}</div>
+                                <div className='field-label'>{t("products.form.tags")}</div>
                                 <input
                                     type="text"
                                     value={product.tags}
@@ -192,7 +194,7 @@ const ProductCreate = () => {
                                     onChange={handleTagsChanged} />
                             </div>
                             <div>
-                                <div className='font-extrabold text-sm uppercase'>{t("products.form.price")}</div>
+                                <div className='field-label'>{t("products.form.price")}</div>
                                 <input
                                     type="number"
                                     min={0}
@@ -202,7 +204,7 @@ const ProductCreate = () => {
                                     onChange={handlePriceChanged} />
                             </div>
                             <div>
-                                <div className='font-extrabold text-sm uppercase'>{t("products.form.currency")}</div>
+                                <div className='field-label'>{t("products.form.currency")}</div>
                                 <select className='text-input'
                                     value={product.currencyId}
                                     required
