@@ -151,7 +151,7 @@ const ProductList = () => {
 
     return (
         <AppLayout>
-            <div className="m-8">
+            <div className="my-8 mx-8">
                 <Dialog isVisible={!!selectedRow} title="Modifica prezzo" actions={changePriceDialogActions} >
                     <p>Inserisci il nuovo prezzo di {selectedRow?.name} - prezz corrente: {selectedRow?.price} €</p>
                     <div>

@@ -51,6 +51,7 @@
   "sideMenu.item.storage": "magazzino matricole e riparazioni",
   "sideMenu.item.sales": "inserimento vendita",
   "sideMenu.item.repairs": "inserimento riparazione",
+  "sideMenu.item.reportBug": "segnala un bug",
   "sideMenu.item.storageSearch": "elenco e ricerca",
   "brands.table.title": "elenco marchi",
   "brands.button.addBrand": "aggiungi marchio",

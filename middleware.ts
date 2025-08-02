@@ -46,6 +46,11 @@ export async function middleware(request: NextRequest) {
         return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
     }
 
+    if (url.includes("/storage") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("storage")) {
+        console.warn("Authentication failed");
+        return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
+    }
+
     if (
         url.includes("/users-management") &&
         !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("users-management")
@@ -68,5 +73,6 @@ export const config = {
         "/templates/:path*",
         "/users-management/:path*",
         "/contacts/:path*",
+        "/storage/:path*",
     ],
 };

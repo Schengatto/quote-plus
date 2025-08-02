@@ -76,7 +76,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                                 onClick={toggleUserMenu}
                             >
                                 <MdOutlineAccountCircle size={20} />
-                                <span className="text-sm text-gray-700 font-medium">
+                                <span className="text-sm text-gray-700 font-medium first-letter:capitalize">
                                     {auth.username}
                                 </span>
                             </button>

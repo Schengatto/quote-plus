@@ -52,6 +52,7 @@
   "sideMenu.item.sales": "Enter Sale",
   "sideMenu.item.repairs": "Enter Repair",
   "sideMenu.item.storageSearch": "Search",
+  "sideMenu.item.reportBug": "report a bug",
   "brands.table.title": "brands list",
   "brands.button.addBrand": "add brand",
   "brands.form.title": "fill in the fields",

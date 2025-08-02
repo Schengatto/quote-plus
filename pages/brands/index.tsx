@@ -18,9 +18,9 @@ const Brands = () => {
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
-    const [ selectedBrand, setSelectedBrand ] = useState<Partial<BrandApiModel> | null>(null);
-    const [ brands, setBrands ] = useState<BrandApiModel[]>([]);
+    const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
+    const [selectedBrand, setSelectedBrand] = useState<Partial<BrandApiModel> | null>(null);
+    const [brands, setBrands] = useState<BrandApiModel[]>([]);
 
     const handleEdit = (event: any, _selectedBrand: Partial<Brand>) => {
         event.stopPropagation();
@@ -90,7 +90,7 @@ const Brands = () => {
                 .then((res) => res.json());
             setBrands(_brands);
         });
-    }, [ setIsLoading ]);
+    }, [setIsLoading]);
 
     useEffect(() => {
         if (!user) return;
@@ -100,11 +100,80 @@ const Brands = () => {
         }
 
         fetchBrands();
-    }, [ user, router, fetchBrands ]);
+    }, [user, router, fetchBrands]);
 
     return (
         <AppLayout>
             <div className="m-8">
+                {!isInputFormActive ?
+                    <div className="flex item-center justify-end w-full my-4">
+                        <button
+                            className="btn-primary"
+                            onClick={handleCreateNew}>
+                            <div>
+                                <MdAddCircleOutline />
+                            </div>
+                            <div className="uppercase font-bold text-sm">{t("brands.button.addBrand")}</div>
+                        </button>
+                    </div>
+                    :
+                    <div className="my-4 card">
+                        <div className="card-header">
+                            {selectedBrand?.id
+                                ? brands.find(b => b.id === selectedBrand.id)?.name
+                                : t("brands.form.title")
+                            }
+                        </div>
+                        <div className="card-body">
+                            <form className="w-[90%]" onSubmit={handleSave}>
+                                <div className="w-full my-4">
+                                    <div className="font-extrabold text-sm uppercase">{t("brands.form.name")}</div>
+                                    <input
+                                        type="text"
+                                        value={selectedBrand?.name}
+                                        required
+                                        className="text-input"
+                                        onChange={handleNameChanged} />
+                                </div>
+
+                                {!!selectedBrand?.products?.length &&
+                                    <div className="uppercase py-4 text-center border-4 bg-yellow-200 border-yellow-500 my-4">
+                                        <strong>{t("brands.warning.deleteDisabled")}</strong>
+                                    </div>
+                                }
+
+                                <div className="flex justify-center items-center gap-2 flex-wrap">
+
+                                    <button
+                                        type="button"
+                                        className="btn-secondary"
+                                        onClick={handleBack}>
+                                        <div className="uppercase font-bold text-sm">{t("common.back")}</div>
+                                    </button>
+
+                                    {selectedBrand?.id
+                                        && <button
+                                            type="button"
+                                            className="btn-danger"
+                                            disabled={!!selectedBrand.products?.length}
+                                            onClick={(e) => handleDelete(e, selectedBrand.id!)}>
+                                            <div className="uppercase font-bold text-sm">{t("common.delete")}</div>
+                                        </button>
+                                    }
+
+                                    <button
+                                        type="submit"
+                                        disabled={!selectedBrand?.name}
+                                        className="btn-primary">
+                                        <div className="uppercase font-bold text-sm">{t("common.save")}</div>
+                                    </button>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                }
+
                 <table className="items-table">
                     <thead className="table-header">
                         <tr>
@@ -131,75 +200,6 @@ const Brands = () => {
                     </tbody>
                 </table>
             </div>
-
-            {!isInputFormActive ?
-                <div className="flex item-center justify-center w-full">
-                    <button
-                        className="btn-primary rounded-full"
-                        onClick={handleCreateNew}>
-                        <div>
-                            <MdAddCircleOutline />
-                        </div>
-                        <div className="uppercase font-bold text-sm">{t("brands.button.addBrand")}</div>
-                    </button>
-                </div>
-                :
-                <div className="m-8 card">
-                    <div className="card-header">
-                        {selectedBrand?.id
-                            ? brands.find(b => b.id === selectedBrand.id)?.name
-                            : t("brands.form.title")
-                        }
-                    </div>
-                    <div className="card-body">
-                        <form className="w-[90%]" onSubmit={handleSave}>
-                            <div className="w-full my-4">
-                                <div className="font-extrabold text-sm uppercase">{t("brands.form.name")}</div>
-                                <input
-                                    type="text"
-                                    value={selectedBrand?.name}
-                                    required
-                                    className="text-input"
-                                    onChange={handleNameChanged} />
-                            </div>
-
-                            {!!selectedBrand?.products?.length &&
-                                <div className="uppercase py-4 text-center border-4 bg-yellow-200 border-yellow-500 my-4">
-                                    <strong>{t("brands.warning.deleteDisabled")}</strong>
-                                </div>
-                            }
-
-                            <div className="flex justify-center items-center gap-2 flex-wrap">
-
-                                <button
-                                    type="button"
-                                    className="btn-secondary"
-                                    onClick={handleBack}>
-                                    <div className="uppercase font-bold text-sm">{t("common.back")}</div>
-                                </button>
-
-                                {selectedBrand?.id
-                                    && <button
-                                        type="button"
-                                        className="btn-danger"
-                                        disabled={!!selectedBrand.products?.length}
-                                        onClick={(e) => handleDelete(e, selectedBrand.id!)}>
-                                        <div className="uppercase font-bold text-sm">{t("common.delete")}</div>
-                                    </button>
-                                }
-
-                                <button
-                                    type="submit"
-                                    disabled={!selectedBrand?.name}
-                                    className="btn-primary">
-                                    <div className="uppercase font-bold text-sm">{t("common.save")}</div>
-                                </button>
-
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            }
 
         </AppLayout>
     );

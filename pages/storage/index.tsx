@@ -11,7 +11,7 @@ import { Item } from "@prisma/client";
 import { formatDate } from "date-fns";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
-import { MdAddCircleOutline, MdDelete } from "react-icons/md";
+import { MdAddCircleOutline, MdDelete, MdSearch } from "react-icons/md";
 
 type ItemList = Item;
 
@@ -83,7 +83,7 @@ const ItemList = () => {
 
     useEffect(() => {
         if (!user) return;
-        if (!user?.userRole.grants?.includes("products")) {
+        if (!user?.userRole.grants?.includes("storage")) {
             router.push("/");
         }
 
@@ -95,13 +95,9 @@ const ItemList = () => {
             <div className="m-8">
                 <div className="my-4">
                     <div className="flex justify-end content-end w-full gap-4">
-                        <button
-                            className="btn-primary"
-                            onClick={handleCreateNewSale}>
-                            <div>
-                                <MdAddCircleOutline />
-                            </div>
-                            <div className="uppercase font-bold text-sm">Aggiungi Vendita</div>
+                        <button className="btn-primary" onClick={handleCreateNewSale}>
+                            <MdAddCircleOutline />
+                            <span className="uppercase font-semibold text-sm">Aggiungi Vendita</span>
                         </button>
                         <button
                             className="btn-primary"
@@ -109,66 +105,62 @@ const ItemList = () => {
                             <div>
                                 <MdAddCircleOutline />
                             </div>
-                            <div className="uppercase font-bold text-sm">Aggiungi Riparazione</div>
+                            <div className="uppercase font-semibold text-sm">Aggiungi Riparazione</div>
                         </button>
                     </div>
                 </div>
                 <div className="items-table max-h-[70vh] overflow-y-auto">
-                    <table className="items-table">
-                        <thead>
-                            <tr className="table-header">
-                                <th colSpan={2} className="text-white uppercase p-2 text-sm">Ricerca</th>
-                                <th colSpan={7}>
-                                    <input
-                                        required
-                                        type="text"
-                                        className="text-input"
-                                        placeholder="matricola, rivenditore, utilizzatore, riferimento"
-                                        onChange={handleSearch} />
-                                </th>
-                            </tr>
-                            <tr className="bg-gray-700 border-2 border-gray-700">
-                                <th colSpan={1} className="text-white uppercase p-2 text-sm">Tipo</th>
-                                <th colSpan={1} className="text-white uppercase p-2 text-sm">Seriale</th>
-                                <th colSpan={1} className="text-white uppercase p-2 text-sm">Prodotto</th>
-                                <th colSpan={1} className="text-white uppercase p-2 text-sm">Rivenditore</th>
-                                <th colSpan={1} className="text-white uppercase p-2 text-sm">Riferimento</th>
-                                <th colSpan={1} className="text-white uppercase p-2 text-sm">Documento</th>
-                                <th colSpan={1} className="text-white uppercase p-2 text-sm">Data</th>
-                                <th colSpan={1} className="text-white uppercase p-2 text-sm">Notes</th>
-                                <th className="mx-2 text-white uppercase p-2 text-sm text-left w-1/12 cursor-pointer" onClick={() => setOrderBy("code")}>
-                                </th>
+                    <div className="flex items-center gap-3 w-full mx-auto border border-gray-300 px-4 py-2 bg-gray-50 shadow-sm">
+                        <MdSearch className="text-gray-500 text-xl" />
+                        <input
+                            required
+                            type="text"
+                            className="w-full bg-transparent focus:outline-none text-sm placeholder-gray-400"
+                            placeholder="Cerca per matricola, rivenditore, utilizzatore, riferimento..."
+                            onChange={handleSearch}
+                        />
+                    </div>
+                    <table className="min-w-full text-sm border rounded-md shadow-sm overflow-hidden">
+                        <thead className="bg-gray-100 text-gray-700 sticky top-0 text-xs uppercase">
+                            <tr>
+                                <th className="px-4 py-3 text-left">Tipo</th>
+                                <th className="px-4 py-3 text-left">Seriale</th>
+                                <th className="px-4 py-3 text-left">Prodotto</th>
+                                <th className="px-4 py-3 text-left">Rivenditore</th>
+                                <th className="px-4 py-3 text-left">Riferimento</th>
+                                <th className="px-4 py-3 text-left">Documento</th>
+                                <th className="px-4 py-3 text-left">Data</th>
+                                <th className="px-4 py-3 text-left">Note</th>
+                                <th className="px-4 py-3 text-center">Azioni</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {products.filter(filterList).map((i: Partial<ItemList>) =>
-                                <tr key={i.id} className="table-row">
-                                    <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-left" title={i.type}>
-                                        {i.type === "repair" ? "Riparazione" : "Vendita"}
-                                    </td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-left" title={i.code}>{i.code}</td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-left" title={i.product}>{i.product}</td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-2/12 truncate max-w-0 text-left" title={i.dealer}>{i.dealer}</td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-2/12 truncate max-w-0 text-left" title={i.reference}>{i.reference}</td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-left" title={i.document}>{i.document}</td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-left" title={String(i.date)}>
-                                        {formatDate(i.date || new Date(), "dd/MM/yyyy")}
-                                    </td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-4/12 truncate max-w-0 text-left" title={i.notes}>{i.notes}</td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate text-center" onClick={(event) => preventClick(event, i)}>
-                                        <button className="disabled:opacity-50 text-red-600"
-                                            onClick={(e) => handleDelete(e, i)}>
+                        <tbody className="divide-y divide-gray-200">
+                            {products.filter(filterList).map((i: Partial<ItemList>) => (
+                                <tr
+                                    key={i.id}
+                                    className="hover:bg-blue-50 transition-colors duration-200 odd:bg-white even:bg-gray-50"
+                                >
+                                    <td className="px-4 py-3">{i.type === "repair" ? "Riparazione" : "Vendita"}</td>
+                                    <td className="px-4 py-3">{i.code}</td>
+                                    <td className="px-4 py-3">{i.product}</td>
+                                    <td className="px-4 py-3">{i.dealer}</td>
+                                    <td className="px-4 py-3">{i.reference}</td>
+                                    <td className="px-4 py-3">{i.document}</td>
+                                    <td className="px-4 py-3">{formatDate(i.date || new Date(), "dd/MM/yyyy")}</td>
+                                    <td className="px-4 py-3">{i.notes}</td>
+                                    <td className="px-4 py-3 text-center">
+                                        <button
+                                            className="text-red-600 hover:text-red-800"
+                                            onClick={(e) => handleDelete(e, i)}
+                                        >
                                             <MdDelete />
                                         </button>
                                     </td>
                                 </tr>
-                            )}
-                            {!products.length &&
-                                <tr className="table-row mx-2">
-                                    <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-left" colSpan={15}>Nessun Risultato trovato</td>
-                                </tr>}
+                            ))}
                         </tbody>
                     </table>
+
                 </div>
             </div>
 

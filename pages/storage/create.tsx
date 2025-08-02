@@ -141,7 +141,7 @@ const RepairCreate = () => {
     useEffect(() => {
         fetchCategories();
         if (!user) return;
-        if (!user?.userRole.grants?.includes("products")) {
+        if (!user?.userRole.grants?.includes("storage")) {
             router.push("/");
         }
     }, [router, user]);
@@ -149,143 +149,113 @@ const RepairCreate = () => {
     return (
         <AppLayout>
             <div className="m-8">
-                <div className="card-header">Inserimento Nuova {type === "repair" ? "riparazione" : "vendita"}</div>
-                <div className="card-body">
-                    <form className="w-[90%]" onSubmit={handleAddItem}>
-                        <div className='w-full grid-cols-3 grid grid-template-columns: repeat(3, minmax(0, 1fr)) gap-2'>
-                            <div className='w-full my-2'>
-                                <div className='font-extrabold text-sm uppercase'>Categoria</div>
-                                <select className='text-input'
-                                    required
-                                    onChange={handleCategoryChanged} >
+                <div className="text-xl font-semibold text-gray-800 border-b pb-2 mb-4">
+                    Inserimento Nuova {type === "repair" ? "Riparazione" : "Vendita"}
+                </div>
+
+                <div className="bg-white shadow-md rounded-xl p-6">
+                    <form className="w-full" onSubmit={handleAddItem}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+                                <select className="text-input" required onChange={handleCategoryChanged}>
                                     <option value={undefined}></option>
-                                    {categories.filter(c => c.products.length).map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
+                                    {categories.filter(c => c.products.length).map(c => (
+                                        <option key={c.id} value={c.id}>{c.name}</option>
+                                    ))}
                                 </select>
                             </div>
-                            <div className='w-full my-2'>
-                                <div className='font-extrabold text-sm uppercase'>Prodotto</div>
-                                <input
-                                    type="text"
-                                    required
-                                    className="text-input"
-                                    onChange={handleProductChanged} />
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Prodotto</label>
+                                <input type="text" required className="text-input" onChange={handleProductChanged} />
                             </div>
-                            <div className='w-full my-2'>
-                                <div className='font-extrabold text-sm uppercase'>Matricola/Seriale</div>
-                                <input
-                                    type="text"
-                                    required
-                                    className="text-input"
-                                    onChange={handleCodeChanged} />
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Matricola/Seriale</label>
+                                <input type="text" required className="text-input" onChange={handleCodeChanged} />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Rivenditore</label>
+                                <input type="text" required className="text-input" onChange={handleDealerChange} />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Utilizzatore/Riferimento</label>
+                                <input type="text" required className="text-input" onChange={handleReferenceChange} />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Documento</label>
+                                <input type="text" required className="text-input" onChange={handleDocumentChange} />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Data</label>
+                                <input type="date" required className="text-input" onChange={handleDateChange} />
+                            </div>
+
+                            <div className="lg:col-span-2">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Note</label>
+                                <input type="text" required className="text-input" onChange={handleNoteChange} />
                             </div>
                         </div>
 
-                        <div className='w-full grid-cols-2 grid grid-template-columns: repeat(4, minmax(0, 1fr)) gap-2'>
-                            <div className='w-full my-2'>
-                                <div className='font-extrabold text-sm uppercase'>Rivenditore</div>
-                                <input
-                                    type="text"
-                                    required
-                                    className="text-input"
-                                    onChange={handleDealerChange} />
-                            </div>
-                            <div className='w-full my-2'>
-                                <div className='font-extrabold text-sm uppercase'>Utilizzatore/Riferimento</div>
-                                <input
-                                    type="text"
-                                    required
-                                    className="text-input"
-                                    onChange={handleReferenceChange} />
-                            </div>
-                        </div>
-
-                        <div className='w-full grid-cols-3 grid grid-template-columns: repeat(3, minmax(0, 1fr)) gap-2'>
-                            <div className='w-full my-2'>
-                                <div className='font-extrabold text-sm uppercase'>Documento</div>
-                                <input
-                                    type="text"
-                                    required
-                                    className="text-input"
-                                    onChange={handleDocumentChange} />
-                            </div>
-                            <div className='w-full my-2'>
-                                <div className='font-extrabold text-sm uppercase'>Data</div>
-                                <input
-                                    type="date"
-                                    required
-                                    className="text-input"
-                                    onChange={handleDateChange} />
-                            </div>
-                            <div className='w-full my-2'>
-                                <div className='font-extrabold text-sm uppercase'>Note</div>
-                                <input
-                                    type="text"
-                                    required
-                                    className="text-input"
-                                    onChange={handleNoteChange} />
-                            </div>
-                        </div>
-
-                        <div className="flex justify-center items-center gap-4">
-                            <button
-                                type="submit"
-                                className="btn-primary">
+                        <div className="flex justify-center items-center">
+                            <button type="submit" className="btn-primary">
                                 <div className="uppercase font-bold text-sm">Aggiungi</div>
                             </button>
                         </div>
                     </form>
                 </div>
 
-                <div className="items-table my-4 max-h-[70vh] overflow-y-auto">
-                    <table className="items-table">
-                        <tr className="table-header">
-                            <th colSpan={1} className="text-white uppercase p-2 text-sm">Code</th>
-                            <th colSpan={1} className="text-white uppercase p-2 text-sm">Prodotto</th>
-                            <th colSpan={1} className="text-white uppercase p-2 text-sm">Rivenditore</th>
-                            <th colSpan={1} className="text-white uppercase p-2 text-sm">Riferimento</th>
-                            <th colSpan={1} className="text-white uppercase p-2 text-sm">Documento</th>
-                            <th colSpan={1} className="text-white uppercase p-2 text-sm">Data</th>
-                            <th colSpan={1} className="text-white uppercase p-2 text-sm">Notes</th>
-                            <th colSpan={1} className="text-white uppercase p-2 text-sm"></th>
-                        </tr>
-                        <tbody>
-                            {list.map((i: Partial<Item>) =>
-                                <tr key={i.id} className="table-row">
-                                    <td className="mx-2 text-sm font-bold p-2 w-2/12 truncate max-w-0 text-left" title={i.code}>{i.code}</td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-left" title={i.product}>{i.product}</td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-left" title={i.dealer}>{i.dealer}</td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-2/12 truncate max-w-0 text-left" title={i.reference}>{i.reference}</td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-left" title={i.document}>{i.document}</td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-left" title={String(i.date)}>
-                                        {formatDate(i.date || new Date(), "dd/MM/yyyy")}
-                                    </td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-4/12 truncate max-w-0 text-left" title={i.notes}>{i.notes}</td>
-                                    <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate text-center" onClick={(event) => preventClick(event, i)}>
-                                        <button className="disabled:opacity-50 text-red-600"
-                                            onClick={(e) => handleDelete(e, i)}>
+                <div className="items-table my-6 max-h-[70vh] overflow-y-auto">
+                    <table className="min-w-full border rounded-md shadow text-sm">
+                        <thead className="bg-gray-100 text-gray-600 uppercase text-xs">
+                            <tr>
+                                <th className="px-4 py-2">Code</th>
+                                <th className="px-4 py-2">Prodotto</th>
+                                <th className="px-4 py-2">Rivenditore</th>
+                                <th className="px-4 py-2">Riferimento</th>
+                                <th className="px-4 py-2">Documento</th>
+                                <th className="px-4 py-2">Data</th>
+                                <th className="px-4 py-2">Notes</th>
+                                <th className="px-4 py-2"></th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                            {list.map((i: Partial<Item>) => (
+                                <tr key={i.id} className="odd:bg-white even:bg-gray-50 hover:bg-sky-50 transition">
+                                    <td className="px-4 py-2" title={i.code}>{i.code}</td>
+                                    <td className="px-4 py-2" title={i.product}>{i.product}</td>
+                                    <td className="px-4 py-2" title={i.dealer}>{i.dealer}</td>
+                                    <td className="px-4 py-2" title={i.reference}>{i.reference}</td>
+                                    <td className="px-4 py-2" title={i.document}>{i.document}</td>
+                                    <td className="px-4 py-2" title={String(i.date)}>{formatDate(i.date || new Date(), "dd/MM/yyyy")}</td>
+                                    <td className="px-4 py-2" title={i.notes}>{i.notes}</td>
+                                    <td className="px-4 py-2 text-center" onClick={(event) => preventClick(event, i)}>
+                                        <button className="text-red-600 hover:text-red-800" onClick={(e) => handleDelete(e, i)}>
                                             <MdDelete />
                                         </button>
                                     </td>
                                 </tr>
-                            )}
-                            {!list.length &&
-                                <tr className="table-row mx-2">
-                                    <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-left" colSpan={15}>Nessun elemento inserito</td>
+                            ))}
+                            {!list.length && (
+                                <tr>
+                                    <td className="px-4 py-2 text-gray-500 italic" colSpan={8}>
+                                        Nessun elemento inserito
+                                    </td>
                                 </tr>
-                            }
+                            )}
                         </tbody>
                     </table>
                 </div>
 
-                <div>
-                    <div className="flex justify-center items-center gap-4">
-                        <button
-                            type="button"
-                            className="btn-secondary"
-                            onClick={handleBack}>
-                            <div className="uppercase font-bold text-sm">Torna ad Elenco</div>
-                        </button>
-                    </div>
+                <div className="flex justify-center items-center mt-4">
+                    <button type="button" className="btn-secondary" onClick={handleBack}>
+                        <div className="uppercase font-bold text-sm">Torna ad Elenco</div>
+                    </button>
                 </div>
             </div>
         </AppLayout>

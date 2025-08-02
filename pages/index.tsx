@@ -52,7 +52,7 @@ const LoginPage = () => {
         if (user) {
             router.push("/home");
         } else {
-            setCurrentLanguage("en");
+            setCurrentLanguage(navigator?.language?.split("-")[0] ?? "en");
         }
     }, [user, router, setCurrentLanguage]);
 

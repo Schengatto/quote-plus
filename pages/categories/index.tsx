@@ -17,10 +17,10 @@ const Categories = () => {
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
-    const [ selectedCategory, setSelectedCategory ] = useState<Partial<CategoryApiModel>>({});
-    const [ categories, setCategories ] = useState<CategoryApiModel[]>([]);
-    const [ availableParentCategories, setAvailableParentCategories ] = useState<Category[]>([]);
+    const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
+    const [selectedCategory, setSelectedCategory] = useState<Partial<CategoryApiModel>>({});
+    const [categories, setCategories] = useState<CategoryApiModel[]>([]);
+    const [availableParentCategories, setAvailableParentCategories] = useState<Category[]>([]);
 
     const handleEdit = (event: any, _selectedCategory: Partial<Category>) => {
         event.stopPropagation();
@@ -99,7 +99,7 @@ const Categories = () => {
             const _categories = await fetch("/api/categories", { method: "GET" }).then((res) => res.json());
             setCategories(_categories);
         });
-    }, [ setIsLoading ]);
+    }, [setIsLoading]);
 
     const categoryLabel = (category: CategoryApiModel): string => {
         return category.parent
@@ -115,18 +115,95 @@ const Categories = () => {
         }
 
         fetchCategories();
-    }, [ router, user, fetchCategories ]);
+    }, [router, user, fetchCategories]);
 
     useEffect(() => {
         const notTheSelectedOne = ((c: Category) => c.id !== selectedCategory?.id);
         const isNotChildCategory = ((c: Category) => !c.parentId);
         const _availableCategories = categories.filter(c => notTheSelectedOne(c) && isNotChildCategory(c));
         setAvailableParentCategories(_availableCategories);
-    }, [ selectedCategory, categories ]);
+    }, [selectedCategory, categories]);
 
     return (
         <AppLayout>
             <div className='m-8'>
+                {!isInputFormActive ?
+                    <div className='flex item-center justify-end w-full my-4'>
+                        <button
+                            className='btn-primary'
+                            onClick={handleCreateNew}
+                        >
+                            <div>
+                                <MdAddCircleOutline />
+                            </div>
+                            <div className='uppercase font-bold text-sm'>{t("categories.button.addCategory")}</div>
+                        </button>
+                    </div>
+                    :
+                    <div className="my-4">
+                        <div className='card-header'>
+                            {selectedCategory?.id
+                                ? categories.find(b => b.id === selectedCategory.id)?.name
+                                : t("categories.form.title")
+                            }
+                        </div>
+                        <div className='card-body'>
+                            <form className="w-[90%]" onSubmit={handleSave}>
+                                <div className='w-full my-4'>
+                                    <div className='font-extrabold text-sm uppercase'>{t("categories.form.name")}</div>
+                                    <input
+                                        type='text'
+                                        value={selectedCategory?.name}
+                                        className='text-input'
+                                        onChange={handleNameChanged}
+                                    />
+                                </div>
+                                <div className='w-full my-4'>
+                                    <div className='font-extrabold text-sm uppercase'>{t("categories.form.parentName")}</div>
+                                    <select className='text-input'
+                                        value={selectedCategory?.parentId ? Number(selectedCategory.parentId) : undefined}
+                                        disabled={!availableParentCategories.length}
+                                        onChange={handleParentChanged} >
+                                        <option value={undefined}></option>
+                                        {availableParentCategories.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
+                                    </select>
+                                </div>
+
+                                {!!selectedCategory?.products?.length &&
+                                    <div className="uppercase py-4 text-center border-4 bg-yellow-200 border-yellow-500 my-4">
+                                        <strong>{t("categories.warning.deleteDisabled")}</strong>
+                                    </div>
+                                }
+
+                                <div className="flex justify-center items-center gap-2 flex-wrap">
+                                    <button
+                                        type="button"
+                                        className="btn-secondary"
+                                        onClick={handleBack}>
+                                        <div className="uppercase font-bold text-sm">{t("common.back")}</div>
+                                    </button>
+
+                                    {selectedCategory?.id
+                                        && <button
+                                            type="button"
+                                            className="btn-danger"
+                                            disabled={!!selectedCategory.products?.length}
+                                            onClick={(e) => handleDelete(e, selectedCategory.id!)}>
+                                            <div className="uppercase font-bold text-sm">{t("common.delete")}</div>
+                                        </button>
+                                    }
+
+                                    <button
+                                        type='submit'
+                                        className='btn-primary'
+                                    >
+                                        <div className='uppercase font-bold text-sm'>{t("categories.button.save")}</div>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                }
                 <table className='items-table'>
                     <thead className='table-header'>
                         <tr>
@@ -156,84 +233,6 @@ const Categories = () => {
                     </tbody>
                 </table>
             </div>
-
-            {!isInputFormActive ?
-                <div className='flex item-center justify-center w-full'>
-                    <button
-                        className='btn-primary'
-                        onClick={handleCreateNew}
-                    >
-                        <div>
-                            <MdAddCircleOutline />
-                        </div>
-                        <div className='uppercase font-bold text-sm'>{t("categories.button.addCategory")}</div>
-                    </button>
-                </div>
-                :
-                <div className='m-8'>
-                    <div className='card-header'>
-                        {selectedCategory?.id
-                            ? categories.find(b => b.id === selectedCategory.id)?.name
-                            : t("categories.form.title")
-                        }
-                    </div>
-                    <div className='card-body'>
-                        <form className="w-[90%]" onSubmit={handleSave}>
-                            <div className='w-full my-4'>
-                                <div className='font-extrabold text-sm uppercase'>{t("categories.form.name")}</div>
-                                <input
-                                    type='text'
-                                    value={selectedCategory?.name}
-                                    className='text-input'
-                                    onChange={handleNameChanged}
-                                />
-                            </div>
-                            <div className='w-full my-4'>
-                                <div className='font-extrabold text-sm uppercase'>{t("categories.form.parentName")}</div>
-                                <select className='text-input'
-                                    value={selectedCategory?.parentId ? Number(selectedCategory.parentId) : undefined}
-                                    disabled={!availableParentCategories.length}
-                                    onChange={handleParentChanged} >
-                                    <option value={undefined}></option>
-                                    {availableParentCategories.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
-                                </select>
-                            </div>
-
-                            {!!selectedCategory?.products?.length &&
-                                <div className="uppercase py-4 text-center border-4 bg-yellow-200 border-yellow-500 my-4">
-                                    <strong>{t("categories.warning.deleteDisabled")}</strong>
-                                </div>
-                            }
-
-                            <div className="flex justify-center items-center gap-2 flex-wrap">
-                                <button
-                                    type="button"
-                                    className="btn-secondary"
-                                    onClick={handleBack}>
-                                    <div className="uppercase font-bold text-sm">{t("common.back")}</div>
-                                </button>
-
-                                {selectedCategory?.id
-                                    && <button
-                                        type="button"
-                                        className="btn-danger"
-                                        disabled={!!selectedCategory.products?.length}
-                                        onClick={(e) => handleDelete(e, selectedCategory.id!)}>
-                                        <div className="uppercase font-bold text-sm">{t("common.delete")}</div>
-                                    </button>
-                                }
-
-                                <button
-                                    type='submit'
-                                    className='btn-primary'
-                                >
-                                    <div className='uppercase font-bold text-sm'>{t("categories.button.save")}</div>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            }
         </AppLayout>
     );
 };
