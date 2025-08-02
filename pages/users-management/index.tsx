@@ -16,10 +16,10 @@ const UserManagementPage = () => {
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
-    const [ selectedUser, setSelectedUser ] = useState<Partial<User>>({});
-    const [ users, setUsers ] = useState<AuthenticatedUser[]>([]);
-    const [ roles, setRoles ] = useState<UserRole[]>([]);
+    const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
+    const [selectedUser, setSelectedUser] = useState<Partial<User>>({});
+    const [users, setUsers] = useState<AuthenticatedUser[]>([]);
+    const [roles, setRoles] = useState<UserRole[]>([]);
 
     const handleCreateNew = () => {
         if (!auth) return;
@@ -85,7 +85,7 @@ const UserManagementPage = () => {
                 .then((res) => res.json());
             setUsers(_users);
         });
-    }, [ setIsLoading ]);
+    }, [setIsLoading]);
 
     const fetchRoles = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
@@ -93,27 +93,95 @@ const UserManagementPage = () => {
                 .then((res) => res.json());
             setRoles(_roles);
         });
-    }, [ setIsLoading ]);
+    }, [setIsLoading]);
 
     useEffect(() => {
         if (!auth) return;
         fetchUsers();
         fetchRoles();
-    }, [ auth, fetchUsers, fetchRoles ]);
+    }, [auth, fetchUsers, fetchRoles]);
 
     return (
         <AppLayout>
             <div className="m-2 xl:m-8">
-                <table className="items-table">
-                    <thead className="table-header">
+                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                    <span className="capitalize">{t("usersManagement.table.title")}</span>
+                </div>
+
+                {!isInputFormActive
+                    ?
+                    <div className="flex item-center justify-end w-full my-4">
+                        <button
+                            className="btn-primary"
+                            onClick={handleCreateNew}>
+                            <div>
+                                <MdAddCircleOutline />
+                            </div>
+                            <div className="uppercase font-bold text-sm">{t("usersManagement.button.addUser")}</div>
+                        </button>
+                    </div>
+                    :
+                    <div className="card mb-4">
+                        <div className="font-semibold first-letter:capitalize">
+                            {t("usersManagement.button.addUser")}
+                        </div>
+
+                        <div>
+                            <form className="w-full" onSubmit={handleSave}>
+                                <div className="w-full my-4">
+                                    <div className="field-label">{t("usersManagement.form.username")}</div>
+                                    <input
+                                        type="text"
+                                        required
+                                        className="text-input"
+                                        onChange={handleNameChanged} />
+                                </div>
+                                <div className='w-full my-4'>
+                                    <div className='field-label'>{t("usersManagement.form.password")}</div>
+                                    <input
+                                        type="text"
+                                        required
+                                        className="text-input"
+                                        onChange={handlePasswordChanged} />
+                                </div>
+
+                                <div className='w-full my-4'>
+                                    <div className='field-label'>{t("usersManagement.form.role")}</div>
+                                    <select className='text-input'
+                                        required
+                                        onChange={handleRoleIdChanged} >
+                                        <option value={undefined}></option>
+                                        {roles.map(r => (<option key={r.id} value={r.id}>{`${r.name} » ${r.grants.join(", ")}`}</option>))}
+                                    </select>
+                                </div>
+
+                                <div className="flex justify-center items-center gap-2 flex-wrap">
+
+                                    <button
+                                        type="button"
+                                        className="btn-secondary"
+                                        onClick={handleBack}>
+                                        <div className="uppercase font-bold text-sm">{t("common.cancel")}</div>
+                                    </button>
+
+                                    <button
+                                        type="submit"
+                                        className="btn-primary">
+                                        <div className="uppercase font-bold text-sm">{t("usersManagement.button.save")}</div>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                }
+
+                <table className="min-w-full text-sm border rounded-md shadow-sm overflow-hidden">
+                    <thead className="bg-gray-100 text-gray-700 sticky top-0 text-xs uppercase">
                         <tr>
-                            <th colSpan={3} className="text-white uppercase p-2 text-sm">{t("usersManagement.table.title")}</th>
-                        </tr>
-                        <tr className="bg-gray-700">
-                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("usersManagement.table.head.username")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("usersManagement.table.head.roleName")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-sm text-left"></th>
-                            {/* <th className="mx-2 text-white uppercase p-3 text-sm text-left"></th> */}
+                            <th className="px-4 py-3 text-left">{t("usersManagement.table.head.username")}</th>
+                            <th className="px-4 py-3 text-left">{t("usersManagement.table.head.roleName")}</th>
+                            <th className="px-4 py-3 text-left"></th>
+                            {/* <th className="px-4 py-3 text-left"></th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -128,69 +196,6 @@ const UserManagementPage = () => {
                     </tbody>
                 </table>
             </div>
-            {!isInputFormActive
-                ?
-                <div className="flex item-center justify-center w-full">
-                    <button
-                        className="btn-primary"
-                        onClick={handleCreateNew}>
-                        <div>
-                            <MdAddCircleOutline />
-                        </div>
-                        <div className="uppercase font-bold text-sm">{t("usersManagement.button.addUser")}</div>
-                    </button>
-                </div>
-                :
-                <div className="m-2 xl:m-8">
-                    <div className="card-header">{t("usersManagement.form.title")}</div>
-                    <div className="card-body">
-                        <form className="w-full" onSubmit={handleSave}>
-                            <div className="w-full my-4">
-                                <div className="font-extrabold text-sm uppercase">{t("usersManagement.form.username")}</div>
-                                <input
-                                    type="text"
-                                    required
-                                    className="text-input"
-                                    onChange={handleNameChanged} />
-                            </div>
-                            <div className='w-full my-4'>
-                                <div className='font-extrabold text-sm uppercase'>{t("usersManagement.form.password")}</div>
-                                <input
-                                    type="text"
-                                    required
-                                    className="text-input"
-                                    onChange={handlePasswordChanged} />
-                            </div>
-
-                            <div className='w-full my-4'>
-                                <div className='font-extrabold text-sm uppercase'>{t("usersManagement.form.role")}</div>
-                                <select className='text-input'
-                                    required
-                                    onChange={handleRoleIdChanged} >
-                                    <option value={undefined}></option>
-                                    {roles.map(r => (<option key={r.id} value={r.id}>{`${r.name} » ${r.grants.join(", ")}`}</option>))}
-                                </select>
-                            </div>
-
-                            <div className="flex justify-center items-center gap-2 flex-wrap">
-
-                                <button
-                                    type="button"
-                                    className="btn-secondary"
-                                    onClick={handleBack}>
-                                    <div className="uppercase font-bold text-sm">{t("common.back")}</div>
-                                </button>
-
-                                <button
-                                    type="submit"
-                                    className="btn-primary">
-                                    <div className="uppercase font-bold text-sm">{t("usersManagement.button.save")}</div>
-                                </button>
-
-                            </div>
-                        </form>
-                    </div>
-                </div>}
         </AppLayout>
     );
 };
