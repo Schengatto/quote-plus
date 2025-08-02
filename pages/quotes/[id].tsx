@@ -55,7 +55,9 @@ const QuoteEdit = () => {
     return (
         <AppLayout>
             <div className="m-8">
-                <div className="card-header">{t("quotes.form.pdfPreview")} - {selectedQuote?.name}</div>
+                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                    <span className="capitalize">{t("quotes.form.pdfPreview")} - {selectedQuote?.name}</span>
+                </div>
                 <div className="card-body">
                     <div className="w-[90%]">
                         <div className='w-[210mm] my-4 border-2 border-dashed border-black m-auto'>

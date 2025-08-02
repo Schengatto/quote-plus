@@ -53,7 +53,13 @@ const Home = () => {
                                     note={note.note}
                                     contact={note.contact} />
                             ))}
-                        {!pendingNotes.length && <div>{t("common.noPendingTasks")}!</div>}
+                        {!pendingNotes.length && <>
+                            <div className="flex flex-col m-auto items-center gap-8">
+                                <img src="/images/no-task.png" width={100} alt="No Task" />
+                                <div className="font-semibold text-xl">{t("common.noPendingTasks")}!</div>
+                            </div>
+                        </>
+                        }
                     </div>
                 </div>
             </div>

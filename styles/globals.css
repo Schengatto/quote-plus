@@ -59,8 +59,12 @@
         @apply text-black bg-gray-300;
     }
 
+    .field-label {
+        @apply capitalize block text-sm font-medium text-gray-700 mb-1;
+    }
+
     .card {
-        @apply border-2 border-black;
+        @apply bg-white shadow-md rounded-xl p-6;
     }
 
     .card-header {

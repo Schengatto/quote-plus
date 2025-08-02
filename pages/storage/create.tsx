@@ -181,7 +181,7 @@ const RepairCreate = () => {
                     <form className="w-full" onSubmit={handleAddItem}>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+                                <label className="field-label">Categoria</label>
                                 <select className="text-input" required onChange={handleCategoryChanged}>
                                     <option value={undefined}></option>
                                     {categories.filter(c => c.products.length).map(c => (
@@ -191,37 +191,37 @@ const RepairCreate = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Prodotto</label>
+                                <label className="field-label">Prodotto</label>
                                 <input type="text" required className="text-input" onChange={handleProductChanged} />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Matricola/Seriale</label>
+                                <label className="field-label">Matricola/Seriale</label>
                                 <input type="text" required className="text-input" onChange={handleCodeChanged} />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Rivenditore</label>
+                                <label className="field-label">Rivenditore</label>
                                 <AutoComplete onSelect={handleDealerSelection} suggestions={dealers} required></AutoComplete>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Utilizzatore/Riferimento</label>
+                                <label className="field-label">Utilizzatore/Riferimento</label>
                                 <AutoComplete onSelect={handleReferenceSelection} suggestions={references} required></AutoComplete>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Documento</label>
+                                <label className="field-label">Documento</label>
                                 <input type="text" required className="text-input" onChange={handleDocumentChange} />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Data</label>
+                                <label className="field-label">Data</label>
                                 <input type="date" required className="text-input" onChange={handleDateChange} />
                             </div>
 
                             <div className="lg:col-span-2">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Note</label>
+                                <label className="field-label">Note</label>
                                 <input type="text" required className="text-input" onChange={handleNoteChange} />
                             </div>
                         </div>

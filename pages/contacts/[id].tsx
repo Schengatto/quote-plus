@@ -31,17 +31,17 @@ const EditContact = () => {
         home: ""
     };
 
-    const [ selectedContact, setSelectedContact ] = useState<Partial<Contact>>(defaultContact);
-    const [ notes, setNotes ] = useState<ContactNote[]>([]);
-    const [ selectedNote, setSelectedNote ] = useState<Partial<ContactNote>>({ status: "OPEN" });
-    const [ searchHistory, setSearchHistory ] = useState<string>("");
+    const [selectedContact, setSelectedContact] = useState<Partial<Contact>>(defaultContact);
+    const [notes, setNotes] = useState<ContactNote[]>([]);
+    const [selectedNote, setSelectedNote] = useState<Partial<ContactNote>>({ status: "OPEN" });
+    const [searchHistory, setSearchHistory] = useState<string>("");
 
     const fetchContactNotes = useCallback(async (contactId: number) => {
         doActionWithLoader(setIsLoading, async () => {
             const _contactsNotes = await fetch(`/api/contacts/${contactId}/notes`, { method: "GET" }).then((res) => res.json());
             setNotes(_contactsNotes);
         });
-    }, [ setIsLoading ]);
+    }, [setIsLoading]);
 
     const handleFirstNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setSelectedContact((prev) => ({ ...prev, firstName: e.target.value }));
@@ -166,20 +166,20 @@ const EditContact = () => {
             setSelectedContact(_contact);
         };
         fetchContact();
-    }, [ params ]);
+    }, [params]);
 
     useEffect(() => {
         if (!selectedContact?.id) return;
         fetchContactNotes(selectedContact?.id);
-    }, [ selectedContact ]);
+    }, [selectedContact]);
 
     return (
         <AppLayout>
             <div className="m-8">
-                <div className="m-8 card">
-                    <div className="card-header">
-                        {t("contacts.title.editContact")}
-                    </div>
+                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                    <span className="capitalize">{t("contacts.title.editContact")}</span>
+                </div>
+                <div className="card">
                     <div className="card-body">
                         <div className="flex w-full flex-col xl:flex-row gap-4">
                             <div className="w-full">
@@ -188,7 +188,7 @@ const EditContact = () => {
                                         <>
                                             <div className="flex gap-4">
                                                 <div className="w-1/3 my-4">
-                                                    <div className="font-extrabold text-sm uppercase">{t("contacts.form.phoneNumber")}</div>
+                                                    <div className="field-label">{t("contacts.form.phoneNumber")}</div>
                                                     <input
                                                         type="text"
                                                         value={selectedContact.phoneNumber}
@@ -197,7 +197,7 @@ const EditContact = () => {
                                                         className="text-input" />
                                                 </div>
                                                 <div className="w-1/3 my-4">
-                                                    <div className="font-extrabold text-sm uppercase">{t("contacts.form.firstName")}</div>
+                                                    <div className="field-label">{t("contacts.form.firstName")}</div>
                                                     <input
                                                         type="text"
                                                         value={selectedContact.firstName ?? ""}
@@ -206,7 +206,7 @@ const EditContact = () => {
                                                         onChange={handleFirstNameChanged} />
                                                 </div>
                                                 <div className="w-1/3 my-4">
-                                                    <div className="font-extrabold text-sm uppercase">{t("contacts.form.lastName")}</div>
+                                                    <div className="field-label">{t("contacts.form.lastName")}</div>
                                                     <input
                                                         type="text"
                                                         value={selectedContact.lastName ?? ""}
@@ -216,7 +216,7 @@ const EditContact = () => {
                                             </div>
                                             <div className="flex gap-4">
                                                 <div className="w-1/3 my-4">
-                                                    <div className="font-extrabold text-sm uppercase">{t("contacts.form.email")}</div>
+                                                    <div className="field-label">{t("contacts.form.email")}</div>
                                                     <input
                                                         type="text"
                                                         value={selectedContact.email ?? ""}
@@ -224,7 +224,7 @@ const EditContact = () => {
                                                         onChange={handleEmailChanged} />
                                                 </div>
                                                 <div className="w-1/3 my-4">
-                                                    <div className="font-extrabold text-sm uppercase">{t("contacts.form.home")}</div>
+                                                    <div className="field-label">{t("contacts.form.home")}</div>
                                                     <input
                                                         type="text"
                                                         value={selectedContact.home ?? ""}
@@ -232,7 +232,7 @@ const EditContact = () => {
                                                         onChange={handleHomeChanged} />
                                                 </div>
                                                 <div className="w-1/3 my-4">
-                                                    <div className="font-extrabold text-sm uppercase">{t("contacts.form.company")}</div>
+                                                    <div className="field-label">{t("contacts.form.company")}</div>
                                                     <input
                                                         type="text"
                                                         value={selectedContact.company ?? ""}
@@ -263,74 +263,81 @@ const EditContact = () => {
 
                     </div>
                 </div>
-                <div className="m-8 card">
-                    <div className="card-header">
-                        {t("contacts.notes.title")}
-                    </div>
-                    <div className="card-body">
-                        <div className="flex w-full flex-col xl:flex-row gap-4">
-                            <div className="w-full xl:w-2/3">
 
-                                <form onSubmit={handleSaveNote}>
-                                    <div className='w-full my-4'>
-                                        <div className='font-extrabold text-sm uppercase'>Status</div>
-                                        <select className='text-input uppercase'
-                                            required
-                                            value={selectedNote.status}
-                                            onChange={handleNoteStatusChanged} >
-                                            <option value="OPEN" className="uppercase">🟡 {t("common.open")}</option>
-                                            <option value="PENDING" className="uppercase">🟡 {t("common.pending")}</option>
-                                            <option value="CLOSED" className="uppercase">🟢 {t("common.closed")}</option>
-                                        </select>
-                                    </div>
-                                    <div className="mb-6">
-                                        <textarea
-                                            className="border border-gray-900 w-full p-1"
-                                            rows={10}
-                                            required
-                                            onChange={handleNoteChanged} />
-                                    </div>
+                <div className="flex w-full gap-8 ">
+                    <div className="w-full">
+                        <div>
+                            <h2 className="capitalize text-l font-semibold text-gray-800 mt-8">{t("contacts.notes.title")}</h2>
+                        </div>
 
-                                    <div className="flex justify-center items-center gap-2 flex-wrap">
-                                        <button
-                                            type="submit"
-                                            className="btn-primary">
-                                            <div className="uppercase font-bold text-sm">{t("contacts.notes.creates")}</div>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                        <div className="my-6">
+                            <div className="card ">
+                                <div className="flex w-full flex-col xl:flex-row gap-4">
+                                    <div className="w-full">
+                                        <form onSubmit={handleSaveNote} className="">
+                                            <div className='w-full my-4'>
+                                                <div className='field-label'>Status</div>
+                                                <select className='text-input uppercase'
+                                                    required
+                                                    value={selectedNote.status}
+                                                    onChange={handleNoteStatusChanged} >
+                                                    <option value="OPEN" className="uppercase">🟡 {t("common.open")}</option>
+                                                    <option value="PENDING" className="uppercase">🟡 {t("common.pending")}</option>
+                                                    <option value="CLOSED" className="uppercase">🟢 {t("common.closed")}</option>
+                                                </select>
+                                            </div>
+                                            <div className="mb-6">
+                                                <div className='field-label'>Messaggio nota</div>
+                                                <textarea
+                                                    className="border border-gray-400 w-full p-1"
+                                                    rows={3}
+                                                    required
+                                                    onChange={handleNoteChanged} />
+                                            </div>
 
-                            <div className="w-full xl:w-1/3 flex flex-col gap-4 my-4">
-                                <div className='w-full'>
-                                    <div className='font-extrabold text-sm uppercase'>{t("common.history")}</div>
-                                    <input
-                                        required
-                                        type="text"
-                                        className="text-input"
-                                        placeholder="Search note"
-                                        onChange={handleHistorySearch} />
-                                </div>
-                                <div className="max-h-[500px] overflow-auto flex flex-col gap-4 my-4">
-                                    {notes
-                                        .filter(n => applyNotesHistoryFilter(n))
-                                        .map(note => (
-                                            <ContactNoteMessage
-                                                key={note.id}
-                                                author={note.createdBy}
-                                                date={note.updatedAt}
-                                                status={note.status}
-                                                note={note.note}
-                                                onNoteDelete={() => handleNoteDelete(note.id)}
-                                                onStatusChanged={(status) => handlePreviousNoteStatusChanged(status, note)} />
-                                        ))}
+                                            <div className="flex justify-center items-center gap-2 flex-wrap">
+                                                <button
+                                                    type="submit"
+                                                    className="btn-primary">
+                                                    <div className="uppercase font-bold text-sm">{t("contacts.notes.creates")}</div>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div className="w-full">
+                        <div>
+                            <h2 className="capitalize text-l font-semibold text-gray-800 mt-8">{t("common.history")}</h2>
+                        </div>
+                        <div className='w-full my-6'>
+                            <input
+                                required
+                                type="text"
+                                className="text-input"
+                                placeholder="Ricerca nota"
+                                onChange={handleHistorySearch} />
+                        </div>
+                        <div className="max-h-[500px] overflow-auto flex flex-col gap-4 my-4">
+                            {notes
+                                .filter(n => applyNotesHistoryFilter(n))
+                                .map(note => (
+                                    <ContactNoteMessage
+                                        key={note.id}
+                                        author={note.createdBy}
+                                        date={note.updatedAt}
+                                        status={note.status}
+                                        note={note.note}
+                                        onNoteDelete={() => handleNoteDelete(note.id)}
+                                        onStatusChanged={(status) => handlePreviousNoteStatusChanged(status, note)} />
+                                ))}
+                        </div>
+                    </div>
                 </div>
             </div>
-        </AppLayout>
+        </AppLayout >
     );
 };
 
