@@ -1,11 +1,8 @@
-import Dialog from "@/components/Dialog";
-import RowActions from "@/components/dropdown";
 import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
 import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import { doActionWithLoader } from "@/utils/actions";
-import { orderAscByProperty } from "@/utils/array";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Item } from "@prisma/client";
 import { formatDate } from "date-fns";
@@ -64,6 +61,7 @@ const ItemList = () => {
     const filterList = (i: Item) => i.code.toLowerCase()?.includes(searchTerm)
         || i.dealer.toLowerCase()?.includes(searchTerm)
         || i.reference?.toLowerCase()?.includes(searchTerm)
+        || i.product?.toLowerCase()?.includes(searchTerm)
         || i.document.toLowerCase()?.includes(searchTerm);
 
     useEffect(() => {
