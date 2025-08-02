@@ -46,12 +46,12 @@ const Notes = () => {
         <AppLayout>
             <div className= "m-8" >
                 <div className='w-full'>
-                    <div className='font-extrabold text-sm uppercase'>{t("common.history")}</div>
+                    <h1 className='first-letter:capitalize text-xl font-semibold text-gray-800 border-b pb-2 mb-4'>{t("common.history")}</h1>
                     <input
                         required
                         type="text"
                         className="text-input"
-                        placeholder="Search note"
+                        placeholder="Ricerca nota"
                         onChange={handleHistorySearch} />
                 </div>
                 <div className="flex flex-col gap-4 my-4" >

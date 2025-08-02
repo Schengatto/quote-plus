@@ -39,7 +39,7 @@ const Home = () => {
         <AppLayout>
             <div className="m-8" >
                 <div className='w-full'>
-                    <div className='font-extrabold text-sm uppercase text-ce'>{t("common.pendingNotes")}</div>
+                    <h1 className='text-xl font-semibold text-gray-800 border-b pb-2 mb-4'>{t("common.pendingNotes")}</h1>
                 </div>
                 <div className="m-4 flex flex-col gap-4">
                     <div className="overflow-auto flex flex-col gap-4 my-4">

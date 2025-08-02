@@ -22,8 +22,7 @@ const ItemList = () => {
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [products, setProducts] = useState<ItemList[]>([]);
-    const [orderBy, setOrderBy] = useState<string>("code");
+    const [products, setItems] = useState<ItemList[]>([]);
 
     const preventClick = (event: any, _selectedProduct: Partial<ItemList>) => {
         event.stopPropagation();
@@ -53,16 +52,10 @@ const ItemList = () => {
     };
 
     const fetchProducts = async () => {
-        const _products = await fetch("/api/storage", { method: "GET" })
+        const _items = await fetch("/api/storage", { method: "GET" })
             .then((res) => res.json()) ?? [];
-        const _productsWithCategoryLabel = _products.map((p: ItemList) => ({ ...p, categoryLabel: getCategoryLabel(p) }));
-        setProducts(orderAscByProperty(_productsWithCategoryLabel, orderBy));
-    };
-
-    const getCategoryLabel = ({ category }: any | ItemList): string => {
-        return category.parent
-            ? `${category.parent.name} » ${category.name}`
-            : category.name;
+        const orderedItems = _items.map(i => ({ ...i, date: new Date(i.date) })).sort((a, b) => b.date.getTime() - a.date.getTime());
+        setItems(orderedItems);
     };
 
     const [searchTerm, setSearchTerm] = useState<string>("");
@@ -78,8 +71,8 @@ const ItemList = () => {
         || i.document.toLowerCase()?.includes(searchTerm);
 
     useEffect(() => {
-        setProducts(orderAscByProperty(products, orderBy));
-    }, [orderBy, setProducts]);
+        setItems(products);
+    }, [setItems]);
 
     useEffect(() => {
         if (!user) return;

@@ -7,7 +7,7 @@ import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Contact } from "@prisma/client";
 import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { MdAddCircleOutline, MdDelete } from "react-icons/md";
+import { MdAddCircleOutline, MdDelete, MdSearch } from "react-icons/md";
 
 interface ContactData {
     name: string;
@@ -81,28 +81,27 @@ const Contacts = () => {
                         </button>
                     </div>
                 </div>
-                <table className="items-table">
-                    <thead className="table-header">
+                <div className="flex items-center gap-3 w-full mx-auto border border-gray-300 px-4 py-2 bg-gray-50 shadow-sm">
+                    <MdSearch className="text-gray-500 text-xl" />
+                    <input
+                        required
+                        type="text"
+                        className="w-full bg-transparent focus:outline-none text-sm placeholder-gray-400"
+                        placeholder="Cerca contatto"
+                        onChange={handleSearch}
+                    />
+                </div>
+                <table className="min-w-full text-sm border rounded-md shadow-sm overflow-hidden">
+                    <thead className="bg-gray-100 text-gray-700 sticky top-0 text-xs uppercase">
                         <tr>
-                            <th colSpan={3} className="text-white uppercase p-2 text-sm text-left">{t("contacts.table.title")}</th>
-                            <th colSpan={2}>
-                                <input
-                                    required
-                                    type="text"
-                                    className="text-input"
-                                    placeholder="search contact"
-                                    onChange={handleSearch} />
-                            </th>
-                        </tr>
-                        <tr className="bg-gray-700 border-2 border-gray-700">
-                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("contacts.table.head.firstName")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("contacts.table.head.lastName")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("contacts.table.head.phoneNumber")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-sm text-left">{t("contacts.table.head.email")}</th>
-                            <th className="mx-2 text-white uppercase p-3 text-sm text-left"></th>
+                            <th className="px-4 py-3 text-left">{t("contacts.table.head.firstName")}</th>
+                            <th className="px-4 py-3 text-left">{t("contacts.table.head.lastName")}</th>
+                            <th className="px-4 py-3 text-left">{t("contacts.table.head.phoneNumber")}</th>
+                            <th className="px-4 py-3 text-left">{t("contacts.table.head.email")}</th>
+                            <th className="px-4 py-3 text-center">Azioni</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="divide-y divide-gray-200">
                         {contacts
                             .filter(c => c.firstName?.toLowerCase()?.includes(searchTerm) || c.phoneNumber?.includes(searchTerm))
                             .map((c: Contact) =>
@@ -111,7 +110,14 @@ const Contacts = () => {
                                     <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{c.lastName}</td>
                                     <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{c.phoneNumber}</td>
                                     <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{c.email}</td>
-                                    <td className="w-10 cursor-pointer text-red-600" onClick={(event) => handleDelete(event, c)}><MdDelete /></td>
+                                    <td className="px-2 py-3 text-center">
+                                        <button
+                                            className="text-red-600 hover:text-red-800"
+                                            onClick={(e) => handleDelete(e, c)}
+                                        >
+                                            <MdDelete />
+                                        </button>
+                                    </td>
                                 </tr>
                             )}
                     </tbody>

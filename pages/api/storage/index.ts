@@ -23,7 +23,7 @@ export default async function handler(
             res.status(201).json(newItem);
         } else if (req.method === "GET") {
             const filters = req.query;
-            const orderBy = req.query.orderBy as unknown as string ?? "code";
+            const orderBy = req.query.orderBy as unknown as string ?? "date";
             const products = await doWithPrisma((prisma) =>
                 prisma.item.findMany({
                     where: {
@@ -31,7 +31,7 @@ export default async function handler(
                         dealer: filters?.dealer && String(filters.dealer),
                         reference: filters?.reference && String(filters.reference)
                     },
-                    orderBy: { [orderBy]: "asc" },
+                    orderBy: { [orderBy]: "desc" },
                 })
             );
             res.status(200).json(products);
