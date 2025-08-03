@@ -133,6 +133,9 @@ model Contact {
     updatedAt   DateTime      @updatedAt @map(name: "updated_at")
     updatedBy   String        @map(name: "updated_by")
     notes       ContactNote[]
+    whatsapp    String?       @default("")
+    telegram    String?       @default("")
+    label       String?       @default("")
 }
 
 enum ContactNoteStatus {

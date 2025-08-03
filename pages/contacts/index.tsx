@@ -57,6 +57,13 @@ const Contacts = () => {
         setSearchTerm(e.target.value.toLowerCase());
     };
 
+    const filterList = (c: Contact) => c.firstName?.toLowerCase()?.includes(searchTerm)
+        || c.phoneNumber?.includes(searchTerm)
+        || c.lastName?.toLowerCase()?.includes(searchTerm)
+        || c.label?.toLowerCase()?.includes(searchTerm)
+        || c.company?.toLowerCase()?.includes(searchTerm)
+        || c.email?.toLowerCase()?.includes(searchTerm);
+
     useEffect(() => {
         fetchContacts();
     }, []);
@@ -103,7 +110,7 @@ const Contacts = () => {
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                         {contacts
-                            .filter(c => c.firstName?.toLowerCase()?.includes(searchTerm) || c.phoneNumber?.includes(searchTerm))
+                            .filter(filterList)
                             .map((c: Contact) =>
                                 <tr key={c.id} className={`table-row ${c.id === selectedContact?.id && "!table-row-active"}`} onClick={(e) => handleEdit(e, c)}>
                                     <td className="text-sm px-4 py-3 w-auto truncate max-w-0">{c.firstName}</td>

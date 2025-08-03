@@ -9,6 +9,7 @@ import { Contact, ContactNote } from "@prisma/client";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
+import { MdPhone, MdSend } from "react-icons/md";
 
 const EditContact = () => {
 
@@ -61,6 +62,18 @@ const EditContact = () => {
 
     const handleCompanyChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setSelectedContact((prev) => ({ ...prev, company: e.target.value }));
+    };
+
+    const handleLabelChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setSelectedContact((prev) => ({ ...prev, label: e.target.value }));
+    };
+
+    const handleWhatsappChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setSelectedContact((prev) => ({ ...prev, whatsapp: e.target.value }));
+    };
+
+    const handleTelegramChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setSelectedContact((prev) => ({ ...prev, telegram: e.target.value }));
     };
 
     const handleNoteStatusChanged = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -171,7 +184,7 @@ const EditContact = () => {
     useEffect(() => {
         if (!selectedContact?.id) return;
         fetchContactNotes(selectedContact?.id);
-    }, [selectedContact]);
+    }, []);
 
     return (
         <AppLayout>
@@ -179,6 +192,34 @@ const EditContact = () => {
                 <div className="page-title">
                     <span className="capitalize">{t("contacts.title.editContact")}</span>
                 </div>
+                {(selectedContact.whatsapp || selectedContact.telegram) &&
+                    <div className="my-4">
+                        <div className="flex justify-end content-end w-full gap-4">
+                            {selectedContact.whatsapp &&
+                                <button className="btn-primary"
+                                    onClick={() => {
+                                        window.open(`https://wa.me/${selectedContact.phoneNumber}`, "_blank");
+                                    }}>
+                                    <MdPhone />
+                                    <span className="uppercase font-semibold text-sm">{t("common.whatsapp")}</span>
+                                </button>
+                            }
+                            {selectedContact.telegram &&
+                                <button
+                                    className="btn-primary"
+                                    onClick={() => {
+                                        window.open(`https://t.me/${selectedContact.telegram}`, "_blank");
+                                    }}>
+                                    <div>
+                                        <MdSend />
+                                    </div>
+                                    <div className="uppercase font-semibold text-sm">{t("common.telegram")}</div>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+
                 <div className="card">
                     <div className="card-body">
                         <div className="flex w-full flex-col xl:flex-row gap-4">
@@ -241,6 +282,32 @@ const EditContact = () => {
                                                 </div>
                                             </div>
 
+                                            <div className="flex flex-col xl:flex-row xl:gap-4">
+                                                <div className="w-full xl:w-1/3 my-4">
+                                                    <div className="field-label">{t("contacts.form.label")}</div>
+                                                    <input
+                                                        type="text"
+                                                        value={selectedContact.label ?? ""}
+                                                        className="text-input"
+                                                        onChange={handleLabelChange} />
+                                                </div>
+                                                <div className="w-full xl:w-1/3 my-4">
+                                                    <div className="field-label">{t("contacts.form.hasWhatsapp")}</div>
+                                                    <input
+                                                        type="text"
+                                                        value={selectedContact.whatsapp ?? ""}
+                                                        className="text-input"
+                                                        onChange={handleWhatsappChange} />
+                                                </div>
+                                                <div className="w-full xl:w-1/3 my-4">
+                                                    <div className="field-label">{t("contacts.form.hasTelegram")}</div>
+                                                    <input
+                                                        type="text"
+                                                        value={selectedContact.telegram ?? ""}
+                                                        className="text-input"
+                                                        onChange={handleTelegramChange} />
+                                                </div>
+                                            </div>
                                         </>
                                     )}
 
@@ -318,7 +385,6 @@ const EditContact = () => {
                                                 <textarea
                                                     className="border border-gray-400 w-full p-1"
                                                     rows={3}
-                                                    required
                                                     onChange={handleNoteChanged} />
                                             </div>
 

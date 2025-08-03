@@ -10,6 +10,7 @@ import { doActionWithLoader } from "@/utils/actions";
 import { Contact, ContactNote } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
+import { MdPhone, MdSend } from "react-icons/md";
 
 const IncomingCall = () => {
     const searchParams = useSearchParams();
@@ -36,7 +37,7 @@ const IncomingCall = () => {
     };
 
     const [contactData, setContactData] = useState<Partial<Contact>>(defaultContact);
-    const [selectedContanct, setSelectedContanct] = useState<Partial<Contact>>({});
+    const [selectedContact, setSelectedContact] = useState<Partial<Contact>>({});
     const [isContactPreset, setIsContactPreset] = useState<boolean>(false);
     const [notes, setNotes] = useState<ContactNote[]>([]);
     const [selectedNote, setSelectedNote] = useState<Partial<ContactNote>>({ status: "OPEN" });
@@ -50,23 +51,35 @@ const IncomingCall = () => {
     }, [setIsLoading]);
 
     const handleFirstNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
-        setSelectedContanct((prev) => ({ ...prev, firstName: e.target.value }));
+        setSelectedContact((prev) => ({ ...prev, firstName: e.target.value }));
     };
 
     const handleLastNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
-        setSelectedContanct((prev) => ({ ...prev, lastName: e.target.value }));
+        setSelectedContact((prev) => ({ ...prev, lastName: e.target.value }));
     };
 
     const handleEmailChanged = (e: ChangeEvent<HTMLInputElement>) => {
-        setSelectedContanct((prev) => ({ ...prev, email: e.target.value }));
+        setSelectedContact((prev) => ({ ...prev, email: e.target.value }));
     };
 
     const handleHomeChanged = (e: ChangeEvent<HTMLInputElement>) => {
-        setSelectedContanct((prev) => ({ ...prev, home: e.target.value }));
+        setSelectedContact((prev) => ({ ...prev, home: e.target.value }));
     };
 
     const handleCompanyChanged = (e: ChangeEvent<HTMLInputElement>) => {
-        setSelectedContanct((prev) => ({ ...prev, company: e.target.value }));
+        setSelectedContact((prev) => ({ ...prev, company: e.target.value }));
+    };
+
+    const handleLabelChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setSelectedContact((prev) => ({ ...prev, label: e.target.value }));
+    };
+
+    const handleWhatsappChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setSelectedContact((prev) => ({ ...prev, whatsapp: e.target.value }));
+    };
+
+    const handleTelegramChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setSelectedContact((prev) => ({ ...prev, telegram: e.target.value }));
     };
 
     const handleNoteStatusChanged = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -112,11 +125,11 @@ const IncomingCall = () => {
         const contactBody: Partial<Contact> = contactId
             ? {
                 ...contactData,
-                ...selectedContanct,
+                ...selectedContact,
                 updatedBy: user?.username
             }
             : {
-                ...selectedContanct,
+                ...selectedContact,
                 createdBy: user?.username,
                 updatedBy: user?.username,
             };
@@ -154,8 +167,10 @@ const IncomingCall = () => {
         e.preventDefault();
         try {
             const contactId = await saveCurrentContact();
-            await saveNewContactNote(contactId);
-            setContactData(prev => ({ ...prev, ...selectedContanct, id: contactId }));
+            if (selectedNote.note) {
+                await saveNewContactNote(contactId);
+            }
+            setContactData(prev => ({ ...prev, ...selectedContact, id: contactId }));
             setIsContactPreset(true);
         } catch (error: any) {
             alert(`${t("common.error.onSave")}, ${error.message}`);
@@ -173,10 +188,10 @@ const IncomingCall = () => {
 
     useEffect(() => {
         if (!contactData.id) {
-            setSelectedContanct({ phoneNumber: phoneNumber ?? "", firstName: displayName });
+            setSelectedContact({ phoneNumber: phoneNumber ?? "", firstName: displayName, whatsapp: phoneNumber ?? "" });
             return;
         };
-        setSelectedContanct(contactData);
+        setSelectedContact(contactData);
         fetchContactNotes(contactData.id);
     }, [contactData]);
 
@@ -195,6 +210,34 @@ const IncomingCall = () => {
                         </div>
                     )}
 
+                    {(selectedContact.whatsapp || selectedContact.telegram) &&
+                        <div className="my-4">
+                            <div className="flex justify-end content-end w-full gap-4">
+                                {selectedContact.whatsapp &&
+                                    <button className="btn-primary"
+                                        onClick={() => {
+                                            window.open(`https://wa.me/${selectedContact.phoneNumber}`, "_blank");
+                                        }}>
+                                        <MdPhone />
+                                        <span className="uppercase font-semibold text-sm">{t("common.whatsapp")}</span>
+                                    </button>
+                                }
+                                {selectedContact.telegram &&
+                                    <button
+                                        className="btn-primary"
+                                        onClick={() => {
+                                            window.open(`https://t.me/${selectedContact.telegram}`, "_blank");
+                                        }}>
+                                        <div>
+                                            <MdSend />
+                                        </div>
+                                        <div className="uppercase font-semibold text-sm">{t("common.telegram")}</div>
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    }
+
                     <div className="my-8 card">
                         <div className="card-body">
                             <div className="flex w-full flex-col xl:flex-row gap-4">
@@ -207,7 +250,7 @@ const IncomingCall = () => {
                                                         <div className="field-label">{t("contacts.form.phoneNumber")}</div>
                                                         <input
                                                             type="text"
-                                                            value={selectedContanct.phoneNumber}
+                                                            value={selectedContact.phoneNumber}
                                                             required
                                                             readOnly
                                                             className="text-input" />
@@ -216,7 +259,7 @@ const IncomingCall = () => {
                                                         <div className="field-label">{t("contacts.form.firstName")}</div>
                                                         <input
                                                             type="text"
-                                                            value={selectedContanct.firstName ?? ""}
+                                                            value={selectedContact.firstName ?? ""}
                                                             required
                                                             className="text-input"
                                                             onChange={handleFirstNameChanged} />
@@ -225,7 +268,7 @@ const IncomingCall = () => {
                                                         <div className="field-label">{t("contacts.form.lastName")}</div>
                                                         <input
                                                             type="text"
-                                                            value={selectedContanct.lastName ?? ""}
+                                                            value={selectedContact.lastName ?? ""}
                                                             className="text-input"
                                                             onChange={handleLastNameChanged} />
                                                     </div>
@@ -235,7 +278,7 @@ const IncomingCall = () => {
                                                         <div className="field-label">{t("contacts.form.email")}</div>
                                                         <input
                                                             type="text"
-                                                            value={selectedContanct.email ?? ""}
+                                                            value={selectedContact.email ?? ""}
                                                             className="text-input"
                                                             onChange={handleEmailChanged} />
                                                     </div>
@@ -243,7 +286,7 @@ const IncomingCall = () => {
                                                         <div className="field-label">{t("contacts.form.home")}</div>
                                                         <input
                                                             type="text"
-                                                            value={selectedContanct.home ?? ""}
+                                                            value={selectedContact.home ?? ""}
                                                             className="text-input"
                                                             onChange={handleHomeChanged} />
                                                     </div>
@@ -251,12 +294,37 @@ const IncomingCall = () => {
                                                         <div className="field-label">{t("contacts.form.company")}</div>
                                                         <input
                                                             type="text"
-                                                            value={selectedContanct.company ?? ""}
+                                                            value={selectedContact.company ?? ""}
                                                             className="text-input"
                                                             onChange={handleCompanyChanged} />
                                                     </div>
                                                 </div>
-
+                                                <div className="flex flex-col xl:flex-row xl:gap-4">
+                                                    <div className="w-full xl:w-1/3 my-4">
+                                                        <div className="field-label">{t("contacts.form.label")}</div>
+                                                        <input
+                                                            type="text"
+                                                            value={selectedContact.label ?? ""}
+                                                            className="text-input"
+                                                            onChange={handleLabelChange} />
+                                                    </div>
+                                                    <div className="w-full xl:w-1/3 my-4">
+                                                        <div className="field-label">{t("contacts.form.hasWhatsapp")}</div>
+                                                        <input
+                                                            type="text"
+                                                            value={selectedContact.whatsapp ?? ""}
+                                                            className="text-input"
+                                                            onChange={handleWhatsappChange} />
+                                                    </div>
+                                                    <div className="w-full xl:w-1/3 my-4">
+                                                        <div className="field-label">{t("contacts.form.hasTelegram")}</div>
+                                                        <input
+                                                            type="text"
+                                                            value={selectedContact.telegram ?? ""}
+                                                            className="text-input"
+                                                            onChange={handleTelegramChange} />
+                                                    </div>
+                                                </div>
                                             </>
                                         )}
 
@@ -276,7 +344,6 @@ const IncomingCall = () => {
                                             <textarea
                                                 className="border border-gray-900 w-full p-1"
                                                 rows={3}
-                                                required
                                                 onChange={handleNoteChanged} />
                                         </div>
 
