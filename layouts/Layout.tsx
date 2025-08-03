@@ -1,12 +1,10 @@
 import SideMenu from "@/components/SideMenu";
 import { useAuth } from "@/hooks/useAuth";
-import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 import { MdMenu, MdMenuOpen, MdOutlineAccountCircle } from "react-icons/md";
-import Cookies from "universal-cookie";
 
 interface LayoutProps {
     children: ReactNode;
@@ -19,6 +17,8 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
     const { t, setCurrentLanguage, currentLanguage } = useI18nStore();
     const [isMenuVisible, setIsMenuVisible] = useState<boolean>(true);
     const [isUserMenuVisible, setIsUserMenuVisible] = useState<boolean>(false);
+
+    const isHome = router.pathname === "/home";
 
     const toggleMenu = () => {
         setIsUserMenuVisible(false);
@@ -35,6 +35,8 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
     };
 
     const navigateTo = (page: string) => {
+        const isMobile = window?.innerWidth < 768;
+        setIsMenuVisible(isHome && !isMobile);
         router.push(page);
     };
 
@@ -42,7 +44,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
         if (!userData) return;
 
         const isMobile = window?.innerWidth < 768;
-        setIsMenuVisible(!isMobile);
+        setIsMenuVisible(isHome && !isMobile);
 
         const userLanguage = currentLanguage || (userData?.extraData as any).language || "it";
         setCurrentLanguage(userLanguage);
