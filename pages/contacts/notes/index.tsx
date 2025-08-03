@@ -37,11 +37,14 @@ const Notes = () => {
 
     const handleHistorySearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchHistory(e.target.value);
-        setVisibleCount(30); // resetta la visualizzazione quando cerchi
+        setVisibleCount(30);
     };
 
-    const applyNotesHistoryFilter = ({ note }: ContactNoteWithContact): boolean => {
-        return !searchHistory || note.toLowerCase().includes(searchHistory.toLowerCase());
+    const applyNotesHistoryFilter = ({ note, contact, createdBy }: ContactNoteWithContact): boolean => {
+        return !searchHistory
+            || note.toLowerCase().includes(searchHistory.toLowerCase())
+            || createdBy.toLowerCase().includes(searchHistory.toLowerCase())
+            || contact.firstName.toLowerCase().includes(searchHistory.toLowerCase());
     };
 
     const filteredNotes = notes.filter(applyNotesHistoryFilter);
