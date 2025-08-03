@@ -63,7 +63,6 @@ const Dialog: FunctionComponent<DialogProps> = (props: DialogProps) => {
     const IconComponent = config.icon;
 
     const handleClose = () => {
-        console.log({ isDialogVisible, dialog })
         if (props.onClose) {
             props.onClose();
         }
@@ -90,7 +89,6 @@ const Dialog: FunctionComponent<DialogProps> = (props: DialogProps) => {
     };
 
     useEffect(() => {
-        console.log(props)
         setIsDialogVisible(!!props.isVisible);
     }, [props]);
 

@@ -1,19 +1,18 @@
-import ContactNoteMessage from "@/components/contacts/ContactNoteMessage";
 import { useAuth } from "@/hooks/useAuth";
 import ContactsLayout from "@/layouts/Contacts";
 import AppLayout from "@/layouts/Layout";
 import { useAppStore } from "@/store/app";
 import { useContactsStore } from "@/store/contacts";
 import { useI18nStore } from "@/store/i18n";
-import { ContactNoteStatus } from "@/types/contacts";
-import { doActionWithLoader } from "@/utils/actions";
-import { Contact, ContactNote } from "@prisma/client";
+import { Contact } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
-import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 const IncomingCall = () => {
     const searchParams = useSearchParams();
     const user = useAuth();
+    const router = useRouter();
 
     const { setIsLoading } = useAppStore();
     const { t } = useI18nStore();
@@ -37,17 +36,6 @@ const IncomingCall = () => {
 
     const [contactData, setContactData] = useState<Partial<Contact>>(defaultContact);
     const [selectedContanct, setSelectedContanct] = useState<Partial<Contact>>({});
-    const [isContactPreset, setIsContactPreset] = useState<boolean>(false);
-    const [notes, setNotes] = useState<ContactNote[]>([]);
-    const [selectedNote, setSelectedNote] = useState<Partial<ContactNote>>({ status: "OPEN" });
-    const [searchHistory, setSearchHistory] = useState<string>("");
-
-    const fetchContactNotes = useCallback(async (contactId: number) => {
-        doActionWithLoader(setIsLoading, async () => {
-            const _contactsNotes = await fetch(`/api/contacts/${contactId}/notes`, { method: "GET" }).then((res) => res.json());
-            setNotes(_contactsNotes);
-        });
-    }, [setIsLoading]);
 
     const handlePhoneNumberChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setSelectedContanct((prev) => ({ ...prev, phoneNumber: e.target.value }));
@@ -71,42 +59,6 @@ const IncomingCall = () => {
 
     const handleCompanyChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setSelectedContanct((prev) => ({ ...prev, company: e.target.value }));
-    };
-
-    const handleNoteStatusChanged = (e: ChangeEvent<HTMLSelectElement>) => {
-        const status: ContactNoteStatus = !!e.currentTarget.value ? e.currentTarget.value as ContactNoteStatus : "OPEN";
-        setSelectedNote((prev) => ({ ...prev, status }));
-    };
-
-    const handleNoteChanged = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        const note = e.currentTarget?.value || "";
-        setSelectedNote((prev) => ({ ...prev, note }));
-    };
-
-    const handleHistorySearch = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearchHistory(e.target.value);
-    };
-
-    const handlePreviousNoteStatusChanged = (status: ContactNoteStatus, note: ContactNote) => {
-        const contactId = contactData.id;
-        if (!contactId) return;
-        doActionWithLoader(setIsLoading, async () => {
-            await fetch(`/api/contacts/${contactId}/notes/${note.id}`, { method: "PATCH", body: JSON.stringify({ ...note, status }) }).then((res) => res.json());
-            await fetchContactNotes(contactId);
-        });
-    };
-
-    const handleNoteDelete = (noteId: number) => {
-        const contactId = contactData.id;
-        if (!contactId) return;
-        doActionWithLoader(setIsLoading, async () => {
-            await fetch(`/api/contacts/${contactId}/notes/${noteId}`, { method: "DELETE" });
-            await fetchContactNotes(contactId);
-        });
-    };
-
-    const applyNotesHistoryFilter = ({ note }: ContactNote): boolean => {
-        return !searchHistory || note.toLowerCase().includes(searchHistory.toLocaleLowerCase());
     };
 
     const saveCurrentContact = async (): Promise<number> => {
@@ -136,31 +88,11 @@ const IncomingCall = () => {
         return Number(contactResponse.id);
     };
 
-    const saveNewContactNote = async (contactId: number) => {
-        const noteEndpoint = `/api/contacts/${contactId}/notes`;
-        const noteBody: Partial<ContactNote> = {
-            ...selectedNote,
-            contactId,
-            createdBy: user?.username,
-            updatedBy: user?.username,
-            event: "INCOMING_CALL"
-        };
-        const noteResponse = await fetch(noteEndpoint, { method: "POST", body: JSON.stringify(noteBody) }).then(
-            (res) => res.json()
-        );
-
-        if (!noteResponse.id) {
-            throw Error("Nota non salvata!");
-        }
-    };
-
-    const handleSaveNote = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSaveContact = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             const contactId = await saveCurrentContact();
-            await saveNewContactNote(contactId);
-            setContactData(prev => ({ ...prev, ...selectedContanct, id: contactId }));
-            setIsContactPreset(true);
+            router.push(`/contacts/${contactId}`);
         } catch (error: any) {
             alert(`${t("common.error.onSave")}, ${error.message}`);
         }
@@ -170,7 +102,6 @@ const IncomingCall = () => {
         if (!contacts || !phoneNumber) return;
         const contactMatch = (c: Contact) => !!c.phoneNumber && (c.phoneNumber == phoneNumber || c.mobile == phoneNumber || c.firstName == displayName);
         const storedContact: Contact | null = contacts.find(c => contactMatch(c)) || null;
-        setIsContactPreset(!!storedContact);
 
         setContactData(storedContact || defaultContact);
     }, [phoneNumber, displayName, contacts]);
@@ -181,7 +112,6 @@ const IncomingCall = () => {
             return;
         };
         setSelectedContanct(contactData);
-        fetchContactNotes(contactData.id);
     }, [contactData]);
 
     return (
@@ -196,7 +126,7 @@ const IncomingCall = () => {
                         <div className="card-body">
                             <div className="flex w-full flex-col xl:flex-row gap-4">
                                 <div className="w-full">
-                                    <form onSubmit={handleSaveNote}>
+                                    <form onSubmit={handleSaveContact}>
                                         {(
                                             <>
                                                 <div className="flex flex-col xl:flex-row xl:gap-4">
@@ -256,27 +186,6 @@ const IncomingCall = () => {
 
                                             </>
                                         )}
-
-                                        <div className='w-full my-4'>
-                                            <div className='field-label'>Status</div>
-                                            <select className='text-input uppercase'
-                                                required
-                                                value={selectedNote.status}
-                                                onChange={handleNoteStatusChanged} >
-                                                <option value="OPEN" className="uppercase">🟡 {t("common.open")}</option>
-                                                <option value="PENDING" className="uppercase">🟡 {t("common.pending")}</option>
-                                                <option value="CLOSED" className="uppercase">🟢 {t("common.closed")}</option>
-                                            </select>
-                                        </div>
-
-                                        <div className="mb-6">
-                                            <textarea
-                                                className="border border-gray-900 w-full p-1"
-                                                rows={3}
-                                                required
-                                                onChange={handleNoteChanged} />
-                                        </div>
-
                                         <div className="flex justify-center items-center gap-2 flex-wrap">
                                             <button
                                                 type="submit"
@@ -287,31 +196,6 @@ const IncomingCall = () => {
                                     </form>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="w-full flex flex-col gap-4 my-4">
-                        <div className='w-full'>
-                            <div className='field-label'>{t("common.history")}</div>
-                            <input
-                                required
-                                type="text"
-                                className="text-input"
-                                placeholder="Search note"
-                                onChange={handleHistorySearch} />
-                        </div>
-                        <div className="max-h-[500px] overflow-auto flex flex-col gap-4 my-4">
-                            {notes
-                                .filter(n => applyNotesHistoryFilter(n))
-                                .map(note => (
-                                    <ContactNoteMessage
-                                        key={note.id}
-                                        author={note.createdBy}
-                                        date={note.updatedAt}
-                                        status={note.status}
-                                        note={note.note}
-                                        onNoteDelete={() => handleNoteDelete(note.id)}
-                                        onStatusChanged={(status) => handlePreviousNoteStatusChanged(status, note)} />
-                                ))}
                         </div>
                     </div>
                 </div>
