@@ -49,6 +49,10 @@ const IncomingCall = () => {
         });
     }, [setIsLoading]);
 
+    const handlePhoneNumberChanged = (e: ChangeEvent<HTMLInputElement>) => {
+        setSelectedContanct((prev) => ({ ...prev, phoneNumber: e.target.value }));
+    };
+
     const handleFirstNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setSelectedContanct((prev) => ({ ...prev, firstName: e.target.value }));
     };
@@ -184,21 +188,14 @@ const IncomingCall = () => {
         <AppLayout>
             <ContactsLayout>
                 <div className="m-2 xl:m-8">
-                    <div className="page-title">
-                        <span className="capitalize"> {t("contacts.event.incomingCall")}</span>
+                    <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4">
+                        <span className="capitalize">{t("contacts.button.addContact")}</span>
                     </div>
-
-                    {!isContactPreset && (
-                        <div className="w-full px-4 py-3 rounded-xl bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 shadow">
-                            <p className="text-lg font-medium">Contatto non presente nel database</p>
-                            <p className="text-sm text-yellow-700">Assicurati di registrare correttamente questo nuovo contatto.</p>
-                        </div>
-                    )}
 
                     <div className="my-8 card">
                         <div className="card-body">
                             <div className="flex w-full flex-col xl:flex-row gap-4">
-                                <div className="w-full xl:w-2/3">
+                                <div className="w-full">
                                     <form onSubmit={handleSaveNote}>
                                         {(
                                             <>
@@ -209,8 +206,8 @@ const IncomingCall = () => {
                                                             type="text"
                                                             value={selectedContanct.phoneNumber}
                                                             required
-                                                            readOnly
-                                                            className="text-input" />
+                                                            className="text-input"
+                                                            onChange={handlePhoneNumberChanged} />
                                                     </div>
                                                     <div className="w-full xl:w-1/3 my-4">
                                                         <div className="field-label">{t("contacts.form.firstName")}</div>
@@ -289,33 +286,32 @@ const IncomingCall = () => {
                                         </div>
                                     </form>
                                 </div>
-                                <div className="w-full xl:w-1/3 flex flex-col gap-4 my-4">
-                                    <div className='w-full'>
-                                        <div className='field-label'>{t("common.history")}</div>
-                                        <input
-                                            required
-                                            type="text"
-                                            className="text-input"
-                                            placeholder="Search note"
-                                            onChange={handleHistorySearch} />
-                                    </div>
-                                    <div className="max-h-[500px] overflow-auto flex flex-col gap-4 my-4">
-                                        {notes
-                                            .filter(n => applyNotesHistoryFilter(n))
-                                            .map(note => (
-                                                <ContactNoteMessage
-                                                    key={note.id}
-                                                    author={note.createdBy}
-                                                    date={note.updatedAt}
-                                                    status={note.status}
-                                                    note={note.note}
-                                                    onNoteDelete={() => handleNoteDelete(note.id)}
-                                                    onStatusChanged={(status) => handlePreviousNoteStatusChanged(status, note)} />
-                                            ))}
-                                    </div>
-                                </div>
                             </div>
-
+                        </div>
+                    </div>
+                    <div className="w-full flex flex-col gap-4 my-4">
+                        <div className='w-full'>
+                            <div className='field-label'>{t("common.history")}</div>
+                            <input
+                                required
+                                type="text"
+                                className="text-input"
+                                placeholder="Search note"
+                                onChange={handleHistorySearch} />
+                        </div>
+                        <div className="max-h-[500px] overflow-auto flex flex-col gap-4 my-4">
+                            {notes
+                                .filter(n => applyNotesHistoryFilter(n))
+                                .map(note => (
+                                    <ContactNoteMessage
+                                        key={note.id}
+                                        author={note.createdBy}
+                                        date={note.updatedAt}
+                                        status={note.status}
+                                        note={note.note}
+                                        onNoteDelete={() => handleNoteDelete(note.id)}
+                                        onStatusChanged={(status) => handlePreviousNoteStatusChanged(status, note)} />
+                                ))}
                         </div>
                     </div>
                 </div>

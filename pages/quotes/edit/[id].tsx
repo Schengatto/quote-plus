@@ -161,7 +161,7 @@ const QuoteEdit = () => {
     return (
         <AppLayout>
             <div className="m-2 xl:m-8">
-                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                <div className="page-title">
                     <span className="capitalize">{t("quotes.edit.title")}</span>
                 </div>
                 <div className="card-body">

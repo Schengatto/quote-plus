@@ -176,7 +176,7 @@ const EditContact = () => {
     return (
         <AppLayout>
             <div className="m-2 xl:m-8">
-                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                <div className="page-title">
                     <span className="capitalize">{t("contacts.title.editContact")}</span>
                 </div>
                 <div className="card">
@@ -187,7 +187,7 @@ const EditContact = () => {
                                     {(
                                         <>
                                             <div className="flex gap-4">
-                                                <div className="w-1/3 my-4">
+                                                <div className="w-full xl:w-1/3 my-4">
                                                     <div className="field-label">{t("contacts.form.phoneNumber")}</div>
                                                     <input
                                                         type="text"
@@ -196,7 +196,7 @@ const EditContact = () => {
                                                         readOnly
                                                         className="text-input" />
                                                 </div>
-                                                <div className="w-1/3 my-4">
+                                                <div className="w-full xl:w-1/3 my-4">
                                                     <div className="field-label">{t("contacts.form.firstName")}</div>
                                                     <input
                                                         type="text"
@@ -205,7 +205,7 @@ const EditContact = () => {
                                                         className="text-input"
                                                         onChange={handleFirstNameChanged} />
                                                 </div>
-                                                <div className="w-1/3 my-4">
+                                                <div className="w-full xl:w-1/3 my-4">
                                                     <div className="field-label">{t("contacts.form.lastName")}</div>
                                                     <input
                                                         type="text"
@@ -215,7 +215,7 @@ const EditContact = () => {
                                                 </div>
                                             </div>
                                             <div className="flex gap-4">
-                                                <div className="w-1/3 my-4">
+                                                <div className="w-full xl:w-1/3 my-4">
                                                     <div className="field-label">{t("contacts.form.email")}</div>
                                                     <input
                                                         type="text"
@@ -223,7 +223,7 @@ const EditContact = () => {
                                                         className="text-input"
                                                         onChange={handleEmailChanged} />
                                                 </div>
-                                                <div className="w-1/3 my-4">
+                                                <div className="w-full xl:w-1/3 my-4">
                                                     <div className="field-label">{t("contacts.form.home")}</div>
                                                     <input
                                                         type="text"
@@ -231,7 +231,7 @@ const EditContact = () => {
                                                         className="text-input"
                                                         onChange={handleHomeChanged} />
                                                 </div>
-                                                <div className="w-1/3 my-4">
+                                                <div className="w-full xl:w-1/3 my-4">
                                                     <div className="field-label">{t("contacts.form.company")}</div>
                                                     <input
                                                         type="text"
@@ -265,9 +265,36 @@ const EditContact = () => {
                 </div>
 
                 <div className="flex w-full flex-col gap-8 xl:flex-row">
-                    <div className="w-full">
+                    <div className="w-full xl:w-2/3">
                         <div>
-                            <h2 className="capitalize text-l font-semibold text-gray-800 mt-8">{t("contacts.notes.title")}</h2>
+                            <h2 className="capitalize text-l font-semibold text-gray-800 mt-8">{t("common.history")}</h2>
+                        </div>
+                        <div className='w-full my-6'>
+                            <input
+                                required
+                                type="text"
+                                className="text-input"
+                                placeholder="Ricerca nota"
+                                onChange={handleHistorySearch} />
+                        </div>
+                        <div className="overflow-auto flex flex-col gap-4 my-4">
+                            {notes
+                                .filter(n => applyNotesHistoryFilter(n))
+                                .map(note => (
+                                    <ContactNoteMessage
+                                        key={note.id}
+                                        author={note.createdBy}
+                                        date={note.updatedAt}
+                                        status={note.status}
+                                        note={note.note}
+                                        onNoteDelete={() => handleNoteDelete(note.id)}
+                                        onStatusChanged={(status) => handlePreviousNoteStatusChanged(status, note)} />
+                                ))}
+                        </div>
+                    </div>
+                    <div className="w-full xl:w-1/3">
+                        <div>
+                            <h2 className="capitalize text-l font-semibold text-gray-800 mt-8">{t("contacts.notes.creates")}</h2>
                         </div>
 
                         <div className="my-6">
@@ -299,40 +326,13 @@ const EditContact = () => {
                                                 <button
                                                     type="submit"
                                                     className="btn-primary">
-                                                    <div className="uppercase font-bold text-sm">{t("contacts.notes.creates")}</div>
+                                                    <div className="uppercase font-bold text-sm">{t("common.add")}</div>
                                                 </button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="w-full">
-                        <div>
-                            <h2 className="capitalize text-l font-semibold text-gray-800 mt-8">{t("common.history")}</h2>
-                        </div>
-                        <div className='w-full my-6'>
-                            <input
-                                required
-                                type="text"
-                                className="text-input"
-                                placeholder="Ricerca nota"
-                                onChange={handleHistorySearch} />
-                        </div>
-                        <div className="max-h-[500px] overflow-auto flex flex-col gap-4 my-4">
-                            {notes
-                                .filter(n => applyNotesHistoryFilter(n))
-                                .map(note => (
-                                    <ContactNoteMessage
-                                        key={note.id}
-                                        author={note.createdBy}
-                                        date={note.updatedAt}
-                                        status={note.status}
-                                        note={note.note}
-                                        onNoteDelete={() => handleNoteDelete(note.id)}
-                                        onStatusChanged={(status) => handlePreviousNoteStatusChanged(status, note)} />
-                                ))}
                         </div>
                     </div>
                 </div>

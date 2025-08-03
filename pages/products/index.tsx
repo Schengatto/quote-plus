@@ -151,7 +151,7 @@ const ProductList = () => {
 
     return (
         <AppLayout>
-            <Dialog isVisible={!!selectedRow} title="Modifica prezzo" actions={changePriceDialogActions} >
+            <Dialog isVisible={!!selectedRow} title="Modifica prezzo" actions={changePriceDialogActions} onClose={() => setSelectedRow(null)} >
                 <p className="text-white">Inserisci il nuovo prezzo di {selectedRow?.name} - prezz corrente: {selectedRow?.price} €</p>
                 <div>
                     <div className='field-label my-2'><span className="text-white">{t("products.form.price")}</span></div>
@@ -166,7 +166,7 @@ const ProductList = () => {
 
             <div className="m-2 xl:m-8">
 
-                <div className="flex text-xl font-semibold text-gray-800 border-b pb-2 mb-4 ">
+                <div className="page-title">
                     <span className="capitalize">{t("products.table.title")}</span>
                 </div>
 

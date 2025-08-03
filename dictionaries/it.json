@@ -9,6 +9,7 @@
   "common.back": "indietro",
   "common.cancel": "annulla",
   "common.ok": "ok",
+  "common.add": "aggiungi",
   "common.warning": "attenzione",
   "common.confirmAction": "conferma azione",
   "common.confirmDelete.message": "Attenzione, premendo conferma i dati relativi all'elemento selezionato verranno eliminati.",

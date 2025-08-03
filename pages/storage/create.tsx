@@ -101,7 +101,6 @@ const RepairCreate = () => {
             }
 
             setList((prev) => [...prev, response]);
-            // router.push("/storage");
         } catch (error: any) {
             alert(`${t("common.error.onSave")}, ${error.message}`);
         }
@@ -165,13 +164,13 @@ const RepairCreate = () => {
     return (
         <AppLayout>
             <div className="m-2 xl:m-8">
-                <div className="flex text-xl  text-gray-800 border-b pb-2 mb-4">
-                    <div className="cursor-pointer hover:text-blue-800 font-semibold border-b-2 border-gray-700 hover:border-blue-800"
+                <div className="flex text-gray-800 border-b pb-2 mb-4">
+                    <div className="page-title cursor-pointer hover:text-blue-800 font-semibold border-b-2 border-gray-700 hover:border-blue-800"
                         onClick={handleBack}>
                         Matricole e Riparazioni
                     </div>
                     <div className="mx-2">/</div>
-                    <div className="text-l font-semibold">
+                    <div className="page-title">
                         Inserimento Nuova {type === "repair" ? "Riparazione" : "Vendita"}
                     </div>
                 </div>

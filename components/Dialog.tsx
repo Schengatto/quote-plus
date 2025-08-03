@@ -1,7 +1,7 @@
 import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
-import { FunctionComponent, ReactNode, useEffect } from "react";
-import { MdWarning, MdInfo, MdError, MdCheckCircle, MdClose } from "react-icons/md";
+import { FunctionComponent, ReactNode, useEffect, useState } from "react";
+import { MdCheckCircle, MdClose, MdError, MdInfo, MdWarning } from "react-icons/md";
 
 export interface DialogAction {
     name: string;
@@ -27,9 +27,10 @@ const Dialog: FunctionComponent<DialogProps> = (props: DialogProps) => {
     const { dialog, setDialog } = useAppStore();
     const { t } = useI18nStore();
 
+    const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
+
     const actions = props.actions || dialog?.actions;
-    const isDialogVisible = props.isVisible || dialog;
-    const dialogType = props.type ||  dialog?.type || "info";
+    const dialogType = props.type || dialog?.type || "info";
 
     const typeConfig = {
         info: {
@@ -62,11 +63,15 @@ const Dialog: FunctionComponent<DialogProps> = (props: DialogProps) => {
     const IconComponent = config.icon;
 
     const handleClose = () => {
+        console.log({ isDialogVisible, dialog })
         if (props.onClose) {
             props.onClose();
-        } else {
-            setDialog(null);
         }
+        if (dialog?.onClose) {
+            dialog?.onClose();
+        }
+        setDialog(null);
+        setIsDialogVisible(false);
     };
 
     const getButtonClasses = (variant: DialogAction["variant"] = "primary") => {
@@ -83,6 +88,15 @@ const Dialog: FunctionComponent<DialogProps> = (props: DialogProps) => {
                 return `${baseClasses} bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500`;
         }
     };
+
+    useEffect(() => {
+        console.log(props)
+        setIsDialogVisible(!!props.isVisible);
+    }, [props]);
+
+    useEffect(() => {
+        setIsDialogVisible(!!dialog);
+    }, [dialog]);
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
