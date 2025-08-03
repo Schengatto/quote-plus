@@ -14,7 +14,7 @@ import Cookies from "universal-cookie";
 const UserProfile = () => {
 
     const router = useRouter();
-    const user = useAuth();
+    const {userData: user} = useAuth();
 
     const { t, setCurrentLanguage, currentLanguage } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();

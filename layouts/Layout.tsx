@@ -13,7 +13,7 @@ interface LayoutProps {
 }
 
 const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
-    const auth = useAuth();
+    const { userData, logout } = useAuth();
     const router = useRouter();
 
     const { t, setCurrentLanguage, currentLanguage } = useI18nStore();
@@ -30,8 +30,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
     };
 
     const handleLogout = () => {
-        const cookies = new Cookies();
-        cookies.remove("token");
+        logout();
         router.push("/");
     };
 
@@ -40,14 +39,14 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
     };
 
     useEffect(() => {
-        if (!auth) return;
+        if (!userData) return;
 
         const isMobile = window?.innerWidth < 768;
         setIsMenuVisible(!isMobile);
 
-        const userLanguage = currentLanguage || (auth?.extraData as any).language || "it";
+        const userLanguage = currentLanguage || (userData?.extraData as any).language || "it";
         setCurrentLanguage(userLanguage);
-    }, [auth]);
+    }, [userData]);
 
     return (
         <>
@@ -57,8 +56,8 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            {auth && (
-                <main className="bg-gray-100 min-h-screen">
+            {userData && (
+                <main className="bg-gray-50 min-h-screen">
                     <div className="h-14 fixed top-0 z-20 w-full bg-white shadow-md flex items-center justify-between px-4">
                         <div className="flex items-center space-x-4">
                             <button
@@ -78,7 +77,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                             >
                                 <MdOutlineAccountCircle size={20} />
                                 <span className="text-sm text-gray-700 font-medium first-letter:capitalize">
-                                    {auth.username}
+                                    {userData.username}
                                 </span>
                             </button>
                         </div>

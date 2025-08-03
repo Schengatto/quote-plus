@@ -11,7 +11,7 @@ import { MdAddCircleOutline, MdDelete } from "react-icons/md";
 
 const UserManagementPage = () => {
 
-    const auth = useAuth();
+    const { userData } = useAuth();
 
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
@@ -22,7 +22,7 @@ const UserManagementPage = () => {
     const [roles, setRoles] = useState<UserRole[]>([]);
 
     const handleCreateNew = () => {
-        if (!auth) return;
+        if (!userData) return;
         setSelectedUser({ username: undefined, password: undefined, userRoleId: undefined });
         setIsInputFormActive(true);
     };
@@ -96,10 +96,10 @@ const UserManagementPage = () => {
     }, [setIsLoading]);
 
     useEffect(() => {
-        if (!auth) return;
+        if (!userData) return;
         fetchUsers();
         fetchRoles();
-    }, [auth, fetchUsers, fetchRoles]);
+    }, [userData, fetchUsers, fetchRoles]);
 
     return (
         <AppLayout>

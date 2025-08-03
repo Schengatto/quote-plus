@@ -14,7 +14,7 @@ import { MdPhone, MdSend } from "react-icons/md";
 
 const IncomingCall = () => {
     const searchParams = useSearchParams();
-    const user = useAuth();
+    const {userData: user} = useAuth();
 
     const { setIsLoading } = useAppStore();
     const { t } = useI18nStore();

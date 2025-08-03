@@ -19,7 +19,7 @@ const RepairCreate = () => {
     const type = searchParams.get("type");
 
     const router = useRouter();
-    const user = useAuth();
+    const {userData: user} = useAuth();
 
     const { t } = useI18nStore();
     const { setIsLoading } = useAppStore();

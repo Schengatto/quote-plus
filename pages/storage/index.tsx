@@ -14,7 +14,7 @@ type ItemList = Item;
 
 const ItemList = () => {
     const router = useRouter();
-    const user = useAuth();
+    const {userData: user} = useAuth();
 
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();

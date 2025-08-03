@@ -16,7 +16,7 @@ const defaultTenantPlaceholders = {
 
 const TenantsPage = () => {
 
-    const auth = useAuth();
+    const { userData } = useAuth();
 
     const { t } = useI18nStore();
     const { setIsLoading } = useAppStore();
@@ -62,17 +62,17 @@ const TenantsPage = () => {
 
     const fetchTenant = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
-            const _tenant = await fetch(`/api/tenants/${auth?.tenantId}`, { method: "GET" })
+            const _tenant = await fetch(`/api/tenants/${userData?.tenantId}`, { method: "GET" })
                 .then((res) => res.json());
             setTenantId(_tenant.id);
             setPlaceholders(_tenant.placeholders);
         });
-    }, [auth, setIsLoading]);
+    }, [userData, setIsLoading]);
 
     useEffect(() => {
-        if (!auth) return;
+        if (!userData) return;
         fetchTenant();
-    }, [auth, fetchTenant]);
+    }, [userData, fetchTenant]);
 
     return (
         <AppLayout>

@@ -12,7 +12,7 @@ const ProductEdit = () => {
 
     const router = useRouter();
     const params = useParams();
-    const user = useAuth();
+    const {userData: user} = useAuth();
 
     const { t } = useI18nStore();
 

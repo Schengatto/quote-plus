@@ -11,7 +11,7 @@ import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
 
 const Templates = () => {
 
-    const auth = useAuth();
+    const {userData} = useAuth();
 
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
@@ -27,8 +27,8 @@ const Templates = () => {
     };
 
     const handleCreateNew = () => {
-        if (!auth) return;
-        setSelectedTemplate({ name: "", content: "", createdById: auth.id });
+        if (!userData) return;
+        setSelectedTemplate({ name: "", content: "", createdById: userData.id });
         setIsInputFormActive(true);
     };
 
@@ -80,16 +80,16 @@ const Templates = () => {
 
     const fetchTemplates = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
-            const _templates = await fetch(`/api/templates?userId=${auth?.id}`, { method: "GET" })
+            const _templates = await fetch(`/api/templates?userId=${userData?.id}`, { method: "GET" })
                 .then((res) => res.json());
             setTemplates(_templates);
         });
-    }, [auth, setTemplates, setIsLoading]);
+    }, [userData, setTemplates, setIsLoading]);
 
     useEffect(() => {
-        if (!auth) return;
+        if (!userData) return;
         fetchTemplates();
-    }, [auth, fetchTemplates]);
+    }, [userData, fetchTemplates]);
 
     return (
         <AppLayout>

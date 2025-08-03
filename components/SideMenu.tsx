@@ -2,11 +2,24 @@ import { useAuth } from "@/hooks/useAuth";
 import { useI18nStore } from "@/store/i18n";
 import { useRouter } from "next/navigation";
 import { FunctionComponent } from "react";
-import { MdBugReport, MdBuild, MdList, MdManageAccounts, MdOutlineEdit, MdOutlineFolderOpen, MdOutlineHouse, MdPhone, MdSearch, MdSettings, MdShoppingCart, MdStorage } from "react-icons/md";
+import {
+    MdBugReport,
+    MdBuild,
+    MdList,
+    MdManageAccounts,
+    MdOutlineEdit,
+    MdOutlineFolderOpen,
+    MdOutlineHouse,
+    MdPhone,
+    MdSearch,
+    MdSettings,
+    MdShoppingCart,
+    MdStorage
+} from "react-icons/md";
 import Cookies from "universal-cookie";
 
 const SideMenu: FunctionComponent = () => {
-    const auth = useAuth();
+    const { userData } = useAuth();
     const router = useRouter();
 
     const { t } = useI18nStore();
@@ -15,7 +28,7 @@ const SideMenu: FunctionComponent = () => {
         router.push(page);
     };
 
-    const hasGrants = (grants: string[]) => auth?.userRole.grants?.some(g => grants.includes(g));
+    const hasGrants = (grants: string[]) => userData?.userRole.grants?.some(g => grants.includes(g));
 
     const handleLogout = () => {
         const cookies = new Cookies();

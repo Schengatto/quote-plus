@@ -15,7 +15,7 @@ import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react"
 const QuoteCreate = () => {
 
     const router = useRouter();
-    const user = useAuth();
+    const {userData: user} = useAuth();
 
     const { t } = useI18nStore();
     const { setIsLoading } = useAppStore();

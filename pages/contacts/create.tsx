@@ -11,7 +11,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 const IncomingCall = () => {
     const searchParams = useSearchParams();
-    const user = useAuth();
+    const {userData: user} = useAuth();
     const router = useRouter();
 
     const { setIsLoading } = useAppStore();

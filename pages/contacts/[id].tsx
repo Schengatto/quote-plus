@@ -15,7 +15,7 @@ const EditContact = () => {
 
     const router = useRouter();
     const params = useParams();
-    const user = useAuth();
+    const {userData: user} = useAuth();
 
     const { setIsLoading } = useAppStore();
     const { t } = useI18nStore();
@@ -184,7 +184,7 @@ const EditContact = () => {
     useEffect(() => {
         if (!selectedContact?.id) return;
         fetchContactNotes(selectedContact?.id);
-    }, []);
+    }, [selectedContact.id]);
 
     return (
         <AppLayout>

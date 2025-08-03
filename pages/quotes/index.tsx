@@ -13,7 +13,7 @@ import { MdAddCircleOutline, MdCopyAll, MdDelete, MdEdit, MdOutlinePictureAsPdf,
 const QuoteComponent = () => {
 
     const router = useRouter();
-    const user = useAuth();
+    const {userData: user} = useAuth();
 
     const { t } = useI18nStore();
     const [quotes, setProducts] = useState<Quote[]>([]);

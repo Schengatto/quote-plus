@@ -13,7 +13,7 @@ interface UserCredentials {
 
 const LoginPage = () => {
     const router = useRouter();
-    const user = useAuth();
+    const { userData: user } = useAuth();
 
     const { t, setCurrentLanguage } = useI18nStore();
     const { setDialog } = useAppStore();
@@ -65,15 +65,12 @@ const LoginPage = () => {
                 <link rel='icon' href='/favicon.ico' />
             </Head>
             <main className='w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-cyan-200 to-blue-400 px-4'>
-                <div>
-                    <h1 className='text-logo text-6xl font-semibold text-center text-gray-700 mb-6 text-shadow'>
-                        Quote Plus
-                    </h1>
-                </div>
                 <div className='bg-white shadow-lg rounded-2xl w-full max-w-md p-8'>
-                    <h2 className='uppercase text-xl font-semibold text-center text-gray-800 mb-6'>
-                        Login
-                    </h2>
+                    <div>
+                        <h1 className='text-logo text-6xl font-semibold text-center text-gray-700 mb-6 text-shadow'>
+                            Quote Plus
+                        </h1>
+                    </div>
                     <form onSubmit={handleLogin} className='space-y-6'>
                         <div>
                             <label htmlFor='username' className='first-letter:uppercase block text-sm font-medium text-gray-700'>

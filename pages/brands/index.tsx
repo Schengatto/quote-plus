@@ -13,7 +13,7 @@ import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
 const Brands = () => {
 
     const router = useRouter();
-    const user = useAuth();
+    const { userData: user } = useAuth();
 
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();

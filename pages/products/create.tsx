@@ -13,7 +13,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 const ProductCreate = () => {
 
     const router = useRouter();
-    const user = useAuth();
+    const {userData: user} = useAuth();
 
     const { t } = useI18nStore();
     const { setIsLoading } = useAppStore();
