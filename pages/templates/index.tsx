@@ -106,7 +106,7 @@ const Templates = () => {
                             <div>
                                 <MdAddCircleOutline />
                             </div>
-                            <div className="uppercase font-bold text-sm">{t("templates.button.addTemplate")}</div>
+                            <div className="uppercase text-sm">{t("templates.button.addTemplate")}</div>
                         </button>
                     </div>
                     :
@@ -139,13 +139,13 @@ const Templates = () => {
                                         type="button"
                                         className="btn-secondary"
                                         onClick={handleBack}>
-                                        <div className="uppercase font-bold text-sm">{t("common.back")}</div>
+                                        <div className="uppercase text-sm">{t("common.back")}</div>
                                     </button>
 
                                     <button
                                         type="submit"
                                         className="btn-primary">
-                                        <div className="uppercase font-bold text-sm">{t("templates.button.save")}</div>
+                                        <div className="uppercase text-sm">{t("templates.button.save")}</div>
                                     </button>
 
                                 </div>
@@ -158,7 +158,7 @@ const Templates = () => {
                     <tbody>
                         {templates.map((b: Template) =>
                             <tr key={b.id} className={`table-row ${b.id === selectedTemplate?.id && "!table-row-active"}`} onClick={(e) => handleEdit(e, b)}>
-                                <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{b.name}</td>
+                                <td className="mx-2 text-sm p-3 w-auto truncate max-w-0">{b.name}</td>
                                 <td className="w-10 cursor-pointer " onClick={(e) => handleEdit(e, b)}><div><MdEdit /></div></td>
                                 <td className="w-10 cursor-pointer text-red-600" onClick={(e) => handleDelete(e, b)}><MdDelete /></td>
                             </tr>

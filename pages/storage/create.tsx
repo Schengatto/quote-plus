@@ -226,7 +226,7 @@ const RepairCreate = () => {
 
                         <div className="flex justify-center items-center">
                             <button type="submit" className="btn-primary">
-                                <div className="uppercase font-bold text-sm">Aggiungi</div>
+                                <div className="uppercase text-sm">Aggiungi</div>
                             </button>
                         </div>
                     </form>

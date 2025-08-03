@@ -284,7 +284,7 @@ const IncomingCall = () => {
                                             <button
                                                 type="submit"
                                                 className="btn-primary">
-                                                <div className="uppercase font-bold text-sm">{t("common.save")}</div>
+                                                <div className="uppercase text-sm">{t("common.save")}</div>
                                             </button>
                                         </div>
                                     </form>

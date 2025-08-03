@@ -178,7 +178,7 @@ const ProductList = () => {
                             <div>
                                 <MdAddCircleOutline />
                             </div>
-                            <div className="uppercase font-bold text-sm">{t("products.button.addProduct")}</div>
+                            <div className="uppercase text-sm">{t("products.button.addProduct")}</div>
                         </button>
                     </div>
                 </div>
@@ -198,18 +198,18 @@ const ProductList = () => {
                         <table className="items-table">
                             <thead className="bg-gray-100 text-gray-700 sticky top-0 text-xs uppercase z-10">
                                 <tr>
-                                    <th className="mx-2 uppercase p-2 text-sm text-left cursor-pointer" onClick={() => setOrderBy("code")}>
+                                    <th className="uppercase px-4 py-3 text-sm text-left cursor-pointer" onClick={() => setOrderBy("code")}>
                                     </th>
-                                    <th className="mx-2 uppercase p-2 text-sm text-left w-1/12 cursor-pointer" onClick={() => setOrderBy("code")}>
+                                    <th className="uppercase px-4 py-3 text-sm text-left w-1/12 cursor-pointer" onClick={() => setOrderBy("code")}>
                                         {t("products.table.head.ref")}
                                     </th>
-                                    <th className="mx-2 uppercase p-2 text-sm text-left w-5/12" onClick={() => setOrderBy("name")}>
+                                    <th className="px-4 py-3 uppercase text-sm text-left w-5/12" onClick={() => setOrderBy("name")}>
                                         {t("products.table.head.product")}
                                     </th>
-                                    <th className="mx-2 uppercase p-2 text-sm text-left w-4/12 cursor-pointer" onClick={() => setOrderBy("categoryLabel")}>
+                                    <th className="px-4 py-3 uppercase text-sm text-left w-4/12 cursor-pointer" onClick={() => setOrderBy("categoryLabel")}>
                                         {t("products.table.head.category")}
                                     </th>
-                                    <th className="mx-2 uppercase text-sm text-left w-1/12" onClick={() => setOrderBy("price")}>
+                                    <th className="uppercase px-4 py-3 text-sm text-left w-1/12" onClick={() => setOrderBy("price")}>
                                         {t("products.table.head.price")}
                                     </th>
                                 </tr>
@@ -218,10 +218,10 @@ const ProductList = () => {
                                 {products.filter(p => p.name.toLowerCase()?.includes(searchTerm)).map((p: Partial<ProductList>) =>
                                     <tr key={p.id} className="table-row" onClick={(event) => handleEdit(event, p)}>
                                         <td onClick={(event) => preventClick(event, p)}><RowActions actions={rowActions(p)} /></td>
-                                        <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-left">{p.code}</td>
-                                        <td className="mx-2 text-sm font-bold p-2 w-5/12 truncate max-w-0 text-left">{p.name}</td>
-                                        <td className="mx-2 text-sm font-bold p-2 w-4/12 truncate max-w-0 text-left">{getCategoryLabel(p)}</td>
-                                        <td className="mx-2 text-sm font-bold p-2 w-1/12 truncate max-w-0 text-right">{p.price} €</td>
+                                        <td className="px-4 py-3 truncate max-w-0 text-left" title={p.code}>{p.code}</td>
+                                        <td className="px-4 py-3 w-5/12 truncate max-w-0 text-left" title={p.name}>{p.name}</td>
+                                        <td className="px-4 py-3 w-4/12 truncate max-w-0 text-left" title={getCategoryLabel(p)}>{getCategoryLabel(p)}</td>
+                                        <td className="px-4 py-3 text-right">{p.price} €</td>
                                     </tr>
                                 )}
                             </tbody>

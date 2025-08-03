@@ -219,13 +219,13 @@ const ProductCreate = () => {
                                 type="button"
                                 className="btn-secondary"
                                 onClick={handleBack}>
-                                <div className="uppercase font-bold text-sm">{t("common.back")}</div>
+                                <div className="uppercase text-sm">{t("common.back")}</div>
                             </button>
 
                             <button
                                 type="submit"
                                 className="btn-primary">
-                                <div className="uppercase font-bold text-sm">{t("products.button.save")}</div>
+                                <div className="uppercase text-sm">{t("products.button.save")}</div>
                             </button>
                         </div>
                     </form>

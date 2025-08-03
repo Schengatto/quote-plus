@@ -218,7 +218,7 @@ const QuoteEdit = () => {
                                     type="button"
                                     className="btn-primary"
                                     onClick={handleAddSelectedProduct}>
-                                    <div className="uppercase font-bold text-sm">{t("quotes.button.addProduct")}</div>
+                                    <div className="uppercase text-sm">{t("quotes.button.addProduct")}</div>
                                 </button>
                             </div>
                         </div>
@@ -244,13 +244,13 @@ const QuoteEdit = () => {
                                 type="button"
                                 className="btn-secondary"
                                 onClick={handleBack}>
-                                <div className="uppercase font-bold text-sm">{t("common.back")}</div>
+                                <div className="uppercase text-sm">{t("common.back")}</div>
                             </button>
 
                             <button
                                 type="submit"
                                 className="btn-primary">
-                                <div className="uppercase font-bold text-sm">{t("quotes.button.save")}</div>
+                                <div className="uppercase text-sm">{t("quotes.button.save")}</div>
                             </button>
                         </div>
                     </form>

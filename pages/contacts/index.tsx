@@ -77,7 +77,7 @@ const Contacts = () => {
                             <div>
                                 <MdAddCircleOutline />
                             </div>
-                            <div className="uppercase font-bold text-sm">{t("contacts.button.addContact")}</div>
+                            <div className="uppercase text-sm">{t("contacts.button.addContact")}</div>
                         </button>
                     </div>
                 </div>
@@ -106,10 +106,10 @@ const Contacts = () => {
                             .filter(c => c.firstName?.toLowerCase()?.includes(searchTerm) || c.phoneNumber?.includes(searchTerm))
                             .map((c: Contact) =>
                                 <tr key={c.id} className={`table-row ${c.id === selectedContact?.id && "!table-row-active"}`} onClick={(e) => handleEdit(e, c)}>
-                                    <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{c.firstName}</td>
-                                    <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{c.lastName}</td>
-                                    <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{c.phoneNumber}</td>
-                                    <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{c.email}</td>
+                                    <td className="text-sm px-4 py-3 w-auto truncate max-w-0">{c.firstName}</td>
+                                    <td className="text-sm px-4 py-3 w-auto truncate max-w-0">{c.lastName}</td>
+                                    <td className="text-sm px-4 py-3 w-auto truncate max-w-0">{c.phoneNumber}</td>
+                                    <td className="text-sm px-4 py-3 w-auto truncate max-w-0">{c.email}</td>
                                     <td className="px-2 py-3 text-center">
                                         <button
                                             className="text-red-600 hover:text-red-800"

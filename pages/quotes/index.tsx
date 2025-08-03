@@ -104,7 +104,7 @@ const QuoteComponent = () => {
                         <div>
                             <MdAddCircleOutline />
                         </div>
-                        <div className="uppercase font-bold text-sm">{t("quotes.button.addQuote")}</div>
+                        <div className="uppercase text-sm">{t("quotes.button.addQuote")}</div>
                     </button>
                 </div>
 
@@ -125,15 +125,15 @@ const QuoteComponent = () => {
                             <th className="px-4 py-3 text-left">{t("quotes.table.head.date")}</th>
                             <th className="px-4 py-3 text-left">{t("quotes.table.head.ref")}</th>
                             <th className="px-4 py-3 text-left">{t("quotes.table.head.owner")}</th>
-                            <th className="px-4 py-3 text-left" colSpan={4}>Azioni</th>
+                            <th className="py-3 text-left" colSpan={4}>Azioni</th>
                         </tr>
                     </thead>
                     <tbody>
                         {quotes.map((q: Quote) =>
                             <tr key={q.id} className="table-row" onClick={(event) => handleEdit(event, q)}>
-                                <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{formatDate(q.updatedAt)}</td>
-                                <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{q.name}</td>
-                                <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{q.createdBy}</td>
+                                <td className="px-4 py-3 text-sm w-auto truncate max-w-0">{formatDate(q.updatedAt)}</td>
+                                <td className="px-4 py-3 text-sm w-auto truncate max-w-0">{q.name}</td>
+                                <td className="px-4 py-3 text-sm w-auto truncate max-w-0">{q.createdBy}</td>
                                 <td className="w-10 cursor-pointer" onClick={(event) => handleEdit(event, q)}><div><MdEdit /></div></td>
                                 <td className="w-10 cursor-pointer" onClick={(event) => handleClone(event, q)}><div><MdCopyAll /></div></td>
                                 <td className="w-10 cursor-pointer" onClick={(event) => handleExportPdf(event, q)}><div><MdOutlinePictureAsPdf /></div></td>

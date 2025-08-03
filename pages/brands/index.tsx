@@ -116,7 +116,7 @@ const Brands = () => {
                             <div>
                                 <MdAddCircleOutline />
                             </div>
-                            <div className="uppercase font-bold text-sm">{t("brands.button.addBrand")}</div>
+                            <div className="uppercase text-sm">{t("brands.button.addBrand")}</div>
                         </button>
                     </div>
                     :
@@ -152,7 +152,7 @@ const Brands = () => {
                                             type="button"
                                             className="btn-secondary"
                                             onClick={handleBack}>
-                                            <div className="uppercase font-bold text-sm">{t("common.back")}</div>
+                                            <div className="uppercase text-sm">{t("common.back")}</div>
                                         </button>
 
                                         {selectedBrand?.id
@@ -161,7 +161,7 @@ const Brands = () => {
                                                 className="btn-danger"
                                                 disabled={!!selectedBrand.products?.length}
                                                 onClick={(e) => handleDelete(e, selectedBrand.id!)}>
-                                                <div className="uppercase font-bold text-sm">{t("common.delete")}</div>
+                                                <div className="uppercase text-sm">{t("common.delete")}</div>
                                             </button>
                                         }
 
@@ -169,7 +169,7 @@ const Brands = () => {
                                             type="submit"
                                             disabled={!selectedBrand?.name}
                                             className="btn-primary">
-                                            <div className="uppercase font-bold text-sm">{t("common.save")}</div>
+                                            <div className="uppercase text-sm">{t("common.save")}</div>
                                         </button>
 
                                     </div>
@@ -183,7 +183,7 @@ const Brands = () => {
                     <tbody>
                         {brands.map((b: BrandApiModel) =>
                             <tr key={b.id} className={`table-row ${b.id === selectedBrand?.id && "!table-row-active"}`} onClick={(e) => handleEdit(e, b)}>
-                                <td className={"mx-2 text-sm font-bold p-3 w-auto truncate max-w-0"}>{b.name}</td>
+                                <td className={"mx-2 text-sm p-3 w-auto truncate max-w-0"}>{b.name}</td>
                                 <td className="w-10 cursor-pointer" onClick={(e) => handleEdit(e, b)}>
                                     <div>
                                         <MdEdit />

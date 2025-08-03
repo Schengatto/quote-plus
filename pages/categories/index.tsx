@@ -140,11 +140,11 @@ const Categories = () => {
                             <div>
                                 <MdAddCircleOutline />
                             </div>
-                            <div className='uppercase font-bold text-sm'>{t("categories.button.addCategory")}</div>
+                            <div className='uppercase text-sm'>{t("categories.button.addCategory")}</div>
                         </button>
                     </div>
                     :
-                    <div className="my-4">
+                    <div className="my-8">
                         <div className="card">
                             <div className="font-semibold first-letter:capitalize">
                                 {selectedCategory?.id
@@ -185,7 +185,7 @@ const Categories = () => {
                                             type="button"
                                             className="btn-secondary"
                                             onClick={handleBack}>
-                                            <div className="uppercase font-bold text-sm">{t("common.back")}</div>
+                                            <div className="uppercase text-sm">{t("common.back")}</div>
                                         </button>
 
                                         {selectedCategory?.id
@@ -194,7 +194,7 @@ const Categories = () => {
                                                 className="btn-danger"
                                                 disabled={!!selectedCategory.products?.length}
                                                 onClick={(e) => handleDelete(e, selectedCategory.id!)}>
-                                                <div className="uppercase font-bold text-sm">{t("common.delete")}</div>
+                                                <div className="uppercase text-sm">{t("common.delete")}</div>
                                             </button>
                                         }
 
@@ -202,7 +202,7 @@ const Categories = () => {
                                             type='submit'
                                             className='btn-primary'
                                         >
-                                            <div className='uppercase font-bold text-sm'>{t("categories.button.save")}</div>
+                                            <div className='uppercase text-sm'>{t("categories.button.save")}</div>
                                         </button>
                                     </div>
                                 </form>
@@ -214,7 +214,7 @@ const Categories = () => {
                     <tbody>
                         {categories.map((c: Required<CategoryApiModel>) => (
                             <tr key={c.id} className={`table-row ${c.id === selectedCategory?.id && "!table-row-active"}`} onClick={(e) => handleEdit(e, c)}>
-                                <td className='mx-2 text-sm font-bold p-3 w-auto truncate max-w-0'>{categoryLabel(c)}</td>
+                                <td className='mx-2 text-sm p-3 w-auto truncate max-w-0'>{categoryLabel(c)}</td>
                                 <td className='w-10 cursor-pointer' onClick={(e) => handleEdit(e, c)}>
                                     <button>
                                         <MdEdit />

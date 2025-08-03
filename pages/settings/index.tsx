@@ -132,7 +132,7 @@ const TenantsPage = () => {
                                     <div>
                                         <MdOutlineSave />
                                     </div>
-                                    <div className="uppercase font-bold text-sm">{t("common.save")}</div>
+                                    <div className="uppercase text-sm">{t("common.save")}</div>
                                 </button>
                             </div>
                         </form>
@@ -152,7 +152,7 @@ const TenantsPage = () => {
                         <div>
                             <MdDownload />
                         </div>
-                        <div className="uppercase font-bold text-sm">{t("settings.button.downloadQuotesBackup")}</div>
+                        <div className="uppercase text-sm">{t("settings.button.downloadQuotesBackup")}</div>
                     </button>
                 </div>
             </div>

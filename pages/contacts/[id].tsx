@@ -249,12 +249,12 @@ const EditContact = () => {
                                             type="button"
                                             className="btn-secondary"
                                             onClick={handleBack}>
-                                            <div className="uppercase font-bold text-sm">{t("common.back")}</div>
+                                            <div className="uppercase text-sm">{t("common.back")}</div>
                                         </button>
                                         <button
                                             type="submit"
                                             className="btn-primary">
-                                            <div className="uppercase font-bold text-sm">{t("common.save")}</div>
+                                            <div className="uppercase text-sm">{t("common.save")}</div>
                                         </button>
                                     </div>
                                 </form>
@@ -326,7 +326,7 @@ const EditContact = () => {
                                                 <button
                                                     type="submit"
                                                     className="btn-primary">
-                                                    <div className="uppercase font-bold text-sm">{t("common.add")}</div>
+                                                    <div className="uppercase text-sm">{t("common.add")}</div>
                                                 </button>
                                             </div>
                                         </form>

@@ -117,7 +117,7 @@ const UserManagementPage = () => {
                             <div>
                                 <MdAddCircleOutline />
                             </div>
-                            <div className="uppercase font-bold text-sm">{t("usersManagement.button.addUser")}</div>
+                            <div className="uppercase text-sm">{t("usersManagement.button.addUser")}</div>
                         </button>
                     </div>
                     :
@@ -161,13 +161,13 @@ const UserManagementPage = () => {
                                         type="button"
                                         className="btn-secondary"
                                         onClick={handleBack}>
-                                        <div className="uppercase font-bold text-sm">{t("common.cancel")}</div>
+                                        <div className="uppercase text-sm">{t("common.cancel")}</div>
                                     </button>
 
                                     <button
                                         type="submit"
                                         className="btn-primary">
-                                        <div className="uppercase font-bold text-sm">{t("usersManagement.button.save")}</div>
+                                        <div className="uppercase text-sm">{t("usersManagement.button.save")}</div>
                                     </button>
                                 </div>
                             </form>
@@ -187,8 +187,8 @@ const UserManagementPage = () => {
                     <tbody>
                         {users.map((u: AuthenticatedUser) =>
                             <tr key={u.id} className="table-row hover:!bg-white hover:!text-black !cursor-auto">
-                                <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{u.username}</td>
-                                <td className="mx-2 text-sm font-bold p-3 w-auto truncate max-w-0">{u.userRole.name}</td>
+                                <td className="mx-2 text-sm p-3 w-auto truncate max-w-0">{u.username}</td>
+                                <td className="mx-2 text-sm p-3 w-auto truncate max-w-0">{u.userRole.name}</td>
                                 {/* <td className="w-10 cursor-pointer " onClick={(e) => handleEdit(e, u)}><div><MdEdit /></div></td> */}
                                 <td className="w-10 cursor-pointer text-red-600" onClick={(e) => handleDelete(e, u)}><MdDelete /></td>
                             </tr>

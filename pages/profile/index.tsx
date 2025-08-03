@@ -168,7 +168,7 @@ const UserProfile = () => {
                                 <div>
                                     <MdOutlineSave />
                                 </div>
-                                <div className="uppercase font-bold text-sm">{t("userProfile.button.saveAccount")}</div>
+                                <div className="uppercase text-sm">{t("userProfile.button.saveAccount")}</div>
                             </button>
                         </div>
                     </form>
@@ -209,7 +209,7 @@ const UserProfile = () => {
                                     <div>
                                         <MdDeleteOutline />
                                     </div>
-                                    <div className="uppercase font-bold text-sm">{t("userProfile.button.deleteAccount")}</div>
+                                    <div className="uppercase text-sm">{t("userProfile.button.deleteAccount")}</div>
                                 </button>
                             }
 
@@ -220,7 +220,7 @@ const UserProfile = () => {
                                 <div>
                                     <MdOutlineSave />
                                 </div>
-                                <div className="uppercase font-bold text-sm">{t("userProfile.button.saveAccount")}</div>
+                                <div className="uppercase text-sm">{t("userProfile.button.saveAccount")}</div>
                             </button>
                         </div>
                     </form>

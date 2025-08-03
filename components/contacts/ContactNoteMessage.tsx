@@ -66,7 +66,7 @@ const ContactNoteMessage: React.FunctionComponent<ContactNoteMessageProps> = ({
                     ) : (
                         <div className="text-xl">{statusCircle}</div>
                     )}
-                    <span className="font-bold uppercase text-sm text-gray-800">{author}</span>
+                    <span className="uppercase text-sm text-gray-800">{author}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-500">
                     <span>{noteDate}</span>
