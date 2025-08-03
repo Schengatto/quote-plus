@@ -186,7 +186,7 @@ const EditContact = () => {
                                 <form onSubmit={handleSaveCurrentContact}>
                                     {(
                                         <>
-                                            <div className="flex gap-4">
+                                            <div className="flex flex-col xl:flex-row xl:gap-4">
                                                 <div className="w-full xl:w-1/3 my-4">
                                                     <div className="field-label">{t("contacts.form.phoneNumber")}</div>
                                                     <input
@@ -214,7 +214,7 @@ const EditContact = () => {
                                                         onChange={handleLastNameChanged} />
                                                 </div>
                                             </div>
-                                            <div className="flex gap-4">
+                                            <div className="flex flex-col xl:flex-row xl:gap-4">
                                                 <div className="w-full xl:w-1/3 my-4">
                                                     <div className="field-label">{t("contacts.form.email")}</div>
                                                     <input
