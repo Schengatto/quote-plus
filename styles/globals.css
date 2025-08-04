@@ -72,7 +72,7 @@
     }
 
     .card-body {
-        @apply bg-white p-4 flex flex-col items-center justify-center;
+        @apply flex flex-col items-center justify-center;
     }
 
     .user-menu-option {

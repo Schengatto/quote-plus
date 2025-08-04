@@ -59,7 +59,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             {userData && (
-                <main className="bg-gray-50 min-h-screen">
+                <main className="bg-stone-100 min-h-screen">
                     <div className="h-14 fixed top-0 z-20 w-full bg-white shadow-md flex items-center justify-between px-4">
                         <div className="flex items-center space-x-4">
                             <button

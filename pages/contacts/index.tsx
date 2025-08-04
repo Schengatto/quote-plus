@@ -75,7 +75,6 @@ const Contacts = () => {
                     <span className="capitalize">{t("sideMenu.item.contactsList")}</span>
                 </div>
 
-
                 <div className="my-4">
                     <div className="flex justify-end content-end w-full">
                         <button

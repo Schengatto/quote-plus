@@ -50,7 +50,7 @@ const ContactNoteMessage: React.FunctionComponent<ContactNoteMessageProps> = ({
     };
 
     return (
-        <div className={`rounded-xl shadow-sm border-l-4 ${status === "CLOSED" ? "border-green-400 bg-green-50" : "border-yellow-400 bg-yellow-50"} p-4 mb-4`}>
+        <div className={`rounded-xl shadow-sm border-l-4 ${status === "CLOSED" ? "border-green-400 bg-emerald-100" : "border-yellow-400 bg-yellow-50"} p-4 mb-4`}>
             <div className="flex justify-between items-start mb-2">
                 <div className="flex items-center gap-2">
                     {onStatusChanged ? (

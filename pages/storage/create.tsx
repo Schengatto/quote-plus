@@ -164,13 +164,13 @@ const RepairCreate = () => {
     return (
         <AppLayout>
             <div className="m-2 xl:m-8">
-                <div className="flex text-gray-800 border-b pb-2 mb-4">
-                    <div className="page-title cursor-pointer hover:text-blue-800 font-semibold border-b-2 border-gray-700 hover:border-blue-800"
+                <div className="flex page-title pb-2 mb-4">
+                    <div className="cursor-pointer hover:text-sky-600 font-semibold border-b-2 border-gray-700 hover:border-sky-600"
                         onClick={handleBack}>
                         Matricole e Riparazioni
                     </div>
                     <div className="mx-2">/</div>
-                    <div className="page-title">
+                    <div className="">
                         Inserimento Nuova {type === "repair" ? "Riparazione" : "Vendita"}
                     </div>
                 </div>
@@ -233,7 +233,7 @@ const RepairCreate = () => {
                 </div>
 
                 <div>
-                    <h2 className="text-l font-semibold text-gray-800 mt-8">Riepilogo {type === "sale" ? "Vendite" : "Riparazioni"} Inserite</h2>
+                    <h2 className="text-l font-semibold text-gray-100 mt-8">Riepilogo {type === "sale" ? "Vendite" : "Riparazioni"} Inserite</h2>
                 </div>
                 <div className="items-table my-6 max-h-[70vh] overflow-y-auto">
                     <table className="min-w-full border rounded-md shadow text-sm">
@@ -268,7 +268,7 @@ const RepairCreate = () => {
                             ))}
                             {!list.length && (
                                 <tr>
-                                    <td className="px-4 py-2 text-gray-500 italic" colSpan={8}>
+                                    <td className="px-4 py-2 text-gray-800 italic bg-white" colSpan={8}>
                                         Nessun elemento inserito
                                     </td>
                                 </tr>
