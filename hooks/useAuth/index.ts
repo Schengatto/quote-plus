@@ -14,7 +14,7 @@ export function useAuth() {
         setUserData(verifiedToken);
     };
 
-    const logout = async() => {
+    const logout = async () => {
         const endpoint = "/api/logout";
         await fetch(endpoint, { method: "POST" }).then((res) =>
             res.json()

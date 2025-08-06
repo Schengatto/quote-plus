@@ -29,8 +29,8 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
         setIsUserMenuVisible((prev: boolean) => !prev);
     };
 
-    const handleLogout = () => {
-        logout();
+    const handleLogout = async() => {
+        await logout();
         router.push("/");
     };
 
