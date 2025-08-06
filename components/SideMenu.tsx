@@ -16,7 +16,6 @@ import {
     MdShoppingCart,
     MdStorage
 } from "react-icons/md";
-import Cookies from "universal-cookie";
 
 const SideMenu: FunctionComponent = () => {
     const { userData } = useAuth();
@@ -29,13 +28,6 @@ const SideMenu: FunctionComponent = () => {
     };
 
     const hasGrants = (grants: string[]) => userData?.userRole.grants?.some(g => grants.includes(g));
-
-    const handleLogout = () => {
-        const cookies = new Cookies();
-        cookies.remove("token");
-        router.push("/");
-    };
-
     interface MenuItemProps {
         icon: React.ReactNode;
         label: string;
@@ -63,7 +55,6 @@ const SideMenu: FunctionComponent = () => {
             {children}
         </div>
     );
-
 
     return (
         <div className="bg-slate-900 w-[300px] h-full py-2 flex flex-col justify-between">

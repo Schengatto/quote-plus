@@ -14,9 +14,12 @@ export function useAuth() {
         setUserData(verifiedToken);
     };
 
-    const logout = () => {
-        const cookies = new Cookies();
-        cookies.remove("token");
+    const logout = async() => {
+        const endpoint = "/api/logout";
+        await fetch(endpoint, { method: "POST" }).then((res) =>
+            res.json()
+        );
+        localStorage.clear();
         setUserData(null);
     };
 
