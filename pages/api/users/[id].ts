@@ -28,6 +28,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             await doWithPrisma((prisma) => prisma.user.delete({ where: { id: Number(id) } }));
             res.status(204).json({});
         } else if (req.method === "PATCH") {
+            const authUser = await getAuthUserFromRequest(req);
+
+            if (!authUser || !authUser.userRole.grants?.includes("users-management")) {
+                res.status(401).json({ message: "authentication failed" });
+                return;
+            }
+
             const user = JSON.parse(req.body);
 
             const result = await doWithPrisma(
@@ -37,6 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         data: {
                             username: user.username,
                             password: user.password,
+                            userRoleId: user.userRoleId,
                             activeTemplateId: user.activeTemplateId,
                             extraData: user.extraData,
                         },

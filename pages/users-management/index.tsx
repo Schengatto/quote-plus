@@ -7,7 +7,7 @@ import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { User, UserRole } from "@prisma/client";
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
-import { MdAddCircleOutline, MdDelete } from "react-icons/md";
+import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
 
 const UserManagementPage = () => {
 
@@ -20,6 +20,7 @@ const UserManagementPage = () => {
     const [selectedUser, setSelectedUser] = useState<Partial<User>>({});
     const [users, setUsers] = useState<AuthenticatedUser[]>([]);
     const [roles, setRoles] = useState<UserRole[]>([]);
+    const [editingUserId, setEditingUserId] = useState<number | null>(null);
 
     const handleCreateNew = () => {
         if (!userData) return;
@@ -77,6 +78,19 @@ const UserManagementPage = () => {
         setDialog(null);
         await fetch(`/api/users/${template.id}`, { method: "DELETE" });
         await fetchUsers();
+    };
+
+    const handleRoleChange = async (userId: number, newRoleId: string) => {
+        try {
+            await fetch(`/api/users/${userId}`, {
+                method: "PATCH",
+                body: JSON.stringify({ userRoleId: newRoleId }),
+            });
+            await fetchUsers();
+        } catch (error: any) {
+            alert(`${t("common.error.onSave")}, ${error.message}`);
+        }
+        setEditingUserId(null);
     };
 
     const fetchUsers = useCallback(async () => {
@@ -181,15 +195,29 @@ const UserManagementPage = () => {
                             <th className="px-4 py-3 text-left">{t("usersManagement.table.head.username")}</th>
                             <th className="px-4 py-3 text-left">{t("usersManagement.table.head.roleName")}</th>
                             <th className="px-4 py-3 text-left"></th>
-                            {/* <th className="px-4 py-3 text-left"></th> */}
+                            <th className="px-4 py-3 text-left"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {users.map((u: AuthenticatedUser) =>
                             <tr key={u.id} className="table-row hover:!bg-white hover:!text-black !cursor-auto">
                                 <td className="mx-2 text-sm p-3 w-auto truncate max-w-0">{u.username}</td>
-                                <td className="mx-2 text-sm p-3 w-auto truncate max-w-0">{u.userRole.name}</td>
-                                {/* <td className="w-10 cursor-pointer " onClick={(e) => handleEdit(e, u)}><div><MdEdit /></div></td> */}
+                                <td className="mx-2 text-sm p-3 w-auto truncate max-w-0">
+                                    {editingUserId === u.id
+                                        ? <select
+                                            className="text-input"
+                                            defaultValue={u.userRoleId}
+                                            onChange={(e) => handleRoleChange(u.id, e.target.value)}
+                                            onBlur={() => setEditingUserId(null)}
+                                            autoFocus>
+                                            {roles.map(r => (
+                                                <option key={r.id} value={r.id}>{r.name}</option>
+                                            ))}
+                                        </select>
+                                        : u.userRole.name
+                                    }
+                                </td>
+                                <td className="w-10 cursor-pointer" onClick={() => setEditingUserId(u.id)}><MdEdit /></td>
                                 <td className="w-10 cursor-pointer text-red-600" onClick={(e) => handleDelete(e, u)}><MdDelete /></td>
                             </tr>
                         )}

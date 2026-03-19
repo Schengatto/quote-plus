@@ -154,5 +154,10 @@
   "tenants.form.price": "Preis",
   "tenants.form.currency": "Währung",
   "tenants.form.discountedPrice": "reduzierter Preis",
-  "settings.button.downloadQuotesBackup": "Angebots-Backup herunterladen"
+  "settings.button.downloadQuotesBackup": "Angebots-Backup herunterladen",
+  "products.csv.export": "CSV exportieren",
+  "products.csv.import": "CSV importieren",
+  "products.csv.importSuccess": "Produkte erfolgreich aktualisiert",
+  "products.bulk.editPrices": "Preise bearbeiten",
+  "products.bulk.hint": "Bearbeiten Sie die Preise direkt in der Tabelle und klicken Sie dann auf Speichern, um die Änderungen zu bestätigen."
 }
