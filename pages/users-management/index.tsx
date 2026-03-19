@@ -6,8 +6,8 @@ import { AuthenticatedUser } from "@/types/api/users";
 import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { User, UserRole } from "@prisma/client";
-import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
-import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
+import React, { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
+import { MdAddCircleOutline, MdCheck, MdClose, MdDelete, MdEdit, MdLock } from "react-icons/md";
 
 const UserManagementPage = () => {
 
@@ -21,6 +21,8 @@ const UserManagementPage = () => {
     const [users, setUsers] = useState<AuthenticatedUser[]>([]);
     const [roles, setRoles] = useState<UserRole[]>([]);
     const [editingUserId, setEditingUserId] = useState<number | null>(null);
+    const [editingPasswordUserId, setEditingPasswordUserId] = useState<number | null>(null);
+    const [newPassword, setNewPassword] = useState<string>("");
 
     const handleCreateNew = () => {
         if (!userData) return;
@@ -78,6 +80,20 @@ const UserManagementPage = () => {
         setDialog(null);
         await fetch(`/api/users/${template.id}`, { method: "DELETE" });
         await fetchUsers();
+    };
+
+    const handlePasswordChange = async (userId: number) => {
+        if (!newPassword.trim()) return;
+        try {
+            await fetch(`/api/users/${userId}`, {
+                method: "PATCH",
+                body: JSON.stringify({ password: newPassword }),
+            });
+        } catch (error: any) {
+            alert(`${t("common.error.onSave")}, ${error.message}`);
+        }
+        setEditingPasswordUserId(null);
+        setNewPassword("");
     };
 
     const handleRoleChange = async (userId: number, newRoleId: string) => {
@@ -196,30 +212,53 @@ const UserManagementPage = () => {
                             <th className="px-4 py-3 text-left">{t("usersManagement.table.head.roleName")}</th>
                             <th className="px-4 py-3 text-left"></th>
                             <th className="px-4 py-3 text-left"></th>
+                            <th className="px-4 py-3 text-left"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {users.map((u: AuthenticatedUser) =>
-                            <tr key={u.id} className="table-row hover:!bg-white hover:!text-black !cursor-auto">
-                                <td className="mx-2 text-sm p-3 w-auto truncate max-w-0">{u.username}</td>
-                                <td className="mx-2 text-sm p-3 w-auto truncate max-w-0">
-                                    {editingUserId === u.id
-                                        ? <select
-                                            className="text-input"
-                                            defaultValue={u.userRoleId}
-                                            onChange={(e) => handleRoleChange(u.id, e.target.value)}
-                                            onBlur={() => setEditingUserId(null)}
-                                            autoFocus>
-                                            {roles.map(r => (
-                                                <option key={r.id} value={r.id}>{r.name}</option>
-                                            ))}
-                                        </select>
-                                        : u.userRole.name
-                                    }
-                                </td>
-                                <td className="w-10 cursor-pointer" onClick={() => setEditingUserId(u.id)}><MdEdit /></td>
-                                <td className="w-10 cursor-pointer text-red-600" onClick={(e) => handleDelete(e, u)}><MdDelete /></td>
-                            </tr>
+                            <React.Fragment key={u.id}>
+                                <tr className="table-row hover:!bg-white hover:!text-black !cursor-auto">
+                                    <td className="mx-2 text-sm p-3 w-auto truncate max-w-0">{u.username}</td>
+                                    <td className="mx-2 text-sm p-3 w-auto truncate max-w-0">
+                                        {editingUserId === u.id
+                                            ? <select
+                                                className="text-input"
+                                                defaultValue={u.userRoleId}
+                                                onChange={(e) => handleRoleChange(u.id, e.target.value)}
+                                                onBlur={() => setEditingUserId(null)}
+                                                autoFocus>
+                                                {roles.map(r => (
+                                                    <option key={r.id} value={r.id}>{r.name}</option>
+                                                ))}
+                                            </select>
+                                            : u.userRole.name
+                                        }
+                                    </td>
+                                    <td className="w-10 cursor-pointer" onClick={() => setEditingUserId(u.id)}><MdEdit /></td>
+                                    <td className="w-10 cursor-pointer text-red-600" onClick={(e) => handleDelete(e, u)}><MdDelete /></td>
+                                    <td className="w-10 cursor-pointer" onClick={() => { setEditingPasswordUserId(u.id); setNewPassword(""); }}><MdLock /></td>
+                                </tr>
+                                {editingPasswordUserId === u.id &&
+                                    <tr>
+                                        <td colSpan={5} className="px-4 py-2 bg-gray-50">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-sm font-semibold first-letter:capitalize">{t("usersManagement.form.newPassword")}:</span>
+                                                <input
+                                                    type="text"
+                                                    className="text-input w-48"
+                                                    placeholder={t("usersManagement.form.newPassword")}
+                                                    value={newPassword}
+                                                    onChange={(e) => setNewPassword(e.target.value)}
+                                                    autoFocus
+                                                />
+                                                <button className="text-green-600 p-1 cursor-pointer" onClick={() => handlePasswordChange(u.id)}><MdCheck size={20} /></button>
+                                                <button className="text-red-600 p-1 cursor-pointer" onClick={() => { setEditingPasswordUserId(null); setNewPassword(""); }}><MdClose size={20} /></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </React.Fragment>
                         )}
                     </tbody>
                 </table>

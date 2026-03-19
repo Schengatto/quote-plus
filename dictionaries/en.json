@@ -149,10 +149,18 @@
   "usersManagement.form.role": "role",
   "usersManagement.form.password": "password",
   "usersManagement.button.save": "save",
+  "usersManagement.button.changePassword": "change password",
+  "usersManagement.form.newPassword": "new password",
+  "usersManagement.table.head.password": "password",
   "tenants.form.title": "placeholder configuration",
   "tenants.form.products": "products",
   "tenants.form.price": "price",
   "tenants.form.currency": "currency",
   "tenants.form.discountedPrice": "discounted price",
-  "settings.button.downloadQuotesBackup": "download quote backup"
+  "settings.button.downloadQuotesBackup": "download quote backup",
+  "products.csv.export": "export CSV",
+  "products.csv.import": "import CSV",
+  "products.csv.importSuccess": "Products updated successfully",
+  "products.bulk.editPrices": "edit prices",
+  "products.bulk.hint": "Edit prices directly in the table, then click Save to confirm the changes."
 }

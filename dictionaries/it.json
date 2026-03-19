@@ -149,10 +149,18 @@
   "usersManagement.form.role": "ruolo",
   "usersManagement.form.password": "password",
   "usersManagement.button.save": "salva",
+  "usersManagement.button.changePassword": "cambia password",
+  "usersManagement.form.newPassword": "nuova password",
+  "usersManagement.table.head.password": "password",
   "tenants.form.title": "configurazione segnaposto",
   "tenants.form.products": "prodotti",
   "tenants.form.price": "prezzo",
   "tenants.form.currency": "valuta",
   "tenants.form.discountedPrice": "prezzo scontato",
-  "settings.button.downloadQuotesBackup": "scarica backup preventivi"
+  "settings.button.downloadQuotesBackup": "scarica backup preventivi",
+  "products.csv.export": "esporta CSV",
+  "products.csv.import": "importa CSV",
+  "products.csv.importSuccess": "Prodotti aggiornati con successo",
+  "products.bulk.editPrices": "modifica prezzi",
+  "products.bulk.hint": "Modifica i prezzi direttamente nella tabella, poi clicca Salva per confermare le modifiche."
 }

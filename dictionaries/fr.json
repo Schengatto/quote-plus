@@ -149,10 +149,18 @@
   "usersManagement.form.role": "rôle",
   "usersManagement.form.password": "mot de passe",
   "usersManagement.button.save": "enregistrer",
+  "usersManagement.button.changePassword": "changer le mot de passe",
+  "usersManagement.form.newPassword": "nouveau mot de passe",
+  "usersManagement.table.head.password": "mot de passe",
   "tenants.form.title": "configuration des espaces réservés",
   "tenants.form.products": "produits",
   "tenants.form.price": "prix",
   "tenants.form.currency": "devise",
   "tenants.form.discountedPrice": "prix remisé",
-  "settings.button.downloadQuotesBackup": "télécharger la sauvegarde des devis"
+  "settings.button.downloadQuotesBackup": "télécharger la sauvegarde des devis",
+  "products.csv.export": "exporter CSV",
+  "products.csv.import": "importer CSV",
+  "products.csv.importSuccess": "Produits mis à jour avec succès",
+  "products.bulk.editPrices": "modifier les prix",
+  "products.bulk.hint": "Modifiez les prix directement dans le tableau, puis cliquez sur Enregistrer pour confirmer les modifications."
 }

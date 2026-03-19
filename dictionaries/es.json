@@ -149,10 +149,18 @@
   "usersManagement.form.role": "rol",
   "usersManagement.form.password": "contraseña",
   "usersManagement.button.save": "guardar",
+  "usersManagement.button.changePassword": "cambiar contraseña",
+  "usersManagement.form.newPassword": "nueva contraseña",
+  "usersManagement.table.head.password": "contraseña",
   "tenants.form.title": "configuración de marcadores",
   "tenants.form.products": "productos",
   "tenants.form.price": "precio",
   "tenants.form.currency": "moneda",
   "tenants.form.discountedPrice": "precio con descuento",
-  "settings.button.downloadQuotesBackup": "descargar copia de seguridad de presupuestos"
+  "settings.button.downloadQuotesBackup": "descargar copia de seguridad de presupuestos",
+  "products.csv.export": "exportar CSV",
+  "products.csv.import": "importar CSV",
+  "products.csv.importSuccess": "Productos actualizados con éxito",
+  "products.bulk.editPrices": "editar precios",
+  "products.bulk.hint": "Edita los precios directamente en la tabla, luego haz clic en Guardar para confirmar los cambios."
 }
