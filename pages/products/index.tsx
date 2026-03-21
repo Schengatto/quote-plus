@@ -10,8 +10,8 @@ import { orderAscByProperty } from "@/utils/array";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Product } from "@prisma/client";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
-import { MdAddCircleOutline, MdSearch } from "react-icons/md";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { MdAddCircleOutline, MdSearch, MdEdit, MdSave, MdClose, MdFileDownload, MdFileUpload } from "react-icons/md";
 
 type ProductList = Product;
 
@@ -28,12 +28,20 @@ const ProductList = () => {
     const [products, setProducts] = useState<ProductList[]>([]);
     const [orderBy, setOrderBy] = useState<string>("code");
 
+    // Bulk price editing state
+    const [isEditingPrices, setIsEditingPrices] = useState(false);
+    const [editedPrices, setEditedPrices] = useState<Record<number, number>>({});
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const isAdmin = user?.userRole.grants?.includes("users-management");
+
     const preventClick = (event: any, _selectedProduct: Partial<ProductList>) => {
         event.stopPropagation();
     };
 
     const handleEdit = (event: any, _selectedProduct: Partial<ProductList>) => {
         event.stopPropagation();
+        if (isEditingPrices) return;
         router.push(`/products/${_selectedProduct.id}`);
     };
 
@@ -123,6 +131,94 @@ const ProductList = () => {
         }
     };
 
+    // --- Bulk price editing ---
+    const handleStartEditPrices = () => {
+        setIsEditingPrices(true);
+        setEditedPrices({});
+    };
+
+    const handleCancelEditPrices = () => {
+        setIsEditingPrices(false);
+        setEditedPrices({});
+    };
+
+    const handleBulkPriceChange = (productId: number, value: string) => {
+        const price = parseFloat(value);
+        if (!isNaN(price) && price >= 0) {
+            setEditedPrices((prev) => ({ ...prev, [productId]: price }));
+        }
+    };
+
+    const handleSaveBulkPrices = async () => {
+        const updates = Object.entries(editedPrices).map(([id, price]) => ({
+            id: Number(id),
+            price,
+        }));
+
+        if (updates.length === 0) {
+            setIsEditingPrices(false);
+            return;
+        }
+
+        await doActionWithLoader(
+            setIsLoading,
+            async () => {
+                const response = await fetch("/api/products/bulk-prices", {
+                    method: "PUT",
+                    body: JSON.stringify(updates),
+                }).then((res) => res.json());
+
+                if (response.updated) {
+                    await fetchProducts();
+                    setIsEditingPrices(false);
+                    setEditedPrices({});
+                } else {
+                    throw new Error(response.message || "Errore durante il salvataggio");
+                }
+            },
+            (error) => alert(`${t("common.error.onSave")}, ${error.message}`)
+        );
+    };
+
+    // --- CSV Export/Import ---
+    const handleExportCsv = () => {
+        window.open("/api/products/export-csv", "_blank");
+    };
+
+    const handleImportCsv = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileSelected = async (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const text = await file.text();
+
+        await doActionWithLoader(
+            setIsLoading,
+            async () => {
+                const response = await fetch("/api/products/import-csv", {
+                    method: "POST",
+                    body: JSON.stringify({ csv: text }),
+                }).then((res) => res.json());
+
+                if (response.updated) {
+                    alert(`${t("products.csv.importSuccess")}: ${response.updated}`);
+                    await fetchProducts();
+                } else {
+                    throw new Error(response.message || "Errore durante l'importazione");
+                }
+            },
+            (error) => alert(error.message)
+        );
+
+        // Reset file input
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
+
     const rowActions = (product: Partial<ProductList>) => [
         { label: t("common.edit"), onClick: (event: any) => handleEdit(event, product) },
         { label: t("common.editPrice"), onClick: (event: any) => handleEditPrice(event, product) },
@@ -149,6 +245,8 @@ const ProductList = () => {
         setSelectedProduct(null);
     }, [user, router, setIsLoading, setSelectedProduct]);
 
+    const changedCount = Object.keys(editedPrices).length;
+
     return (
         <AppLayout>
             <Dialog isVisible={!!selectedRow} title="Modifica prezzo" actions={changePriceDialogActions} onClose={() => setSelectedRow(null)} >
@@ -164,6 +262,14 @@ const ProductList = () => {
                 </div>
             </Dialog>
 
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept=".csv"
+                className="hidden"
+                onChange={handleFileSelected}
+            />
+
             <div className="m-2 xl:m-8">
 
                 <div className="page-title">
@@ -171,17 +277,70 @@ const ProductList = () => {
                 </div>
 
                 <div className="my-4">
-                    <div className="flex justify-end content-end w-full">
-                        <button
-                            className="btn-primary"
-                            onClick={handleCreateNew}>
-                            <div>
-                                <MdAddCircleOutline />
-                            </div>
-                            <div className="uppercase text-sm">{t("products.button.addProduct")}</div>
-                        </button>
+                    <div className="flex justify-end content-end w-full gap-2 flex-wrap">
+                        {isAdmin && !isEditingPrices && (
+                            <>
+                                <button
+                                    className="btn-primary"
+                                    onClick={handleExportCsv}
+                                    title={t("products.csv.export")}>
+                                    <div><MdFileDownload /></div>
+                                    <div className="uppercase text-sm">{t("products.csv.export")}</div>
+                                </button>
+                                <button
+                                    className="btn-primary"
+                                    onClick={handleImportCsv}
+                                    title={t("products.csv.import")}>
+                                    <div><MdFileUpload /></div>
+                                    <div className="uppercase text-sm">{t("products.csv.import")}</div>
+                                </button>
+                                <button
+                                    className="btn-primary"
+                                    onClick={handleStartEditPrices}
+                                    title={t("products.bulk.editPrices")}>
+                                    <div><MdEdit /></div>
+                                    <div className="uppercase text-sm">{t("products.bulk.editPrices")}</div>
+                                </button>
+                            </>
+                        )}
+                        {isEditingPrices && (
+                            <>
+                                <button
+                                    className="btn-primary bg-red-600 hover:bg-red-700"
+                                    onClick={handleCancelEditPrices}>
+                                    <div><MdClose /></div>
+                                    <div className="uppercase text-sm">{t("common.cancel")}</div>
+                                </button>
+                                <button
+                                    className="btn-primary bg-green-600 hover:bg-green-700"
+                                    onClick={handleSaveBulkPrices}
+                                    disabled={changedCount === 0}>
+                                    <div><MdSave /></div>
+                                    <div className="uppercase text-sm">
+                                        {t("common.save")} {changedCount > 0 && `(${changedCount})`}
+                                    </div>
+                                </button>
+                            </>
+                        )}
+                        {!isEditingPrices && (
+                            <button
+                                className="btn-primary"
+                                onClick={handleCreateNew}>
+                                <div>
+                                    <MdAddCircleOutline />
+                                </div>
+                                <div className="uppercase text-sm">{t("products.button.addProduct")}</div>
+                            </button>
+                        )}
                     </div>
                 </div>
+
+                {isEditingPrices && (
+                    <div className="mb-3 px-4 py-2 bg-yellow-50 border border-yellow-300 text-yellow-800 text-sm rounded">
+                        {t("products.bulk.hint")}
+                    </div>
+                )}
+
                 <div>
                     <div className="flex items-center gap-3 w-full mx-auto border border-gray-300 px-4 py-2 bg-gray-50 shadow-sm">
                         <MdSearch className="text-gray-500 text-xl" />
@@ -216,12 +375,39 @@ const ProductList = () => {
                             </thead>
                             <tbody className="divide-y divide-gray-200 border-none">
                                 {products.filter(p => p.name.toLowerCase()?.includes(searchTerm)).map((p: Partial<ProductList>) =>
-                                    <tr key={p.id} className="table-row" onClick={(event) => handleEdit(event, p)}>
-                                        <td onClick={(event) => preventClick(event, p)}><RowActions actions={rowActions(p)} /></td>
+                                    <tr key={p.id} className={`table-row ${isEditingPrices ? "cursor-default" : ""}`} onClick={(event) => handleEdit(event, p)}>
+                                        <td onClick={(event) => preventClick(event, p)}>
+                                            {!isEditingPrices && <RowActions actions={rowActions(p)} />}
+                                        </td>
                                         <td className="px-4 py-3 truncate max-w-0 text-left" title={p.code}>{p.code}</td>
                                         <td className="px-4 py-3 w-5/12 truncate max-w-0 text-left" title={p.name}>{p.name}</td>
                                         <td className="px-4 py-3 w-4/12 truncate max-w-0 text-left" title={getCategoryLabel(p)}>{getCategoryLabel(p)}</td>
-                                        <td className="px-4 py-3 text-right">{p.price} €</td>
+                                        <td className="px-4 py-3 text-right">
+                                            {isEditingPrices ? (
+                                                <input
+                                                    type="number"
+                                                    min={0}
+                                                    step="0.01"
+                                                    defaultValue={p.price}
+                                                    className="w-24 text-right border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    onChange={(e) => {
+                                                        const newPrice = parseFloat(e.target.value);
+                                                        if (p.id && !isNaN(newPrice) && newPrice !== p.price) {
+                                                            handleBulkPriceChange(p.id, e.target.value);
+                                                        } else if (p.id && newPrice === p.price) {
+                                                            setEditedPrices((prev) => {
+                                                                const next = { ...prev };
+                                                                delete next[p.id!];
+                                                                return next;
+                                                            });
+                                                        }
+                                                    }}
+                                                />
+                                            ) : (
+                                                <>{p.price} €</>
+                                            )}
+                                        </td>
                                     </tr>
                                 )}
                             </tbody>
