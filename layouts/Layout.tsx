@@ -46,7 +46,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
         const isMobile = window?.innerWidth < 768;
         setIsMenuVisible(isHome && !isMobile);
 
-        const userLanguage = currentLanguage || (userData?.extraData as any).language || "it";
+        const userLanguage = currentLanguage || ((userData as any)?.extraData as any)?.language || "it";
         setCurrentLanguage(userLanguage);
     }, [ userData, currentLanguage, isHome, setCurrentLanguage ]);
 

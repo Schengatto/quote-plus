@@ -21,6 +21,7 @@
   "dependencies": {
     "@prisma/client": "5.7.0",
     "@tinymce/tinymce-react": "6.3.0",
+    "cookie": "^1.1.1",
     "date-fns": "4.1.0",
     "html-to-react": "1.7.0",
     "jose": "5.1.3",

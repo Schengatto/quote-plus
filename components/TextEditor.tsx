@@ -55,7 +55,7 @@ const TextEditor: React.FunctionComponent<any> = ({ initialValue, onChange }) =>
     return <Editor
         id="editor-description"
         apiKey={process.env.tinymceApiKey}
-        onInit={(evt, editor) => editorRef.current = editor}
+        onInit={(_evt: any, editor: any) => editorRef.current = editor}
         onFocusOut={propagateChanges}
         initialValue={initialValue}
         init={{
