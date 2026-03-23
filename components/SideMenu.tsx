@@ -27,7 +27,7 @@ const SideMenu: FunctionComponent = () => {
         router.push(page);
     };
 
-    const hasGrants = (grants: string[]) => userData?.userRole.grants?.some(g => grants.includes(g));
+    const hasGrants = (grants: string[]) => userData?.userRole.grants?.some((g: string) => grants.includes(g));
     interface MenuItemProps {
         icon: React.ReactNode;
         label: string;
