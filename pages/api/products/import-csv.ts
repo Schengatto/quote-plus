@@ -93,16 +93,16 @@ function parseCsvLine(line: string): string[] {
     for (let i = 0; i < line.length; i++) {
         const char = line[i];
         if (inQuotes) {
-            if (char === '"' && line[i + 1] === '"') {
-                current += '"';
+            if (char === "\"" && line[i + 1] === "\"") {
+                current += "\"";
                 i++;
-            } else if (char === '"') {
+            } else if (char === "\"") {
                 inQuotes = false;
             } else {
                 current += char;
             }
         } else {
-            if (char === '"') {
+            if (char === "\"") {
                 inQuotes = true;
             } else if (char === ";") {
                 result.push(current);

@@ -18,9 +18,9 @@ const Brands = () => {
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
-    const [selectedBrand, setSelectedBrand] = useState<Partial<BrandApiModel> | null>(null);
-    const [brands, setBrands] = useState<BrandApiModel[]>([]);
+    const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
+    const [ selectedBrand, setSelectedBrand ] = useState<Partial<BrandApiModel> | null>(null);
+    const [ brands, setBrands ] = useState<BrandApiModel[]>([]);
 
     const handleEdit = (event: any, _selectedBrand: Partial<Brand>) => {
         event.stopPropagation();
@@ -90,7 +90,7 @@ const Brands = () => {
                 .then((res) => res.json());
             setBrands(_brands);
         });
-    }, [setIsLoading]);
+    }, [ setIsLoading ]);
 
     useEffect(() => {
         if (!user) return;
@@ -100,7 +100,7 @@ const Brands = () => {
         }
 
         fetchBrands();
-    }, [user, router, fetchBrands]);
+    }, [ user, router, fetchBrands ]);
 
     return (
         <AppLayout>

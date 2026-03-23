@@ -15,7 +15,7 @@ const EditContact = () => {
 
     const router = useRouter();
     const params = useParams();
-    const {userData: user} = useAuth();
+    const { userData: user } = useAuth();
 
     const { setIsLoading } = useAppStore();
     const { t } = useI18nStore();
@@ -32,17 +32,17 @@ const EditContact = () => {
         home: ""
     };
 
-    const [selectedContact, setSelectedContact] = useState<Partial<Contact>>(defaultContact);
-    const [notes, setNotes] = useState<ContactNote[]>([]);
-    const [selectedNote, setSelectedNote] = useState<Partial<ContactNote>>({ status: "OPEN" });
-    const [searchHistory, setSearchHistory] = useState<string>("");
+    const [ selectedContact, setSelectedContact ] = useState<Partial<Contact>>(defaultContact);
+    const [ notes, setNotes ] = useState<ContactNote[]>([]);
+    const [ selectedNote, setSelectedNote ] = useState<Partial<ContactNote>>({ status: "OPEN" });
+    const [ searchHistory, setSearchHistory ] = useState<string>("");
 
     const fetchContactNotes = useCallback(async (contactId: number) => {
         doActionWithLoader(setIsLoading, async () => {
             const _contactsNotes = await fetch(`/api/contacts/${contactId}/notes`, { method: "GET" }).then((res) => res.json());
             setNotes(_contactsNotes);
         });
-    }, [setIsLoading]);
+    }, [ setIsLoading ]);
 
     const handleFirstNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setSelectedContact((prev) => ({ ...prev, firstName: e.target.value }));
@@ -179,12 +179,12 @@ const EditContact = () => {
             setSelectedContact(_contact);
         };
         fetchContact();
-    }, [params]);
+    }, [ params ]);
 
     useEffect(() => {
         if (!selectedContact?.id) return;
         fetchContactNotes(selectedContact?.id);
-    }, [selectedContact.id]);
+    }, [ selectedContact.id, fetchContactNotes ]);
 
     return (
         <AppLayout>

@@ -2,7 +2,18 @@ import { verifyJwtToken } from "@/libs/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { AuthenticatedUser } from "./types/api/users";
 
-const NO_AUTH_PAGES = ["/", "/api/users/auth"];
+const NO_AUTH_PAGES = [ "/", "/api/users/auth" ];
+const AUTH_FAILED_RESPONSE = { success: false, message: "authentication failed" };
+
+const PROTECTED_ROUTES: { path: string; grant: string }[] = [
+    { path: "/brands", grant: "brands" },
+    { path: "/categories", grant: "categories" },
+    { path: "/products", grant: "products" },
+    { path: "/quotes", grant: "quotes" },
+    { path: "/contacts", grant: "quotes" },
+    { path: "/storage", grant: "storage" },
+    { path: "/users-management", grant: "users-management" },
+];
 
 const isAuthPages = (url: string): boolean =>
     !url.startsWith("/api/translations") && !NO_AUTH_PAGES.some((page) => page === url);
@@ -15,47 +26,22 @@ export async function middleware(request: NextRequest) {
 
     if (isAuthPageRequested && !verifiedToken) {
         if (url.includes("/api")) {
-            return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
-        } else {
-            const response = NextResponse.redirect(new URL("/", url));
-            response.cookies.delete("token");
-            return response;
+            return Response.json(AUTH_FAILED_RESPONSE, { status: 401 });
         }
+        const response = NextResponse.redirect(new URL("/", url));
+        response.cookies.delete("token");
+        return response;
     }
+
     if (request.method === "GET") {
         return NextResponse.next();
     }
 
-    if (url.includes("/brands") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("brands")) {
-        return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
-    }
-
-    if (url.includes("/categories") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("categories")) {
-        return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
-    }
-
-    if (url.includes("/products") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("products")) {
-        return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
-    }
-
-    if (url.includes("/quotes") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("quotes")) {
-        return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
-    }
-
-    if (url.includes("/contacts") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("quotes")) {
-        return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
-    }
-
-    if (url.includes("/storage") && !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("storage")) {
-        console.warn("Authentication failed");
-        return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
-    }
-
-    if (
-        url.includes("/users-management") &&
-        !(verifiedToken as AuthenticatedUser).userRole.grants?.includes("users-management")
-    ) {
-        return Response.json({ success: false, message: "authentication failed" }, { status: 401 });
+    const grants = (verifiedToken as AuthenticatedUser)?.userRole?.grants;
+    for (const route of PROTECTED_ROUTES) {
+        if (url.includes(route.path) && !grants?.includes(route.grant)) {
+            return Response.json(AUTH_FAILED_RESPONSE, { status: 401 });
+        }
     }
 
     return NextResponse.next();

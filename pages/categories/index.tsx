@@ -12,15 +12,15 @@ import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
 
 const Categories = () => {
     const router = useRouter();
-    const {userData: user} = useAuth();
+    const { userData: user } = useAuth();
 
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
-    const [selectedCategory, setSelectedCategory] = useState<Partial<CategoryApiModel>>({});
-    const [categories, setCategories] = useState<CategoryApiModel[]>([]);
-    const [availableParentCategories, setAvailableParentCategories] = useState<Category[]>([]);
+    const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
+    const [ selectedCategory, setSelectedCategory ] = useState<Partial<CategoryApiModel>>({});
+    const [ categories, setCategories ] = useState<CategoryApiModel[]>([]);
+    const [ availableParentCategories, setAvailableParentCategories ] = useState<Category[]>([]);
 
     const handleEdit = (event: any, _selectedCategory: Partial<Category>) => {
         event.stopPropagation();
@@ -99,7 +99,7 @@ const Categories = () => {
             const _categories = await fetch("/api/categories", { method: "GET" }).then((res) => res.json());
             setCategories(_categories);
         });
-    }, [setIsLoading]);
+    }, [ setIsLoading ]);
 
     const categoryLabel = (category: CategoryApiModel): string => {
         return category.parent
@@ -115,14 +115,14 @@ const Categories = () => {
         }
 
         fetchCategories();
-    }, [router, user, fetchCategories]);
+    }, [ router, user, fetchCategories ]);
 
     useEffect(() => {
         const notTheSelectedOne = ((c: Category) => c.id !== selectedCategory?.id);
         const isNotChildCategory = ((c: Category) => !c.parentId);
         const _availableCategories = categories.filter(c => notTheSelectedOne(c) && isNotChildCategory(c));
         setAvailableParentCategories(_availableCategories);
-    }, [selectedCategory, categories]);
+    }, [ selectedCategory, categories ]);
 
     return (
         <AppLayout>

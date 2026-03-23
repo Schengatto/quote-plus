@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 
 export function useAuth() {
-    const [userData, setUserData] = useState<AuthenticatedUser | null>(null);
+    const [ userData, setUserData ] = useState<AuthenticatedUser | null>(null);
 
     const getVerifiedtoken = async () => {
         const cookies = new Cookies();

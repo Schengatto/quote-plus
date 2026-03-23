@@ -14,7 +14,7 @@ import { MdPhone, MdSend } from "react-icons/md";
 
 const IncomingCall = () => {
     const searchParams = useSearchParams();
-    const {userData: user} = useAuth();
+    const { userData: user } = useAuth();
 
     const { setIsLoading } = useAppStore();
     const { t } = useI18nStore();
@@ -36,19 +36,19 @@ const IncomingCall = () => {
         home: ""
     };
 
-    const [contactData, setContactData] = useState<Partial<Contact>>(defaultContact);
-    const [selectedContact, setSelectedContact] = useState<Partial<Contact>>({});
-    const [isContactPreset, setIsContactPreset] = useState<boolean>(false);
-    const [notes, setNotes] = useState<ContactNote[]>([]);
-    const [selectedNote, setSelectedNote] = useState<Partial<ContactNote>>({ status: "OPEN" });
-    const [searchHistory, setSearchHistory] = useState<string>("");
+    const [ contactData, setContactData ] = useState<Partial<Contact>>(defaultContact);
+    const [ selectedContact, setSelectedContact ] = useState<Partial<Contact>>({});
+    const [ isContactPreset, setIsContactPreset ] = useState<boolean>(false);
+    const [ notes, setNotes ] = useState<ContactNote[]>([]);
+    const [ selectedNote, setSelectedNote ] = useState<Partial<ContactNote>>({ status: "OPEN" });
+    const [ searchHistory, setSearchHistory ] = useState<string>("");
 
     const fetchContactNotes = useCallback(async (contactId: number) => {
         doActionWithLoader(setIsLoading, async () => {
             const _contactsNotes = await fetch(`/api/contacts/${contactId}/notes`, { method: "GET" }).then((res) => res.json());
             setNotes(_contactsNotes);
         });
-    }, [setIsLoading]);
+    }, [ setIsLoading ]);
 
     const handleFirstNameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setSelectedContact((prev) => ({ ...prev, firstName: e.target.value }));
@@ -184,7 +184,8 @@ const IncomingCall = () => {
         setIsContactPreset(!!storedContact);
 
         setContactData(storedContact || defaultContact);
-    }, [phoneNumber, displayName, contacts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ phoneNumber, displayName, contacts ]);
 
     useEffect(() => {
         if (!contactData.id) {
@@ -193,7 +194,7 @@ const IncomingCall = () => {
         };
         setSelectedContact(contactData);
         fetchContactNotes(contactData.id);
-    }, [contactData]);
+    }, [ contactData, phoneNumber, displayName, fetchContactNotes ]);
 
     return (
         <AppLayout>

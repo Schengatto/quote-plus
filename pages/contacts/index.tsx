@@ -19,7 +19,7 @@ const Contacts = () => {
 
     const { setContacts } = useContactsStore();
 
-    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [ searchTerm, setSearchTerm ] = useState<string>("");
 
     const handleEdit = (event: any, _selectedContact: Partial<Contact>) => {
         event.stopPropagation();
@@ -41,7 +41,7 @@ const Contacts = () => {
             const _contacts = await fetch("/api/contacts", { method: "GET" }).then((res) => res.json());
             setContacts(_contacts);
         });
-    }, [setIsLoading]);
+    }, [ setIsLoading, setContacts ]);
 
     const deleteProduct = async (contact: Partial<Contact>) => {
         setDialog(null);
@@ -66,7 +66,7 @@ const Contacts = () => {
 
     useEffect(() => {
         fetchContacts();
-    }, []);
+    }, [ fetchContacts ]);
 
     return (
         <AppLayout>

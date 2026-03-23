@@ -4,6 +4,7 @@ import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import { doActionWithLoader } from "@/utils/actions";
 import { ContactNote } from "@prisma/client";
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
 interface ContactNoteWithContact extends ContactNote {
@@ -14,21 +15,19 @@ const Home = () => {
     const { isLoading, setIsLoading } = useAppStore();
     const { t } = useI18nStore();
 
-    const [pendingNotes, setPendingNotes] = useState<ContactNoteWithContact[]>([]);
+    const [ pendingNotes, setPendingNotes ] = useState<ContactNoteWithContact[]>([]);
 
     const fetchNotes = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
             const _notes: ContactNoteWithContact[] = await fetch("/api/notes", { method: "GET" }).then((res) => res.json());
-            const _filteredNotes = _notes.filter(n => ["OPEN", "PENDING"].includes(n.status));
+            const _filteredNotes = _notes.filter(n => [ "OPEN", "PENDING" ].includes(n.status));
             setPendingNotes(_filteredNotes);
         });
-    }, [setIsLoading]);
-
+    }, [ setIsLoading ]);
 
     useEffect(() => {
         fetchNotes();
-    }, []);
-
+    }, [ fetchNotes ]);
 
     return (
         <AppLayout>
@@ -51,7 +50,7 @@ const Home = () => {
                                 ))}
                             {!pendingNotes.length && <>
                                 <div className="flex flex-col m-auto items-center gap-8">
-                                    <img src="/images/no-task.png" width={100} alt="No Task" />
+                                    <Image src="/images/no-task.png" width={100} height={100} alt="No Task" />
                                     <div className="font-semibold text-xl">{t("common.noPendingTasks")}!</div>
                                 </div>
                             </>

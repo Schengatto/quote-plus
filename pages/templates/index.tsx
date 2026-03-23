@@ -11,14 +11,14 @@ import { MdAddCircleOutline, MdDelete, MdEdit } from "react-icons/md";
 
 const Templates = () => {
 
-    const {userData} = useAuth();
+    const { userData } = useAuth();
 
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
-    const [selectedTemplate, setSelectedTemplate] = useState<Partial<Template> | null>(null);
-    const [templates, setTemplates] = useState<Template[]>([]);
+    const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
+    const [ selectedTemplate, setSelectedTemplate ] = useState<Partial<Template> | null>(null);
+    const [ templates, setTemplates ] = useState<Template[]>([]);
 
     const handleEdit = (event: any, _selectedTemplate: Partial<Template>) => {
         event.stopPropagation();
@@ -84,12 +84,12 @@ const Templates = () => {
                 .then((res) => res.json());
             setTemplates(_templates);
         });
-    }, [userData, setTemplates, setIsLoading]);
+    }, [ userData, setTemplates, setIsLoading ]);
 
     useEffect(() => {
         if (!userData) return;
         fetchTemplates();
-    }, [userData, fetchTemplates]);
+    }, [ userData, fetchTemplates ]);
 
     return (
         <AppLayout>

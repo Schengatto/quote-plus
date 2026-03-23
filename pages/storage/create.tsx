@@ -19,18 +19,18 @@ const RepairCreate = () => {
     const type = searchParams.get("type");
 
     const router = useRouter();
-    const {userData: user} = useAuth();
+    const { userData: user } = useAuth();
 
     const { t } = useI18nStore();
     const { setIsLoading } = useAppStore();
 
-    const [items, setItems] = useState<ItemList[]>([]);
-    const [categories, setCategories] = useState<CategoryApiModel[]>([]);
+    const [ items, setItems ] = useState<ItemList[]>([]);
+    const [ categories, setCategories ] = useState<CategoryApiModel[]>([]);
 
-    const [item, setItem] = useState<Partial<Item>>({});
-    const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(undefined);
+    const [ item, setItem ] = useState<Partial<Item>>({});
+    const [ selectedProduct, setSelectedProduct ] = useState<Product | undefined>(undefined);
 
-    const [list, setList] = useState<Item[]>([]);
+    const [ list, setList ] = useState<Item[]>([]);
 
     const handleCategoryChanged = (e: ChangeEvent<HTMLSelectElement>) => {
         const categoryId: number = !!e.currentTarget.value ? Number(e.currentTarget.value) : 0;
@@ -100,7 +100,7 @@ const RepairCreate = () => {
                 throw Error("Qualcosa è andato storto, l'elemento è stato creato!");
             }
 
-            setList((prev) => [...prev, response]);
+            setList((prev) => [ ...prev, response ]);
         } catch (error: any) {
             alert(`${t("common.error.onSave")}, ${error.message}`);
         }
@@ -135,9 +135,8 @@ const RepairCreate = () => {
         setItems(orderedItems);
     };
 
-    const dealers = useMemo(() => Array.from(new Set(items.map(i => i.dealer))), [items]);
-    const references = useMemo(() => Array.from(new Set(items.map(i => i.reference))), [items]);
-
+    const dealers = useMemo(() => Array.from(new Set(items.map(i => i.dealer))), [ items ]);
+    const references = useMemo(() => Array.from(new Set(items.map(i => i.reference))), [ items ]);
 
     useEffect(() => {
         doActionWithLoader(
@@ -151,7 +150,7 @@ const RepairCreate = () => {
 
         doActionWithLoader(setIsLoading, fetchItems);
         return () => setSelectedProduct(undefined);
-    }, [selectedProduct, setIsLoading, setSelectedProduct]);
+    }, [ selectedProduct, setIsLoading, setSelectedProduct ]);
 
     useEffect(() => {
         fetchCategories();
@@ -159,7 +158,7 @@ const RepairCreate = () => {
         if (!user?.userRole.grants?.includes("storage")) {
             router.push("/");
         }
-    }, [router, user]);
+    }, [ router, user ]);
 
     return (
         <AppLayout>

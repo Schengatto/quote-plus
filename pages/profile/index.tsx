@@ -14,16 +14,16 @@ import Cookies from "universal-cookie";
 const UserProfile = () => {
 
     const router = useRouter();
-    const {userData: user} = useAuth();
+    const { userData: user } = useAuth();
 
     const { t, setCurrentLanguage, currentLanguage } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [templates, setTemplates] = useState<Template[]>([]);
-    const [username, setUsername] = useState<string>(user?.username || "");
-    const [password, setPassword] = useState<string>(user?.password || "");
-    const [selectedTemplate, setSelectedTemplate] = useState<number>(user?.activeTemplateId || 0);
-    const [selectedLanguage, setSelectedLanguage] = useState<string>(currentLanguage);
+    const [ templates, setTemplates ] = useState<Template[]>([]);
+    const [ username, setUsername ] = useState<string>(user?.username || "");
+    const [ password, setPassword ] = useState<string>(user?.password || "");
+    const [ selectedTemplate, setSelectedTemplate ] = useState<number>(user?.activeTemplateId || 0);
+    const [ selectedLanguage, setSelectedLanguage ] = useState<string>(currentLanguage);
 
     const handleUsernameChanged = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -111,13 +111,13 @@ const UserProfile = () => {
         const _templates = await fetch(`/api/templates?userId=${user!.id}`, { method: "GET" })
             .then((res) => res.json());
         setTemplates(_templates);
-    }, [user]);
+    }, [ user ]);
 
     const fetchUserInfo = useCallback(async () => {
         const _user = await fetch(`/api/users/${user?.id}`, { method: "GET" }).then(res => res.json());
         setUsername(_user?.username);
         setSelectedTemplate(_user.activeTemplateId);
-    }, [user]);
+    }, [ user ]);
 
     useEffect(() => {
         if (!user) return;
@@ -125,7 +125,7 @@ const UserProfile = () => {
         fetchUserTemplates();
         fetchUserInfo();
 
-    }, [user, fetchUserInfo, fetchUserTemplates]);
+    }, [ user, fetchUserInfo, fetchUserTemplates ]);
 
     return (
         <AppLayout>

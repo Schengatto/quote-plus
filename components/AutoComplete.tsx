@@ -7,9 +7,9 @@ type AutoCompleteProps = {
 };
 
 export default function AutoComplete({ suggestions, onSelect, required = false }: AutoCompleteProps) {
-    const [inputValue, setInputValue] = useState("");
-    const [filtered, setFiltered] = useState<string[]>([]);
-    const [showList, setShowList] = useState(false);
+    const [ inputValue, setInputValue ] = useState("");
+    const [ filtered, setFiltered ] = useState<string[]>([]);
+    const [ showList, setShowList ] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;

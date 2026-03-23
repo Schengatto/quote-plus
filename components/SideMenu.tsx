@@ -65,7 +65,7 @@ const SideMenu: FunctionComponent = () => {
                     onClick={() => navigateTo("/home")}
                 />
 
-                {hasGrants(["quotes"]) && (
+                {hasGrants([ "quotes" ]) && (
                     <MenuSection title={t("sideMenu.item.quotes")}>
                         <MenuItem
                             icon={<MdOutlineEdit />}
@@ -80,23 +80,23 @@ const SideMenu: FunctionComponent = () => {
                     </MenuSection>
                 )}
 
-                {hasGrants(["categories", "brands", "products"]) && (
+                {hasGrants([ "categories", "brands", "products" ]) && (
                     <MenuSection title={t("sideMenu.item.catalog")}>
-                        {hasGrants(["categories"]) && (
+                        {hasGrants([ "categories" ]) && (
                             <MenuItem
                                 icon={<MdStorage />}
                                 label={t("sideMenu.item.categories")}
                                 onClick={() => navigateTo("/categories")}
                             />
                         )}
-                        {hasGrants(["products"]) && (
+                        {hasGrants([ "products" ]) && (
                             <MenuItem
                                 icon={<MdStorage />}
                                 label={t("sideMenu.item.products")}
                                 onClick={() => navigateTo("/products")}
                             />
                         )}
-                        {hasGrants(["brands"]) && (
+                        {hasGrants([ "brands" ]) && (
                             <MenuItem
                                 icon={<MdStorage />}
                                 label={t("sideMenu.item.brands")}
@@ -119,7 +119,7 @@ const SideMenu: FunctionComponent = () => {
                     />
                 </MenuSection>
 
-                {hasGrants(["storage"]) && (
+                {hasGrants([ "storage" ]) && (
                     <MenuSection title={t("sideMenu.item.storage")}>
                         <MenuItem
                             icon={<MdSearch />}
@@ -139,16 +139,16 @@ const SideMenu: FunctionComponent = () => {
                     </MenuSection>
                 )}
 
-                {hasGrants(["users-management", "tenant-config"]) && (
+                {hasGrants([ "users-management", "tenant-config" ]) && (
                     <MenuSection title={t("sideMenu.item.admin")}>
-                        {hasGrants(["users-management"]) && (
+                        {hasGrants([ "users-management" ]) && (
                             <MenuItem
                                 icon={<MdManageAccounts />}
                                 label={t("sideMenu.item.usersManagement")}
                                 onClick={() => navigateTo("/users-management")}
                             />
                         )}
-                        {hasGrants(["tenant-config"]) && (
+                        {hasGrants([ "tenant-config" ]) && (
                             <MenuItem
                                 icon={<MdSettings />}
                                 label={t("sideMenu.item.settings")}

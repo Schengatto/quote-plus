@@ -15,8 +15,8 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
     const router = useRouter();
 
     const { t, setCurrentLanguage, currentLanguage } = useI18nStore();
-    const [isMenuVisible, setIsMenuVisible] = useState<boolean>(true);
-    const [isUserMenuVisible, setIsUserMenuVisible] = useState<boolean>(false);
+    const [ isMenuVisible, setIsMenuVisible ] = useState<boolean>(true);
+    const [ isUserMenuVisible, setIsUserMenuVisible ] = useState<boolean>(false);
 
     const isHome = router.pathname === "/home";
 
@@ -48,7 +48,7 @@ const AppLayout: React.FunctionComponent<LayoutProps> = ({ children }) => {
 
         const userLanguage = currentLanguage || (userData?.extraData as any).language || "it";
         setCurrentLanguage(userLanguage);
-    }, [userData]);
+    }, [ userData, currentLanguage, isHome, setCurrentLanguage ]);
 
     return (
         <>

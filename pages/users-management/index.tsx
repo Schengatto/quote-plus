@@ -9,6 +9,8 @@ import { User, UserRole } from "@prisma/client";
 import React, { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import { MdAddCircleOutline, MdCheck, MdClose, MdDelete, MdEdit, MdLock } from "react-icons/md";
 
+const SAVE_ERROR_KEY = "common.error.onSave";
+
 const UserManagementPage = () => {
 
     const { userData } = useAuth();
@@ -16,13 +18,13 @@ const UserManagementPage = () => {
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [isInputFormActive, setIsInputFormActive] = useState<boolean>(false);
-    const [selectedUser, setSelectedUser] = useState<Partial<User>>({});
-    const [users, setUsers] = useState<AuthenticatedUser[]>([]);
-    const [roles, setRoles] = useState<UserRole[]>([]);
-    const [editingUserId, setEditingUserId] = useState<number | null>(null);
-    const [editingPasswordUserId, setEditingPasswordUserId] = useState<number | null>(null);
-    const [newPassword, setNewPassword] = useState<string>("");
+    const [ isInputFormActive, setIsInputFormActive ] = useState<boolean>(false);
+    const [ selectedUser, setSelectedUser ] = useState<Partial<User>>({});
+    const [ users, setUsers ] = useState<AuthenticatedUser[]>([]);
+    const [ roles, setRoles ] = useState<UserRole[]>([]);
+    const [ editingUserId, setEditingUserId ] = useState<number | null>(null);
+    const [ editingPasswordUserId, setEditingPasswordUserId ] = useState<number | null>(null);
+    const [ newPassword, setNewPassword ] = useState<string>("");
 
     const handleCreateNew = () => {
         if (!userData) return;
@@ -61,10 +63,10 @@ const UserManagementPage = () => {
                 .then((res) => res.json());
 
             if (!response.id) {
-                alert(`${t("common.error.onSave")}, ${response.message}`);
+                alert(`${t(SAVE_ERROR_KEY)}, ${response.message}`);
             }
         } catch (error: any) {
-            alert(`${t("common.error.onSave")}, ${error.message}`);
+            alert(`${t(SAVE_ERROR_KEY)}, ${error.message}`);
         }
         await fetchUsers();
         setIsInputFormActive(false);
@@ -90,7 +92,7 @@ const UserManagementPage = () => {
                 body: JSON.stringify({ password: newPassword }),
             });
         } catch (error: any) {
-            alert(`${t("common.error.onSave")}, ${error.message}`);
+            alert(`${t(SAVE_ERROR_KEY)}, ${error.message}`);
         }
         setEditingPasswordUserId(null);
         setNewPassword("");
@@ -104,7 +106,7 @@ const UserManagementPage = () => {
             });
             await fetchUsers();
         } catch (error: any) {
-            alert(`${t("common.error.onSave")}, ${error.message}`);
+            alert(`${t(SAVE_ERROR_KEY)}, ${error.message}`);
         }
         setEditingUserId(null);
     };
@@ -115,7 +117,7 @@ const UserManagementPage = () => {
                 .then((res) => res.json());
             setUsers(_users);
         });
-    }, [setIsLoading]);
+    }, [ setIsLoading ]);
 
     const fetchRoles = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
@@ -123,13 +125,13 @@ const UserManagementPage = () => {
                 .then((res) => res.json());
             setRoles(_roles);
         });
-    }, [setIsLoading]);
+    }, [ setIsLoading ]);
 
     useEffect(() => {
         if (!userData) return;
         fetchUsers();
         fetchRoles();
-    }, [userData, fetchUsers, fetchRoles]);
+    }, [ userData, fetchUsers, fetchRoles ]);
 
     return (
         <AppLayout>
@@ -252,8 +254,13 @@ const UserManagementPage = () => {
                                                     onChange={(e) => setNewPassword(e.target.value)}
                                                     autoFocus
                                                 />
-                                                <button className="text-green-600 p-1 cursor-pointer" onClick={() => handlePasswordChange(u.id)}><MdCheck size={20} /></button>
-                                                <button className="text-red-600 p-1 cursor-pointer" onClick={() => { setEditingPasswordUserId(null); setNewPassword(""); }}><MdClose size={20} /></button>
+                                                <button className="text-green-600 p-1 cursor-pointer"
+                                                    onClick={() => handlePasswordChange(u.id)}><MdCheck size={20} />
+                                                </button>
+                                                <button className="text-red-600 p-1 cursor-pointer"
+                                                    onClick={() => { setEditingPasswordUserId(null); setNewPassword(""); }}>
+                                                    <MdClose size={20} />
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>

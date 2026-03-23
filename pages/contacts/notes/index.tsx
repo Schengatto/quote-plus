@@ -18,9 +18,9 @@ const Notes = () => {
     const { t } = useI18nStore();
     const { setIsLoading } = useAppStore();
 
-    const [notes, setNotes] = useState<ContactNoteWithContact[]>([]);
-    const [searchHistory, setSearchHistory] = useState("");
-    const [visibleCount, setVisibleCount] = useState(30);
+    const [ notes, setNotes ] = useState<ContactNoteWithContact[]>([]);
+    const [ searchHistory, setSearchHistory ] = useState("");
+    const [ visibleCount, setVisibleCount ] = useState(30);
     const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -33,7 +33,7 @@ const Notes = () => {
         };
 
         fetchNotes();
-    }, []);
+    }, [ setIsLoading ]);
 
     const handleHistorySearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchHistory(e.target.value);
@@ -67,7 +67,7 @@ const Notes = () => {
         return () => {
             observer.disconnect();
         };
-    }, [filteredNotes.length]);
+    }, [ filteredNotes.length ]);
 
     return (
         <AppLayout>
@@ -106,6 +106,5 @@ const Notes = () => {
         </AppLayout>
     );
 };
-
 
 export default Notes;

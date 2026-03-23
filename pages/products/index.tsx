@@ -10,27 +10,27 @@ import { orderAscByProperty } from "@/utils/array";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Product } from "@prisma/client";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { MdAddCircleOutline, MdSearch, MdEdit, MdSave, MdClose, MdFileDownload, MdFileUpload } from "react-icons/md";
 
 type ProductList = Product;
 
 const ProductList = () => {
     const router = useRouter();
-    const {userData: user} = useAuth();
+    const { userData: user } = useAuth();
 
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
     const { setSelectedProduct } = useProductsStore();
-    const [selectedRow, setSelectedRow] = useState<Partial<ProductList> | null>(null);
-    const [newProductPrice, setNewProductPrice] = useState<number>(0);
+    const [ selectedRow, setSelectedRow ] = useState<Partial<ProductList> | null>(null);
+    const [ newProductPrice, setNewProductPrice ] = useState<number>(0);
 
-    const [products, setProducts] = useState<ProductList[]>([]);
-    const [orderBy, setOrderBy] = useState<string>("code");
+    const [ products, setProducts ] = useState<ProductList[]>([]);
+    const [ orderBy, setOrderBy ] = useState<string>("code");
 
     // Bulk price editing state
-    const [isEditingPrices, setIsEditingPrices] = useState(false);
-    const [editedPrices, setEditedPrices] = useState<Record<number, number>>({});
+    const [ isEditingPrices, setIsEditingPrices ] = useState(false);
+    const [ editedPrices, setEditedPrices ] = useState<Record<number, number>>({});
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const isAdmin = user?.userRole.grants?.includes("users-management");
@@ -79,12 +79,12 @@ const ProductList = () => {
         await fetchProducts();
     };
 
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         const _products = await fetch("/api/products", { method: "GET" })
             .then((res) => res.json()) ?? [];
         const _productsWithCategoryLabel = _products.map((p: ProductList) => ({ ...p, categoryLabel: getCategoryLabel(p) }));
         setProducts(orderAscByProperty(_productsWithCategoryLabel, orderBy));
-    };
+    }, [ orderBy ]);
 
     const getCategoryLabel = ({ category }: any | ProductList): string => {
         return category.parent
@@ -92,7 +92,7 @@ const ProductList = () => {
             : category.name;
     };
 
-    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [ searchTerm, setSearchTerm ] = useState<string>("");
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -150,7 +150,7 @@ const ProductList = () => {
     };
 
     const handleSaveBulkPrices = async () => {
-        const updates = Object.entries(editedPrices).map(([id, price]) => ({
+        const updates = Object.entries(editedPrices).map(([ id, price ]) => ({
             id: Number(id),
             price,
         }));
@@ -232,8 +232,8 @@ const ProductList = () => {
     ];
 
     useEffect(() => {
-        setProducts(orderAscByProperty(products, orderBy));
-    }, [orderBy, setProducts]);
+        setProducts((prev) => orderAscByProperty(prev, orderBy));
+    }, [ orderBy, setProducts ]);
 
     useEffect(() => {
         if (!user) return;
@@ -243,7 +243,7 @@ const ProductList = () => {
 
         doActionWithLoader(setIsLoading, fetchProducts);
         setSelectedProduct(null);
-    }, [user, router, setIsLoading, setSelectedProduct]);
+    }, [ user, router, setIsLoading, setSelectedProduct, fetchProducts ]);
 
     const changedCount = Object.keys(editedPrices).length;
 

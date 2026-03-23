@@ -1,6 +1,6 @@
 import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
-import { FunctionComponent, ReactNode, useEffect, useState } from "react";
+import { FunctionComponent, ReactNode, useCallback, useEffect, useState } from "react";
 import { MdCheckCircle, MdClose, MdError, MdInfo, MdWarning } from "react-icons/md";
 
 export interface DialogAction {
@@ -27,7 +27,7 @@ const Dialog: FunctionComponent<DialogProps> = (props: DialogProps) => {
     const { dialog, setDialog } = useAppStore();
     const { t } = useI18nStore();
 
-    const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
+    const [ isDialogVisible, setIsDialogVisible ] = useState<boolean>(false);
 
     const actions = props.actions || dialog?.actions;
     const dialogType = props.type || dialog?.type || "info";
@@ -62,7 +62,7 @@ const Dialog: FunctionComponent<DialogProps> = (props: DialogProps) => {
     const config = typeConfig[dialogType as DialogType];
     const IconComponent = config.icon;
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         if (props.onClose) {
             props.onClose();
         }
@@ -71,7 +71,7 @@ const Dialog: FunctionComponent<DialogProps> = (props: DialogProps) => {
         }
         setDialog(null);
         setIsDialogVisible(false);
-    };
+    }, [ props, dialog, setDialog ]);
 
     const getButtonClasses = (variant: DialogAction["variant"] = "primary") => {
         const baseClasses = "px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800";
@@ -90,11 +90,11 @@ const Dialog: FunctionComponent<DialogProps> = (props: DialogProps) => {
 
     useEffect(() => {
         setIsDialogVisible(!!props.isVisible);
-    }, [props]);
+    }, [ props ]);
 
     useEffect(() => {
         setIsDialogVisible(!!dialog);
-    }, [dialog]);
+    }, [ dialog ]);
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -112,7 +112,7 @@ const Dialog: FunctionComponent<DialogProps> = (props: DialogProps) => {
             document.removeEventListener("keydown", handleKeyDown);
             document.body.style.overflow = "unset";
         };
-    }, [isDialogVisible]);
+    }, [ isDialogVisible, handleClose ]);
 
     if (!isDialogVisible) return null;
 

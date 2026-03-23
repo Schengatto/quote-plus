@@ -17,14 +17,13 @@ const ContactsLayout: React.FunctionComponent<ContactsLayoutProps> = ({ children
             const _contacts = await fetch("/api/contacts", { method: "GET" }).then((res) => res.json());
             setContacts(_contacts);
         });
-    }, [setIsLoading]);
-
+    }, [ setIsLoading, setContacts ]);
 
     useEffect(() => {
         fetchContacts();
-    }, []);
+    }, [ fetchContacts ]);
 
-    return (<>{children}</>)
+    return (<>{children}</>);
 };
 
 export default ContactsLayout;

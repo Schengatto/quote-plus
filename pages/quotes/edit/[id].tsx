@@ -17,7 +17,7 @@ const QuoteEdit = () => {
 
     const router = useRouter();
     const params = useParams();
-    const {userData: user} = useAuth();
+    const { userData: user } = useAuth();
 
     const { t } = useI18nStore();
     const { setIsLoading } = useAppStore();
@@ -156,7 +156,7 @@ const QuoteEdit = () => {
 
     useEffect(() => {
         setQuoteOverview(() => quoteContent.replaceAll(placeholders.products || "{{products}}", ""));
-    }, [ quoteContent ]);
+    }, [ quoteContent, placeholders.products ]);
 
     return (
         <AppLayout>

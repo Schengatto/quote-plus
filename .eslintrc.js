@@ -1,6 +1,8 @@
+const ONLY_MULTILINE = "only-multiline";
+
 module.exports = {
-    "extends": ["next/core-web-vitals", "plugin:sonarjs/recommended"],
-    "plugins": ["sonarjs"],
+    "extends": [ "next/core-web-vitals", "plugin:sonarjs/recommended" ],
+    "plugins": [ "sonarjs" ],
     "globals": {
         "NodeJS": true,
     },
@@ -15,10 +17,10 @@ module.exports = {
         "object-curly-spacing": [ "warn", "always" ],
         "quotes": [ "warn", "double" ],
         "comma-dangle": [ "warn", {
-            "arrays": "only-multiline",
-            "objects": "only-multiline",
-            "imports": "only-multiline",
-            "exports": "only-multiline",
+            "arrays": ONLY_MULTILINE,
+            "objects": ONLY_MULTILINE,
+            "imports": ONLY_MULTILINE,
+            "exports": ONLY_MULTILINE,
             "functions": "never",
         } ],
         "no-multiple-empty-lines": [ "warn", { "max": 1, "maxEOF": 1 } ],

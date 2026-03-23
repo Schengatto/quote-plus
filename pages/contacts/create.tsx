@@ -11,7 +11,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 const IncomingCall = () => {
     const searchParams = useSearchParams();
-    const {userData: user} = useAuth();
+    const { userData: user } = useAuth();
     const router = useRouter();
 
     const { setIsLoading } = useAppStore();
@@ -34,8 +34,8 @@ const IncomingCall = () => {
         home: ""
     };
 
-    const [contactData, setContactData] = useState<Partial<Contact>>(defaultContact);
-    const [selectedContanct, setSelectedContanct] = useState<Partial<Contact>>({});
+    const [ contactData, setContactData ] = useState<Partial<Contact>>(defaultContact);
+    const [ selectedContanct, setSelectedContanct ] = useState<Partial<Contact>>({});
 
     const handlePhoneNumberChanged = (e: ChangeEvent<HTMLInputElement>) => {
         setSelectedContanct((prev) => ({ ...prev, phoneNumber: e.target.value }));
@@ -104,7 +104,8 @@ const IncomingCall = () => {
         const storedContact: Contact | null = contacts.find(c => contactMatch(c)) || null;
 
         setContactData(storedContact || defaultContact);
-    }, [phoneNumber, displayName, contacts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ phoneNumber, displayName, contacts ]);
 
     useEffect(() => {
         if (!contactData.id) {
@@ -112,7 +113,7 @@ const IncomingCall = () => {
             return;
         };
         setSelectedContanct(contactData);
-    }, [contactData]);
+    }, [ contactData, phoneNumber, displayName ]);
 
     return (
         <AppLayout>

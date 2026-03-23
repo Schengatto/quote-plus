@@ -37,7 +37,7 @@ export default async function handler(
             return `${p.id};${escapeCsv(p.code)};${escapeCsv(p.name)};${escapeCsv(categoryLabel)};${p.price}`;
         });
 
-        const csv = [header, ...rows].join("\n");
+        const csv = [ header, ...rows ].join("\n");
 
         res.setHeader("Content-Type", "text/csv; charset=utf-8");
         res.setHeader("Content-Disposition", `attachment; filename=products_${new Date().toISOString().slice(0, 10)}.csv`);
@@ -48,8 +48,8 @@ export default async function handler(
 }
 
 function escapeCsv(value: string): string {
-    if (value.includes(";") || value.includes('"') || value.includes("\n")) {
-        return `"${value.replace(/"/g, '""')}"`;
+    if (value.includes(";") || value.includes("\"") || value.includes("\n")) {
+        return `"${value.replace(/"/g, "\"\"")}"`;
     }
     return value;
 }

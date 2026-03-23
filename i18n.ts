@@ -1,5 +1,5 @@
 export const defaultLocale = "it";
-export const locales = ["en", "it"] as const;
+export const locales = [ "en", "it" ] as const;
 export type ValidLocale = (typeof locales)[number];
 
 type PathnameLocale = {
@@ -42,7 +42,7 @@ export const getTranslator = async (locale: ValidLocale) => {
             return key;
         }
         if (params && Object.entries(params).length) {
-            Object.entries(params).forEach(([key, value]) => {
+            Object.entries(params).forEach(([ key, value ]) => {
                 translation = translation!.replace(`{{ ${key} }}`, String(value));
             });
         }

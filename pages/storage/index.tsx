@@ -7,19 +7,19 @@ import { genericDeleteItemsDialog } from "@/utils/dialog";
 import { Item } from "@prisma/client";
 import { formatDate } from "date-fns";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { MdAddCircleOutline, MdDelete, MdSearch } from "react-icons/md";
 
 type ItemList = Item;
 
 const ItemList = () => {
     const router = useRouter();
-    const {userData: user} = useAuth();
+    const { userData: user } = useAuth();
 
     const { t } = useI18nStore();
     const { setIsLoading, setDialog } = useAppStore();
 
-    const [items, setItems] = useState<ItemList[]>([]);
+    const [ items, setItems ] = useState<ItemList[]>([]);
 
     const handleCreateNewSale = () => {
         router.push("/storage/create?type=sale");
@@ -44,14 +44,14 @@ const ItemList = () => {
         await fetchItems();
     };
 
-    const fetchItems = async () => {
+    const fetchItems = useCallback(async () => {
         const _items: Item[] = await fetch("/api/storage", { method: "GET" })
             .then((res) => res.json()) ?? [];
         const orderedItems = _items.map((i) => ({ ...i, date: new Date(i.date) })).sort((a, b) => b.date.getTime() - a.date.getTime());
         setItems(orderedItems);
-    };
+    }, []);
 
-    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [ searchTerm, setSearchTerm ] = useState<string>("");
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -65,17 +65,13 @@ const ItemList = () => {
         || i.document.toLowerCase()?.includes(searchTerm);
 
     useEffect(() => {
-        setItems(items);
-    }, [setItems]);
-
-    useEffect(() => {
         if (!user) return;
         if (!user?.userRole.grants?.includes("storage")) {
             router.push("/");
         }
 
         doActionWithLoader(setIsLoading, fetchItems);
-    }, [user, router, setIsLoading]);
+    }, [ user, router, setIsLoading, fetchItems ]);
 
     return (
         <AppLayout>
