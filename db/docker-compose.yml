@@ -16,7 +16,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     ports:
-      - 15433:80
+      - 15433:999
     depends_on:
       - database
     networks:
