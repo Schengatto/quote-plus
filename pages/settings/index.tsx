@@ -4,8 +4,8 @@ import { useAppStore } from "@/store/app";
 import { useI18nStore } from "@/store/i18n";
 import { TenantPlaceholders } from "@/types/tenants";
 import { doActionWithLoader } from "@/utils/actions";
-import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
-import { MdDownload, MdOutlineSave } from "react-icons/md";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { MdDownload, MdFileDownload, MdFileUpload, MdOutlineSave } from "react-icons/md";
 
 const defaultTenantPlaceholders = {
     products: "{{products}}",
@@ -23,6 +23,12 @@ const TenantsPage = () => {
 
     const [ tenantId, setTenantId ] = useState<String>();
     const [ placeholders, setPlaceholders ] = useState<TenantPlaceholders>(defaultTenantPlaceholders);
+
+    // Product import/export state
+    const fileInputProductsRef = useRef<HTMLInputElement>(null);
+    const [ importPreview, setImportPreview ] = useState<any>(null);
+    const [ importCsvData, setImportCsvData ] = useState<string | null>(null);
+    const [ importResult, setImportResult ] = useState<any>(null);
 
     const handleValueChange = (e: ChangeEvent<HTMLInputElement>, key: string) => {
         e.preventDefault();
@@ -58,6 +64,70 @@ const TenantsPage = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    };
+
+    // --- Product CSV Full Export/Import ---
+    const handleExportProductsFull = () => {
+        window.open("/api/products/export-csv-full", "_blank");
+    };
+
+    const handleImportProductsClick = () => {
+        setImportPreview(null);
+        setImportResult(null);
+        fileInputProductsRef.current?.click();
+    };
+
+    const handleProductsFileSelected = async (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const text = await file.text();
+        setImportCsvData(text);
+
+        await doActionWithLoader(setIsLoading, async () => {
+            const response = await fetch("/api/products/import-csv-full", {
+                method: "POST",
+                body: JSON.stringify({ csv: text, mode: "validate" }),
+            }).then((res) => res.json());
+
+            setImportPreview(response);
+            setImportResult(null);
+        }, (error) => alert(error.message));
+
+        if (fileInputProductsRef.current) {
+            fileInputProductsRef.current.value = "";
+        }
+    };
+
+    const handleConfirmImport = async () => {
+        if (!importCsvData) return;
+
+        await doActionWithLoader(setIsLoading, async () => {
+            const response = await fetch("/api/products/import-csv-full", {
+                method: "POST",
+                body: JSON.stringify({
+                    csv: importCsvData,
+                    mode: "execute",
+                    createdById: userData?.id || 0,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Errore durante l'importazione");
+            }
+
+            setImportResult(data);
+            setImportPreview(null);
+            setImportCsvData(null);
+        }, (error) => alert(error.message));
+    };
+
+    const handleCancelImport = () => {
+        setImportPreview(null);
+        setImportCsvData(null);
+        setImportResult(null);
     };
 
     const fetchTenant = useCallback(async () => {
@@ -155,6 +225,103 @@ const TenantsPage = () => {
                         <div className="uppercase text-sm">{t("settings.button.downloadQuotesBackup")}</div>
                     </button>
                 </div>
+            </div>
+
+            <div className="m-2 xl:m-8">
+                <div className="page-title">
+                    <span className="capitalize">{t("settings.productsImportExport.title")}</span>
+                </div>
+
+                <input
+                    ref={fileInputProductsRef}
+                    type="file"
+                    accept=".csv"
+                    className="hidden"
+                    onChange={handleProductsFileSelected}
+                />
+
+                <div className="flex items-start gap-4">
+                    <button
+                        type="button"
+                        className="btn-primary"
+                        onClick={handleExportProductsFull}>
+                        <div><MdFileDownload /></div>
+                        <div className="uppercase text-sm">{t("settings.productsImportExport.export")}</div>
+                    </button>
+                    <button
+                        type="button"
+                        className="btn-primary"
+                        onClick={handleImportProductsClick}>
+                        <div><MdFileUpload /></div>
+                        <div className="uppercase text-sm">{t("settings.productsImportExport.import")}</div>
+                    </button>
+                </div>
+
+                {importPreview && (
+                    <div className="mt-4 p-4 border border-gray-300 rounded bg-gray-50">
+                        <h3 className="font-bold text-lg mb-3">{t("settings.productsImportExport.preview")}</h3>
+
+                        <div className="grid grid-cols-2 gap-2 mb-3 text-sm">
+                            <div>{t("settings.productsImportExport.totalRows")}: <strong>{importPreview.totalRows}</strong></div>
+                            <div>{t("settings.productsImportExport.toCreate")}: <strong>{importPreview.toCreate}</strong></div>
+                            <div>{t("settings.productsImportExport.toUpdate")}: <strong>{importPreview.toUpdate}</strong></div>
+                        </div>
+
+                        {importPreview.newBrands?.length > 0 && (
+                            <div className="mb-2 p-2 bg-blue-50 border border-blue-200 rounded text-sm">
+                                <strong>{t("settings.productsImportExport.newBrands")}:</strong>{" "}
+                                {importPreview.newBrands.join(", ")}
+                            </div>
+                        )}
+
+                        {importPreview.newCategories?.length > 0 && (
+                            <div className="mb-2 p-2 bg-blue-50 border border-blue-200 rounded text-sm">
+                                <strong>{t("settings.productsImportExport.newCategories")}:</strong>{" "}
+                                {importPreview.newCategories.join(", ")}
+                            </div>
+                        )}
+
+                        {importPreview.errors?.length > 0 && (
+                            <div className="mb-2 p-2 bg-red-50 border border-red-200 rounded text-sm">
+                                <strong>{t("settings.productsImportExport.errors")}:</strong>
+                                <ul className="list-disc list-inside mt-1">
+                                    {importPreview.errors.map((err: string, i: number) => (
+                                        <li key={i}>{err}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        <div className="flex gap-3 mt-4">
+                            {importPreview.valid && (
+                                <button
+                                    type="button"
+                                    className="btn-primary bg-green-600 hover:bg-green-700"
+                                    onClick={handleConfirmImport}>
+                                    <div className="uppercase text-sm">{t("settings.productsImportExport.confirmImport")}</div>
+                                </button>
+                            )}
+                            <button
+                                type="button"
+                                className="btn-primary bg-red-600 hover:bg-red-700"
+                                onClick={handleCancelImport}>
+                                <div className="uppercase text-sm">{t("common.cancel")}</div>
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {importResult && (
+                    <div className="mt-4 p-4 border border-green-300 rounded bg-green-50 text-sm">
+                        <strong>{t("settings.productsImportExport.importDone")}</strong>
+                        <div className="mt-1">
+                            {importResult.created > 0 && <div>{t("settings.productsImportExport.created")}: {importResult.created}</div>}
+                            {importResult.updated > 0 && <div>{t("settings.productsImportExport.updated")}: {importResult.updated}</div>}
+                            {importResult.newBrands?.length > 0 && <div>{t("settings.productsImportExport.newBrandsCreated")}: {importResult.newBrands.join(", ")}</div>}
+                            {importResult.newCategories?.length > 0 && <div>{t("settings.productsImportExport.newCategoriesCreated")}: {importResult.newCategories.join(", ")}</div>}
+                        </div>
+                    </div>
+                )}
             </div>
         </AppLayout>
     );

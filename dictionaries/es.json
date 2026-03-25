@@ -162,5 +162,21 @@
   "products.csv.import": "importar CSV",
   "products.csv.importSuccess": "Productos actualizados con éxito",
   "products.bulk.editPrices": "editar precios",
-  "products.bulk.hint": "Edita los precios directamente en la tabla, luego haz clic en Guardar para confirmar los cambios."
+  "products.bulk.hint": "Edita los precios directamente en la tabla, luego haz clic en Guardar para confirmar los cambios.",
+  "settings.productsImportExport.title": "gestión de productos",
+  "settings.productsImportExport.export": "exportar productos CSV",
+  "settings.productsImportExport.import": "importar productos CSV",
+  "settings.productsImportExport.preview": "Vista previa de la importación",
+  "settings.productsImportExport.totalRows": "Filas totales",
+  "settings.productsImportExport.toCreate": "A crear",
+  "settings.productsImportExport.toUpdate": "A actualizar",
+  "settings.productsImportExport.newBrands": "Nuevas marcas a crear",
+  "settings.productsImportExport.newCategories": "Nuevas categorías a crear",
+  "settings.productsImportExport.errors": "Errores",
+  "settings.productsImportExport.confirmImport": "confirmar importación",
+  "settings.productsImportExport.importDone": "Importación completada!",
+  "settings.productsImportExport.created": "Productos creados",
+  "settings.productsImportExport.updated": "Productos actualizados",
+  "settings.productsImportExport.newBrandsCreated": "Nuevas marcas creadas",
+  "settings.productsImportExport.newCategoriesCreated": "Nuevas categorías creadas"
 }

@@ -162,5 +162,21 @@
   "products.csv.import": "importer CSV",
   "products.csv.importSuccess": "Produits mis à jour avec succès",
   "products.bulk.editPrices": "modifier les prix",
-  "products.bulk.hint": "Modifiez les prix directement dans le tableau, puis cliquez sur Enregistrer pour confirmer les modifications."
+  "products.bulk.hint": "Modifiez les prix directement dans le tableau, puis cliquez sur Enregistrer pour confirmer les modifications.",
+  "settings.productsImportExport.title": "gestion des produits",
+  "settings.productsImportExport.export": "exporter produits CSV",
+  "settings.productsImportExport.import": "importer produits CSV",
+  "settings.productsImportExport.preview": "Aperçu de l'importation",
+  "settings.productsImportExport.totalRows": "Lignes totales",
+  "settings.productsImportExport.toCreate": "À créer",
+  "settings.productsImportExport.toUpdate": "À mettre à jour",
+  "settings.productsImportExport.newBrands": "Nouvelles marques à créer",
+  "settings.productsImportExport.newCategories": "Nouvelles catégories à créer",
+  "settings.productsImportExport.errors": "Erreurs",
+  "settings.productsImportExport.confirmImport": "confirmer l'importation",
+  "settings.productsImportExport.importDone": "Importation terminée !",
+  "settings.productsImportExport.created": "Produits créés",
+  "settings.productsImportExport.updated": "Produits mis à jour",
+  "settings.productsImportExport.newBrandsCreated": "Nouvelles marques créées",
+  "settings.productsImportExport.newCategoriesCreated": "Nouvelles catégories créées"
 }
