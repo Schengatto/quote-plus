@@ -229,11 +229,11 @@ async function classifyContactRows(
         select: { id: true, name: true },
     });
 
-    const existingContactIds = new Set(existingContacts.map((c: any) => c.id));
-    const existingPhoneNumbers = new Map(
+    const existingContactIds = new Set<number>(existingContacts.map((c: any) => c.id));
+    const existingPhoneNumbers = new Map<string, number>(
         existingContacts.map((c: any) => [ c.phoneNumber, c.id ])
     );
-    const groupMap = new Map(
+    const groupMap = new Map<string, number>(
         existingGroups.map((g: any) => [ g.name.toLowerCase(), g.id ])
     );
 
