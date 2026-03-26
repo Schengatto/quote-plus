@@ -19,8 +19,8 @@ const UNIQUE_KEYS: Record<string, string> = {
     item: "id",
 };
 
-const EXCLUDE_FIELDS = ["id"];
-const DATE_FIELDS = ["createdAt", "updatedAt", "date"];
+const EXCLUDE_FIELDS = [ "id" ];
+const DATE_FIELDS = [ "createdAt", "updatedAt", "date" ];
 
 function parseModelName(filename: string): string | null {
     const base = path.basename(filename, ".json");
@@ -60,7 +60,7 @@ function getPrismaModel(modelName: string): any {
 
 function prepareRecord(record: any): any {
     const data: any = {};
-    for (const [key, value] of Object.entries(record)) {
+    for (const [ key, value ] of Object.entries(record)) {
         if (EXCLUDE_FIELDS.includes(key)) continue;
         if (DATE_FIELDS.includes(key) && typeof value === "string") {
             data[key] = new Date(value as string);
@@ -84,7 +84,7 @@ async function importFile(filePath: string) {
         console.error(
             `Could not detect model from filename "${path.basename(filePath)}".`
             + `\nSupported prefixes: ${Object.keys(UNIQUE_KEYS).join(", ")}`
-            + `\nExample: quotes.json, contacts2025-01-01.json, products.json`
+            + "\nExample: quotes.json, contacts2025-01-01.json, products.json"
         );
         process.exit(1);
     }

@@ -45,7 +45,7 @@ export default async function handler(
             ].join(";");
         });
 
-        const csv = [header, ...rows].join("\n");
+        const csv = [ header, ...rows ].join("\n");
 
         res.setHeader("Content-Type", "text/csv; charset=utf-8");
         res.setHeader(

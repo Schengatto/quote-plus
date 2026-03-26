@@ -111,9 +111,21 @@ model Quote {
     updatedBy   String   @map(name: "updated_by")
 }
 
+model ContactGroup {
+    id        Int       @id @default(autoincrement())
+    name      String    @unique
+    company   String?
+    label     String?   @default("")
+    createdAt DateTime  @default(now()) @map(name: "created_at")
+    createdBy String    @map(name: "created_by")
+    updatedAt DateTime  @updatedAt @map(name: "updated_at")
+    updatedBy String    @map(name: "updated_by")
+    contacts  Contact[]
+}
+
 model Contact {
-    id          Int           @id @default(autoincrement())
-    phoneNumber String        @unique
+    id          Int            @id @default(autoincrement())
+    phoneNumber String         @unique
     firstName   String?
     lastName    String?
     company     String?
@@ -128,14 +140,16 @@ model Contact {
     homeFax     String?
     pager       String?
     other       String?
-    createdAt   DateTime      @default(now()) @map(name: "created_at")
-    createdBy   String        @map(name: "created_by")
-    updatedAt   DateTime      @updatedAt @map(name: "updated_at")
-    updatedBy   String        @map(name: "updated_by")
+    createdAt   DateTime       @default(now()) @map(name: "created_at")
+    createdBy   String         @map(name: "created_by")
+    updatedAt   DateTime       @updatedAt @map(name: "updated_at")
+    updatedBy   String         @map(name: "updated_by")
     notes       ContactNote[]
-    whatsapp    String?       @default("")
-    telegram    String?       @default("")
-    label       String?       @default("")
+    whatsapp    String?        @default("")
+    telegram    String?        @default("")
+    label       String?        @default("")
+    groupId     Int?           @map(name: "group_id")
+    group       ContactGroup?  @relation(fields: [groupId], references: [id], onDelete: SetNull)
 }
 
 enum ContactNoteStatus {

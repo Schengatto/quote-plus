@@ -25,7 +25,10 @@ export default async function handler(
             );
             res.status(200).json({ id });
         } else if (req.method === "GET") {
-            const contact = await doWithPrisma((prisma) => prisma.contact.findFirst({ where: { id: Number(id) } }));
+            const contact = await doWithPrisma((prisma) => prisma.contact.findFirst({
+                where: { id: Number(id) },
+                include: { group: true },
+            }));
             res.status(200).json(contact);
         } else if (req.method === "DELETE") {
             await doWithPrisma((prisma) => prisma.contact.delete({ where: { id: Number(id) } }));

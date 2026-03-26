@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(netstat -ano)",
+      "Bash(pnpm approve-builds:*)",
+      "Bash(npm audit:*)",
+      "Bash(npm --version)",
+      "Bash(npx eslint:*)",
+      "Bash(npx next:*)",
+      "Bash(npm install:*)"
+    ]
+  }
+}
