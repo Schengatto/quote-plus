@@ -5,9 +5,7 @@ import { useEffect, useRef } from "react";
 const TextEditor: React.FunctionComponent<any> = ({ initialValue, onChange }) => {
 
     const plugins = [
-        "print",
         "preview",
-        "paste",
         "searchreplace",
         "autolink",
         "directionality",
@@ -17,21 +15,16 @@ const TextEditor: React.FunctionComponent<any> = ({ initialValue, onChange }) =>
         "image",
         "link",
         "media",
-        "template",
         "codesample",
         "table",
         "charmap",
-        "hr",
         "pagebreak",
         "nonbreaking",
         "anchor",
-        "toc",
         "insertdatetime",
         "advlist",
         "lists",
-        "wordcount",
-        "imagetools",
-        "textpattern"
+        "wordcount"
     ].join(" ");
 
     const { currentLanguage } = useI18nStore();
@@ -43,7 +36,7 @@ const TextEditor: React.FunctionComponent<any> = ({ initialValue, onChange }) =>
     };
 
     const toolbar = [
-        "formatselect",
+        "blocks",
         "bold italic underline strikethrough",
         "forecolor backcolor blockquote",
         "link image media",
@@ -66,13 +59,6 @@ const TextEditor: React.FunctionComponent<any> = ({ initialValue, onChange }) =>
             plugins: plugins,
             toolbar: toolbar,
             image_advtab: true,
-            templates: [
-                {
-                    title: "Prodotto - Prezzo prodotto",
-                    description: "Aggiunge le informazioni del prezzo del prodotto",
-                    content: "<p>Prezzo listino: {{prezzo}} &euro; + IVA</p> <p><strong>Prezzo scontato a Voi riservato {{prezzo-scontato}} &euro; + IVA</strong></p>"
-                },
-            ],
         }}
     />;
 };

@@ -41,16 +41,18 @@ export async function exportQuotePdf(name: string, htmlContent: string): Promise
     document.body.appendChild(container);
 
     try {
-        const blob: Blob = await html2pdf()
+        const pdf = await html2pdf()
             .set({
                 margin: [ 8, 6, 8, 6 ],
                 image: { type: "jpeg", quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false },
                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
             } as any)
             .from(container)
-            .outputPdf("blob");
+            .toPdf()
+            .get("pdf");
 
+        const blob = pdf.output("blob") as Blob;
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;

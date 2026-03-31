@@ -234,7 +234,7 @@ const QuoteEdit = () => {
                             && <div className='w-full my-4'>
                                 <div className='field-label'>{t("quotes.form.pdfPreview")}</div>
                                 <div className="bg-white max-h-96 overflow-auto p-2 w-[210mm] border-2 border-dashed border-black">
-                                    {Parser().parse(quoteOverview)}
+                                    {quoteOverview ? Parser().parse(quoteOverview) : null}
                                 </div>
                             </div>
                         }

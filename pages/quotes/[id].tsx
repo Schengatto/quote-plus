@@ -66,7 +66,7 @@ const QuoteEdit = () => {
                         <div className='w-[210mm] my-4 border-2 border-dashed border-black m-auto'>
                             <div className="bg-white max-h-[80vh] overflow-auto" >
                                 <div className="p-2" ref={targetRef}>
-                                    {Parser().parse(quoteOverview)}
+                                    {quoteOverview ? Parser().parse(quoteOverview) : null}
                                 </div>
                             </div>
                         </div>
