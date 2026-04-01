@@ -20,7 +20,7 @@ const Home = () => {
     const fetchNotes = useCallback(async () => {
         doActionWithLoader(setIsLoading, async () => {
             const _notes: ContactNoteWithContact[] = await fetch("/api/notes", { method: "GET" }).then((res) => res.json());
-            const _filteredNotes = _notes.filter(n => [ "OPEN", "PENDING" ].includes(n.status));
+            const _filteredNotes = (_notes ?? []).filter(n => [ "OPEN", "PENDING" ].includes(n.status));
             setPendingNotes(_filteredNotes);
         });
     }, [ setIsLoading ]);

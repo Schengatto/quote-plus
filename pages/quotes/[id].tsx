@@ -1,7 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
 import { useI18nStore } from "@/store/i18n";
-import { exportQuotePdf } from "@/utils/export-pdf";
+import { exportQuoteDocx } from "@/utils/export-docx";
 import { removeAllPlaceholders } from "@/utils/placeholders";
 import { Quote } from "@prisma/client";
 import { Parser } from "html-to-react";
@@ -32,7 +32,7 @@ const QuoteEdit = () => {
 
     const handleExportPdf = async () => {
         if (selectedQuote) {
-            await exportQuotePdf(selectedQuote.name, selectedQuote.content);
+            await exportQuoteDocx(selectedQuote.name, selectedQuote.content);
         }
     };
 
