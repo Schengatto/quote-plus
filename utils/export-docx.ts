@@ -1,6 +1,7 @@
 export async function exportQuoteDocx(name: string, content: string): Promise<void> {
     const response = await fetch("/api/quotes/export-docx", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, content }),
     });
 

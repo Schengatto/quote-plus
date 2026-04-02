@@ -9,7 +9,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const { name, content: rawContent } = JSON.parse(req.body);
+        const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+        const { name, content: rawContent } = body;
         const content = removeAllPlaceholders(rawContent);
         const date = new Date().toLocaleDateString("it-IT", { day: "2-digit", month: "long", year: "numeric" });
 
