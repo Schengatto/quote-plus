@@ -124,7 +124,7 @@
   "quotes.button.addQuote": "ajouter un devis",
   "quotes.button.save": "enregistrer",
   "quotes.button.editQuote": "modifier",
-  "quotes.button.exportPdf": "exporter en Word",
+  "quotes.button.exportPdf": "exporter en PDF",
   "userProfile.userOptions.title": "options utilisateur",
   "userProfile.accountOptions.title": "options du compte",
   "userProfile.form.username": "nom d'utilisateur",

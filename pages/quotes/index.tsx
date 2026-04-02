@@ -5,7 +5,6 @@ import { useI18nStore } from "@/store/i18n";
 import { useQuotesStore } from "@/store/quotes";
 import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
-import { exportQuoteDocx } from "@/utils/export-docx";
 import { Quote } from "@prisma/client";
 import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
@@ -39,10 +38,9 @@ const QuoteComponent = () => {
         router.push("/quotes/create");
     };
 
-    const handleExportPdf = async (event: any, _selectedQuote: Partial<Quote>) => {
+    const handleExportPdf = (event: any, _selectedQuote: Partial<Quote>) => {
         event.stopPropagation();
-        const quote = await fetch(`/api/quotes/${_selectedQuote.id}`, { method: "GET" }).then((res) => res.json());
-        await exportQuoteDocx(quote.name, quote.content);
+        router.push(`/quotes/${_selectedQuote.id}?print=true`);
     };
 
     const handleCreateNew = () => {

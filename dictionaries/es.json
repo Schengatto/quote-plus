@@ -124,7 +124,7 @@
   "quotes.button.addQuote": "añadir presupuesto",
   "quotes.button.save": "guardar",
   "quotes.button.editQuote": "editar",
-  "quotes.button.exportPdf": "exportar Word",
+  "quotes.button.exportPdf": "exportar PDF",
   "userProfile.userOptions.title": "opciones de usuario",
   "userProfile.accountOptions.title": "opciones de cuenta",
   "userProfile.form.username": "usuario",

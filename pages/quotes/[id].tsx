@@ -1,7 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/layouts/Layout";
 import { useI18nStore } from "@/store/i18n";
-import { exportQuoteDocx } from "@/utils/export-docx";
 import { removeAllPlaceholders } from "@/utils/placeholders";
 import { Quote } from "@prisma/client";
 import { Parser } from "html-to-react";
@@ -9,7 +8,7 @@ import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const QuoteEdit = () => {
+const QuotePreview = () => {
 
     const router = useRouter();
     const params = useParams();
@@ -30,10 +29,32 @@ const QuoteEdit = () => {
         router.push("/quotes");
     };
 
-    const handleExportPdf = async () => {
-        if (selectedQuote) {
-            await exportQuoteDocx(selectedQuote.name, selectedQuote.content);
-        }
+    const handlePrint = () => {
+        if (!targetRef.current) return;
+        const printWindow = window.open("", "_blank");
+        if (!printWindow) return;
+
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>${selectedQuote?.name || ""}</title>
+                <style>
+                    @page { size: A4; margin: 10mm 12mm; }
+                    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a1a; line-height: 1.6; margin: 0; padding: 16px; }
+                    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+                    td, th { padding: 8px 10px; vertical-align: top; }
+                    img { max-width: 180px; height: auto; }
+                    p { margin: 6px 0; }
+                    strong { color: #1e293b; }
+                </style>
+            </head>
+            <body>${targetRef.current.innerHTML}</body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
     };
 
     const handleEdit = async () => {
@@ -54,6 +75,14 @@ const QuoteEdit = () => {
         }
         fetchSelectedQuote();
     }, [ user, router, params, fetchSelectedQuote ]);
+
+    useEffect(() => {
+        if (selectedQuote && router.query.print === "true") {
+            const timer = setTimeout(() => handlePrint(), 500);
+            return () => clearTimeout(timer);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ selectedQuote, router.query.print ]);
 
     return (
         <AppLayout>
@@ -81,7 +110,7 @@ const QuoteEdit = () => {
                             <button
                                 type="button"
                                 className="btn-primary"
-                                onClick={() => handleExportPdf()}>
+                                onClick={handlePrint}>
                                 <div className="uppercase text-sm">{t("quotes.button.exportPdf")}</div>
                             </button>
                             <button
@@ -98,4 +127,4 @@ const QuoteEdit = () => {
     );
 };
 
-export default QuoteEdit;
+export default QuotePreview;
