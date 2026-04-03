@@ -178,5 +178,13 @@
   "settings.productsImportExport.created": "Productos creados",
   "settings.productsImportExport.updated": "Productos actualizados",
   "settings.productsImportExport.newBrandsCreated": "Nuevas marcas creadas",
-  "settings.productsImportExport.newCategoriesCreated": "Nuevas categorías creadas"
+  "settings.productsImportExport.newCategoriesCreated": "Nuevas categorías creadas",
+  "contacts.button.manageGroups": "Gestionar grupos",
+  "contactGroups.title": "Grupos de contactos",
+  "contactGroups.table.name": "Nombre",
+  "contactGroups.table.company": "Empresa",
+  "contactGroups.table.contactCount": "Contactos",
+  "contactGroups.table.actions": "Acciones",
+  "contactGroups.confirmDelete.message": "Al eliminar este grupo se desvincularán",
+  "contactGroups.confirmDelete.contactsWillBeUnlinked": "contactos del grupo. Los contactos NO serán eliminados."
 }

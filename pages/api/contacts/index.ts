@@ -22,6 +22,7 @@ export default async function handler(
             res.status(201).json({ id });
         } else {
             const contacts = await doWithPrisma((prisma) => prisma.contact.findMany({
+                include: { group: true },
                 orderBy: {
                     firstName: "asc",
                 },

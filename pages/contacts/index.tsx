@@ -4,10 +4,12 @@ import { useContactsStore } from "@/store/contacts";
 import { useI18nStore } from "@/store/i18n";
 import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
-import { Contact } from "@prisma/client";
+import { Contact, ContactGroup } from "@prisma/client";
 import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { MdAddCircleOutline, MdDelete, MdSearch } from "react-icons/md";
+import { MdAddCircleOutline, MdDelete, MdGroup, MdSearch } from "react-icons/md";
+
+type ContactWithGroup = Contact & { group?: ContactGroup | null };
 
 const Contacts = () => {
 
@@ -76,7 +78,15 @@ const Contacts = () => {
                 </div>
 
                 <div className="my-4">
-                    <div className="flex justify-end content-end w-full">
+                    <div className="flex justify-end content-end w-full gap-2">
+                        <button
+                            className="btn-primary"
+                            onClick={() => router.push("/contact-groups")}>
+                            <div>
+                                <MdGroup />
+                            </div>
+                            <div className="uppercase text-sm">{t("contacts.button.manageGroups")}</div>
+                        </button>
                         <button
                             className="btn-primary"
                             onClick={handleCreateNew}>
@@ -104,18 +114,20 @@ const Contacts = () => {
                             <th className="px-4 py-3 text-left">{t("contacts.table.head.lastName")}</th>
                             <th className="px-4 py-3 text-left">{t("contacts.table.head.phoneNumber")}</th>
                             <th className="px-4 py-3 text-left">{t("contacts.table.head.email")}</th>
+                            <th className="px-4 py-3 text-left">Gruppo</th>
                             <th className="px-4 py-3 text-center">Azioni</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                        {contacts
+                        {(contacts as ContactWithGroup[])
                             .filter(filterList)
-                            .map((c: Contact) =>
+                            .map((c: ContactWithGroup) =>
                                 <tr key={c.id} className={`table-row ${c.id === selectedContact?.id && "!table-row-active"}`} onClick={(e) => handleEdit(e, c)}>
                                     <td className="text-sm px-4 py-3 w-auto truncate max-w-0">{c.firstName}</td>
                                     <td className="text-sm px-4 py-3 w-auto truncate max-w-0">{c.lastName}</td>
                                     <td className="text-sm px-4 py-3 w-auto truncate max-w-0">{c.phoneNumber}</td>
                                     <td className="text-sm px-4 py-3 w-auto truncate max-w-0">{c.email}</td>
+                                    <td className="text-sm px-4 py-3 w-auto truncate max-w-0">{c.group?.name ?? ""}</td>
                                     <td className="px-2 py-3 text-center">
                                         <button
                                             className="text-red-600 hover:text-red-800"

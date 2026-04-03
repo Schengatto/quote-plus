@@ -201,5 +201,13 @@
   "contacts.group.searchGroups": "Search group...",
   "contacts.group.noGroupsFound": "No groups found",
   "contacts.group.confirmUnlink": "Do you want to unlink this contact from the group?",
-  "contacts.group.groupNotes": "Group notes"
+  "contacts.group.groupNotes": "Group notes",
+  "contacts.button.manageGroups": "Manage groups",
+  "contactGroups.title": "Contact groups",
+  "contactGroups.table.name": "Name",
+  "contactGroups.table.company": "Company",
+  "contactGroups.table.contactCount": "Contacts",
+  "contactGroups.table.actions": "Actions",
+  "contactGroups.confirmDelete.message": "Deleting this group will unlink",
+  "contactGroups.confirmDelete.contactsWillBeUnlinked": "contacts from the group. Contacts will NOT be deleted."
 }

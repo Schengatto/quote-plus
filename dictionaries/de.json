@@ -175,5 +175,13 @@
   "settings.productsImportExport.created": "Produkte erstellt",
   "settings.productsImportExport.updated": "Produkte aktualisiert",
   "settings.productsImportExport.newBrandsCreated": "Neue Marken erstellt",
-  "settings.productsImportExport.newCategoriesCreated": "Neue Kategorien erstellt"
+  "settings.productsImportExport.newCategoriesCreated": "Neue Kategorien erstellt",
+  "contacts.button.manageGroups": "Gruppen verwalten",
+  "contactGroups.title": "Kontaktgruppen",
+  "contactGroups.table.name": "Name",
+  "contactGroups.table.company": "Unternehmen",
+  "contactGroups.table.contactCount": "Kontakte",
+  "contactGroups.table.actions": "Aktionen",
+  "contactGroups.confirmDelete.message": "Das Löschen dieser Gruppe wird",
+  "contactGroups.confirmDelete.contactsWillBeUnlinked": "Kontakte von der Gruppe trennen. Die Kontakte werden NICHT gelöscht."
 }

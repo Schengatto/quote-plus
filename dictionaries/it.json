@@ -201,5 +201,13 @@
   "contacts.group.searchGroups": "Cerca gruppo...",
   "contacts.group.noGroupsFound": "Nessun gruppo trovato",
   "contacts.group.confirmUnlink": "Vuoi scollegare questo contatto dal gruppo?",
-  "contacts.group.groupNotes": "Note del gruppo"
+  "contacts.group.groupNotes": "Note del gruppo",
+  "contacts.button.manageGroups": "Gestisci gruppi",
+  "contactGroups.title": "Gruppi contatti",
+  "contactGroups.table.name": "Nome",
+  "contactGroups.table.company": "Azienda",
+  "contactGroups.table.contactCount": "Contatti",
+  "contactGroups.table.actions": "Azioni",
+  "contactGroups.confirmDelete.message": "Eliminando questo gruppo, verranno scollegati",
+  "contactGroups.confirmDelete.contactsWillBeUnlinked": "contatti dal gruppo. I contatti NON verranno eliminati."
 }

@@ -62,11 +62,7 @@ const EditContact = () => {
 
     // --- Group management ---
     const searchGroups = async (query: string) => {
-        if (!query.trim()) {
-            setGroupSearchResults([]);
-            return;
-        }
-        const response = await fetch(`/api/contact-groups/search?q=${encodeURIComponent(query)}`).then((res) => res.json());
+        const response = await fetch(`/api/contact-groups/search?q=${encodeURIComponent(query.trim())}`).then((res) => res.json());
         setGroupSearchResults(response.results || []);
     };
 
@@ -132,9 +128,8 @@ const EditContact = () => {
     const handleOpenGroupSearch = () => {
         setShowGroupSearch(true);
         setShowCreateGroup(false);
-        setNewGroupName(selectedContact.firstName || selectedContact.company || "");
-        setGroupSearchQuery(selectedContact.firstName || selectedContact.company || "");
-        searchGroups(selectedContact.firstName || selectedContact.company || "");
+        setGroupSearchQuery("");
+        searchGroups("");
     };
 
     const handleOpenCreateGroup = () => {
@@ -216,13 +211,14 @@ const EditContact = () => {
         let contactId = selectedContact.id;
 
         const contactEndpoint = contactId ? `/api/contacts/${contactId}` : "/api/contacts";
+        const { group, ...contactData } = selectedContact as ContactWithGroup;
         const contactBody: Partial<Contact> = contactId
             ? {
-                ...selectedContact,
+                ...contactData,
                 updatedBy: user?.username
             }
             : {
-                ...selectedContact,
+                ...contactData,
                 createdBy: user?.username,
                 updatedBy: user?.username,
             };
@@ -235,7 +231,7 @@ const EditContact = () => {
             throw Error("Contatto e nota non salvati!");
         }
 
-        return Number(contactId);
+        return Number(contactResponse.id);
     };
 
     const saveNewContactNote = async (contactId: number) => {
@@ -261,7 +257,13 @@ const EditContact = () => {
         try {
             const contactId = await handleSaveCurrentContact(e);
             await saveNewContactNote(contactId);
-            setSelectedContact(prev => ({ ...prev, ...selectedContact, id: contactId }));
+            const updatedContact = await fetch(`/api/contacts/${contactId}`, { method: "GET" }).then((res) => res.json());
+            if (updatedContact && updatedContact.id) {
+                setSelectedContact(updatedContact);
+            } else {
+                setSelectedContact(prev => ({ ...prev, id: contactId }));
+            }
+            await fetchContactNotes(contactId, updatedContact?.groupId);
         } catch (error: any) {
             alert(`${t("common.error.onSave")}, ${error.message}`);
         }
@@ -275,12 +277,14 @@ const EditContact = () => {
         if (!params?.id) return;
         const fetchContact = async () => {
             const _contact = await fetch(`/api/contacts/${params.id}`, { method: "GET" }).then((res) => res.json());
-            setSelectedContact(_contact);
+            if (_contact && _contact.id) {
+                setSelectedContact(_contact);
+            }
         };
         fetchContact();
     }, [ params ]);
 
-    const groupId = (selectedContact as ContactWithGroup).groupId;
+    const groupId = (selectedContact as ContactWithGroup)?.groupId ?? null;
 
     useEffect(() => {
         if (!selectedContact?.id) return;
@@ -481,37 +485,39 @@ const EditContact = () => {
 
                             {showGroupSearch && (
                                 <div className="mt-4 p-3 border border-gray-300 rounded bg-gray-50">
-                                    <input
-                                        type="text"
-                                        className="text-input mb-2"
-                                        placeholder={t("contacts.group.searchGroups")}
-                                        value={groupSearchQuery}
-                                        onChange={handleGroupSearchChange}
-                                        autoFocus
-                                    />
-                                    {groupSearchResults.length > 0 ? (
-                                        <ul className="divide-y divide-gray-200">
-                                            {groupSearchResults.map((group) => (
-                                                <li
-                                                    key={group.id}
-                                                    className="py-2 px-2 hover:bg-blue-50 cursor-pointer rounded flex justify-between items-center"
-                                                    onClick={() => handleLinkToGroup(group.id)}>
-                                                    <span className="font-medium">{group.name}</span>
-                                                    {group.company && <span className="text-gray-500 text-sm">{group.company}</span>}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    ) : groupSearchQuery.trim() ? (
-                                        <div className="text-gray-500 text-sm py-2">
-                                            {t("contacts.group.noGroupsFound")}
-                                            <button
-                                                type="button"
-                                                className="ml-2 text-blue-600 underline"
-                                                onClick={handleOpenCreateGroup}>
-                                                {t("contacts.group.createNewGroup")}
-                                            </button>
-                                        </div>
-                                    ) : null}
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            className="text-input"
+                                            placeholder={t("contacts.group.searchGroups")}
+                                            value={groupSearchQuery}
+                                            onChange={handleGroupSearchChange}
+                                            autoFocus
+                                        />
+                                        {groupSearchResults.length > 0 ? (
+                                            <ul className="absolute z-10 left-0 right-0 mt-1 max-h-48 overflow-auto bg-white border border-gray-300 rounded shadow-lg">
+                                                {groupSearchResults.map((group) => (
+                                                    <li
+                                                        key={group.id}
+                                                        className="py-2 px-3 hover:bg-blue-50 cursor-pointer flex justify-between items-center text-sm"
+                                                        onClick={() => handleLinkToGroup(group.id)}>
+                                                        <span className="font-medium">{group.name}</span>
+                                                        {group.company && <span className="text-gray-400 text-xs">{group.company}</span>}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        ) : groupSearchQuery.trim() ? (
+                                            <div className="absolute z-10 left-0 right-0 mt-1 bg-white border border-gray-300 rounded shadow-lg px-3 py-2 text-gray-500 text-sm">
+                                                {t("contacts.group.noGroupsFound")}
+                                                <button
+                                                    type="button"
+                                                    className="ml-2 text-blue-600 underline"
+                                                    onClick={handleOpenCreateGroup}>
+                                                    {t("contacts.group.createNewGroup")}
+                                                </button>
+                                            </div>
+                                        ) : null}
+                                    </div>
                                     <button
                                         type="button"
                                         className="btn-secondary mt-2 text-xs"

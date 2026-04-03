@@ -13,20 +13,15 @@ export default async function handler(
     try {
         const q = (req.query.q as string || "").trim();
 
-        if (!q) {
-            res.status(200).json({ results: [] });
-            return;
-        }
-
         const results = await doWithPrisma((prisma) =>
             prisma.contactGroup.findMany({
-                where: {
+                where: q ? {
                     OR: [
                         { name: { contains: q, mode: "insensitive" } },
                         { company: { contains: q, mode: "insensitive" } },
                     ],
-                },
-                take: 10,
+                } : undefined,
+                take: 20,
                 orderBy: { name: "asc" },
             })
         );

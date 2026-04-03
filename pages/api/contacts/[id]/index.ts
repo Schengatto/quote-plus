@@ -19,7 +19,7 @@ export default async function handler(
 
     try {
         if (req.method === "PATCH") {
-            const contact: Partial<Contact> = JSON.parse(req.body);
+            const contact: Partial<Contact> = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
             const { id } = await doWithPrisma((prisma) =>
                 prisma.contact.update({ where: { id: contact.id }, data: contact as any })
             );
