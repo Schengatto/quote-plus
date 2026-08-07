@@ -17,7 +17,7 @@ export default async function handler(
         const authUser = await getAuthUserFromRequest(req);
 
         if (req.method === "POST") {
-            const { username, password, userRoleId }: Partial<User> = JSON.parse(req.body);
+            const { username, password, userRoleId }: Partial<User> = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
             const newUserData: Partial<User> = {
                 username,
                 password,

@@ -17,7 +17,7 @@ export default async function handler(
 
     try {
         if (req.method === "POST") {
-            const item: Partial<Item> = JSON.parse(req.body);
+            const item: Partial<Item> = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
             const newItem = await doWithPrisma((prisma) => prisma.item.create({ data: item as any }));
 
             res.status(201).json(newItem);

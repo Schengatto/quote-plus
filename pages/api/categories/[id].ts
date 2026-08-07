@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
             res.status(204).json({});
         } else if (req.method === "PATCH") {
-            const category: Partial<Category> = JSON.parse(req.body);
+            const category: Partial<Category> = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
             const response = await doWithPrisma((prisma) =>
                 prisma.category.update({ where: { id: category.id }, data: category as any })
             );

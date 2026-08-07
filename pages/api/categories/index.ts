@@ -19,7 +19,7 @@ export default async function handler(
 
     try {
         if (req.method === "POST") {
-            const { name, parentId, createdById }: CreateRequestBody = JSON.parse(req.body);
+            const { name, parentId, createdById }: CreateRequestBody = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
             const brand = await doWithPrisma((prisma) =>
                 prisma.category.create({ data: { name, parentId, createdById } })
             );

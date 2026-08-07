@@ -24,7 +24,7 @@ export default async function handler(
     }
 
     try {
-        const { csv } = JSON.parse(req.body);
+        const { csv } = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
 
         if (!csv || typeof csv !== "string") {
             res.status(400).json({ message: "Missing CSV data" });

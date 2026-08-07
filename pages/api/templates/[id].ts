@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             await doWithPrisma((prisma) => prisma.template.delete({ where: { id: Number(id), createdById: user?.id } }));
             res.status(204).json({});
         } else if (req.method === "PATCH") {
-            const template: Partial<Template> = JSON.parse(req.body);
+            const template: Partial<Template> = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
             const { id } = await doWithPrisma((prisma) =>
                 prisma.template.update({ where: { id: template.id }, data: template as any })
             );

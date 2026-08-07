@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 res.status(401).json({ success: false, message: "authentication failed" });
             }
 
-            const { placeholders }: Partial<Tenant> = JSON.parse(req.body);
+            const { placeholders }: Partial<Tenant> = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
             await doWithPrisma((prisma) =>
                 prisma.tenant.update({ where: { id: String(id) }, data: { placeholders: placeholders ?? undefined } })
             );

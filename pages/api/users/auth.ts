@@ -16,7 +16,7 @@ export default async function handler(
 
     try {
         if (req.method === "POST") {
-            const { username, password }: Partial<User> = JSON.parse(req.body);
+            const { username, password }: Partial<User> = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
             const userData = await doWithPrisma((prisma) =>
                 prisma.user.findFirstOrThrow({
                     where: { username, password },

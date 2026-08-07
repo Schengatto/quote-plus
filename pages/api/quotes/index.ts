@@ -17,7 +17,7 @@ export default async function handler(
 
     try {
         if (req.method === "POST") {
-            const quote: Partial<Quote> = JSON.parse(req.body);
+            const quote: Partial<Quote> = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
             const { id } = await doWithPrisma((prisma) => prisma.quote.create({ data: quote as any }));
             res.status(201).json({ id });
         } else if (req.method === "GET") {

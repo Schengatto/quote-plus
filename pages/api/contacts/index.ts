@@ -17,7 +17,7 @@ export default async function handler(
 
     try {
         if (req.method === "POST") {
-            const contact: Partial<Contact> = JSON.parse(req.body);
+            const contact: Partial<Contact> = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
             const { id } = await doWithPrisma((prisma) => prisma.contact.create({ data: contact as any }));
             res.status(201).json({ id });
         } else {

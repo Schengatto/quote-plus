@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return;
             }
 
-            const user = JSON.parse(req.body);
+            const user = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
 
             const result = await doWithPrisma(
                 async (prisma) =>

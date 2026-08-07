@@ -17,7 +17,7 @@ export default async function handler(
 
     try {
         if (req.method === "POST") {
-            const product: Partial<Product> = JSON.parse(req.body);
+            const product: Partial<Product> = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
             const { id } = await doWithPrisma((prisma) => prisma.product.create({ data: product as any }));
             res.status(201).json({ id });
         } else if (req.method === "GET") {

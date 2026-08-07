@@ -16,7 +16,7 @@ export default async function handler(
     }
 
     try {
-        const updates: BulkPriceUpdate[] = JSON.parse(req.body);
+        const updates: BulkPriceUpdate[] = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
 
         if (!Array.isArray(updates) || updates.length === 0) {
             res.status(400).json({ message: "Invalid payload" });

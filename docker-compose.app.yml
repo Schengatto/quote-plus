@@ -1,0 +1,23 @@
+services:
+  quote:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_TINYMCE_API_KEY: ${NEXT_PUBLIC_TINYMCE_API_KEY}
+        NEXT_PUBLIC_APP_VERSION: ${NEXT_PUBLIC_APP_VERSION}
+        NEXT_PUBLIC_JWT_SECRET_KEY: ${NEXT_PUBLIC_JWT_SECRET_KEY}
+    container_name: quote-plus-app
+    restart: unless-stopped
+    environment:
+      PRISMA_DB_CONNECTION_STRING: ${PRISMA_DB_CONNECTION_STRING}
+      NEXT_PUBLIC_JWT_SECRET_KEY: ${NEXT_PUBLIC_JWT_SECRET_KEY}
+    ports:
+      - "0.0.0.0:3001:3000"
+    networks:
+      - postgres-network
+
+networks:
+  postgres-network:
+    external: true
+    name: db_postgres-network
