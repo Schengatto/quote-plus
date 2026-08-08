@@ -22,8 +22,14 @@ export default async function handler(
             res.status(201).json({ id });
         } else if (req.method === "GET") {
             const searchTerm = req.query.search ? String(req.query.search) : "";
+            // Without an explicit order Postgres returns rows in heap order, which
+            // shuffles as soon as a quote is updated. The client can re-sort, but the
+            // API must still hand back a deterministic list.
             const quotes = await doWithPrisma((prisma) =>
-                prisma.quote.findMany({ where: { content: { contains: searchTerm } } })
+                prisma.quote.findMany({
+                    where: { content: { contains: searchTerm } },
+                    orderBy: { updatedAt: "desc" },
+                })
             );
             res.status(200).json(quotes);
         }

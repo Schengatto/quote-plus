@@ -5,10 +5,48 @@ import { useI18nStore } from "@/store/i18n";
 import { useQuotesStore } from "@/store/quotes";
 import { doActionWithLoader } from "@/utils/actions";
 import { genericDeleteItemsDialog } from "@/utils/dialog";
+import { orderAscByProperty, orderDescByProperty } from "@/utils/array";
 import { Quote } from "@prisma/client";
 import { useRouter } from "next/router";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { MdAddCircleOutline, MdCopyAll, MdDelete, MdEdit, MdOutlinePictureAsPdf, MdSearch } from "react-icons/md";
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { MdAddCircleOutline, MdArrowDownward, MdArrowUpward, MdCopyAll, MdDelete, MdEdit, MdOutlinePictureAsPdf, MdSearch, MdUnfoldMore } from "react-icons/md";
+
+type SortField = "updatedAt" | "name" | "createdBy";
+type SortDirection = "asc" | "desc";
+
+/** Direction a column starts from when it first becomes the active one. */
+const INITIAL_DIRECTION: Record<SortField, SortDirection> = {
+    updatedAt: "desc",
+    name: "asc",
+    createdBy: "asc",
+};
+
+type SortableHeaderProps = {
+    field: SortField;
+    label: string;
+    activeField: SortField;
+    direction: SortDirection;
+    onSort: (field: SortField) => void;
+    className?: string;
+};
+
+const SortableHeader = ({ field, label, activeField, direction, onSort, className = "" }: SortableHeaderProps) => {
+    const isActive = field === activeField;
+    return (
+        <th
+            className={`px-4 py-3 text-left cursor-pointer select-none ${className}`}
+            aria-sort={isActive ? (direction === "asc" ? "ascending" : "descending") : "none"}
+            onClick={() => onSort(field)}
+        >
+            <div className="flex items-center gap-1">
+                <span>{label}</span>
+                {isActive
+                    ? (direction === "asc" ? <MdArrowUpward /> : <MdArrowDownward />)
+                    : <MdUnfoldMore className="opacity-30" />}
+            </div>
+        </th>
+    );
+};
 
 const QuoteComponent = () => {
 
@@ -16,11 +54,30 @@ const QuoteComponent = () => {
     const { userData: user } = useAuth();
 
     const { t } = useI18nStore();
-    const [ quotes, setProducts ] = useState<Quote[]>([]);
+    const [ quotes, setQuotes ] = useState<Quote[]>([]);
     const { setIsLoading, setDialog } = useAppStore();
     const { setSelectedQuote } = useQuotesStore();
 
     const [ searchTerm, setSearchTerm ] = useState<string>("");
+    const [ sortField, setSortField ] = useState<SortField>("updatedAt");
+    const [ sortDirection, setSortDirection ] = useState<SortDirection>(INITIAL_DIRECTION.updatedAt);
+
+    const handleSort = (field: SortField) => {
+        if (field === sortField) {
+            setSortDirection((prev) => prev === "asc" ? "desc" : "asc");
+            return;
+        }
+        setSortField(field);
+        setSortDirection(INITIAL_DIRECTION[field]);
+    };
+
+    // Dates arrive from the API as ISO strings, which sort chronologically as text.
+    const sortedQuotes: Quote[] = useMemo(
+        () => sortDirection === "asc"
+            ? orderAscByProperty(quotes, sortField)
+            : orderDescByProperty(quotes, sortField),
+        [ quotes, sortField, sortDirection ]
+    );
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -65,7 +122,7 @@ const QuoteComponent = () => {
             async () => {
                 const _quotes = await fetch(`/api/quotes?search=${searchTerm}`, { method: "GET" })
                     .then((res) => res.json());
-                setProducts(_quotes);
+                setQuotes(_quotes);
             },
             (error: any) => alert(error.message)
         );
@@ -122,14 +179,32 @@ const QuoteComponent = () => {
                 <table className="min-w-full text-sm border rounded-md shadow-sm overflow-hidden">
                     <thead className="bg-gray-100 text-gray-700 sticky top-0 text-xs uppercase">
                         <tr>
-                            <th className="px-4 py-3 text-left">{t("quotes.table.head.date")}</th>
-                            <th className="px-4 py-3 text-left">{t("quotes.table.head.ref")}</th>
-                            <th className="px-4 py-3 text-left">{t("quotes.table.head.owner")}</th>
+                            <SortableHeader
+                                field="updatedAt"
+                                label={t("quotes.table.head.date")}
+                                activeField={sortField}
+                                direction={sortDirection}
+                                onSort={handleSort}
+                            />
+                            <SortableHeader
+                                field="name"
+                                label={t("quotes.table.head.ref")}
+                                activeField={sortField}
+                                direction={sortDirection}
+                                onSort={handleSort}
+                            />
+                            <SortableHeader
+                                field="createdBy"
+                                label={t("quotes.table.head.owner")}
+                                activeField={sortField}
+                                direction={sortDirection}
+                                onSort={handleSort}
+                            />
                             <th className="py-3 text-left" colSpan={4}>Azioni</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {quotes.map((q: Quote) =>
+                        {sortedQuotes.map((q: Quote) =>
                             <tr key={q.id} className="table-row" onClick={(event) => handleEdit(event, q)}>
                                 <td className="px-4 py-3 text-sm w-auto truncate max-w-0">{formatDate(q.updatedAt)}</td>
                                 <td className="px-4 py-3 text-sm w-auto truncate max-w-0">{q.name}</td>
