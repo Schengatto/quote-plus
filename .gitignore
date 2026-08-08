@@ -35,6 +35,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Self-hosted TinyMCE assets, generated from node_modules by scripts/copy-tinymce.mjs
+/public/tinymce
+
 # Database
 db/db-data
 db/pgadmin-data

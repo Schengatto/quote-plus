@@ -4,7 +4,6 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_TINYMCE_API_KEY: ${NEXT_PUBLIC_TINYMCE_API_KEY}
         NEXT_PUBLIC_APP_VERSION: ${NEXT_PUBLIC_APP_VERSION}
         NEXT_PUBLIC_JWT_SECRET_KEY: ${NEXT_PUBLIC_JWT_SECRET_KEY}
     container_name: quote-plus-app
@@ -13,7 +12,9 @@ services:
       PRISMA_DB_CONNECTION_STRING: ${PRISMA_DB_CONNECTION_STRING}
       NEXT_PUBLIC_JWT_SECRET_KEY: ${NEXT_PUBLIC_JWT_SECRET_KEY}
     ports:
-      - "0.0.0.0:3001:3000"
+      # Localhost only: nginx reverse-proxies quote.melcom.it to this port.
+      # Binding to 0.0.0.0 would expose the app directly and undo the firewall hardening.
+      - "127.0.0.1:3001:3000"
     networks:
       - postgres-network
 

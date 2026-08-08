@@ -47,12 +47,17 @@ const TextEditor: React.FunctionComponent<any> = ({ initialValue, onChange }) =>
 
     return <Editor
         id="editor-description"
-        apiKey={process.env.tinymceApiKey}
+        tinymceScriptSrc="/tinymce/tinymce.min.js"
+        licenseKey="gpl"
         onInit={(_evt: any, editor: any) => editorRef.current = editor}
         onFocusOut={propagateChanges}
         initialValue={initialValue}
         init={{
-            language: currentLanguage,
+            // Self-hosted GPL build: no API key and no domain registration needed.
+            base_url: "/tinymce",
+            // The store starts empty; falling back to "en" avoids requesting a
+            // language pack at "/tinymce/langs/.js". TinyMCE has "en" built in.
+            language: currentLanguage || "en",
             branding: false,
             height: 600,
             menubar: true,
