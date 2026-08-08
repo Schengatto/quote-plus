@@ -5,9 +5,8 @@ const doWithPrisma = async (
     onError?: (error: any) => void
 ): Promise<any> => {
     const prisma = new PrismaClient();
-    let result = null;
     try {
-        result = await callback(prisma);
+        return await callback(prisma);
     } catch (error: any) {
         if (!onError) {
             console.error(error);
@@ -17,7 +16,6 @@ const doWithPrisma = async (
         }
     } finally {
         prisma.$disconnect();
-        return result;
     }
 };
 
